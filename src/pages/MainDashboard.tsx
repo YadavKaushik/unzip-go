@@ -994,15 +994,16 @@ export default function MainDashboard() {
           {/* Rank 4-10 */}
           <div className="px-2 py-2 space-y-2" style={{ background: '#FAF5E9' }}>
             {TOP_EARNERS.slice(3).map((earner, idx) => {
-              const avatarComponents = [CartoonAvatar4, CartoonAvatar5, CartoonAvatar1, CartoonAvatar2, CartoonAvatar3, CartoonAvatar4, CartoonAvatar5];
-              const AvatarComp = avatarComponents[idx % avatarComponents.length];
+              const avatarIndex = [4, 5, 7, 8, 9, 10, 12][idx % 7];
+              const borderColors = ['#e84393', '#3498db', '#C8102E', '#27ae60', '#8e44ad', '#e67e22', '#2c3e50'];
+              const borderColor = borderColors[idx % borderColors.length];
               return (
-                <div key={earner.id} className="flex items-center gap-3 py-3 px-3 rounded-xl" style={{ background: '#3a2020', border: '1px solid rgba(200,16,46,0.2)' }}>
+                <div key={earner.id} className="flex items-center gap-3 py-3 px-3 rounded-xl" style={{ background: '#3a1515', border: '1px solid rgba(200,16,46,0.15)' }}>
                   <div className="w-7 text-center">
-                    <span className="text-white/60 font-800 text-base">{earner.rank}</span>
+                    <span className="text-white/50 font-800 text-base">{earner.rank}</span>
                   </div>
-                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor: '#C8102E' }}>
-                    <AvatarComp size={44} />
+                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor }}>
+                    <img src={`/avatars/avatar-${avatarIndex}.jpg`} alt="" className="w-full h-full object-cover" loading="lazy" />
                   </div>
                   <div className="flex-1">
                     <div className="text-white font-600 text-sm">{earner.user}</div>
