@@ -7,19 +7,25 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useI18n } from '@/hooks/useI18n';
 
-/* ── Dark/Gold Theme ── */
-const darkBg = '#0d0d0d';
-const cardBg = 'rgba(255,255,255,0.06)';
-const cardBorder = 'rgba(255,255,255,0.08)';
+/* ── Cream/Red Theme (matching game UI) ── */
+const creamBg = '#FAF5E9';
+const cardBg = '#FFFFFF';
+const cardBorder = '#f0e0c0';
+const redPrimary = '#C8102E';
+const redDark = '#8B0000';
 const goldPrimary = '#D4AF37';
 const goldLight = '#F5D060';
+const redGradient = 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)';
 const goldGradient = 'linear-gradient(135deg, #D4AF37 0%, #F5D060 50%, #D4AF37 100%)';
-const goldGradientSubtle = 'linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(245,208,96,0.08) 100%)';
-const headerGradient = 'linear-gradient(180deg, #2a1f00 0%, #1a1200 60%, #0d0d0d 100%)';
+const headerGradient = 'linear-gradient(180deg, #C8102E 0%, #8B0000 100%)';
+const textDark = '#1a1a1a';
 const textWhite = '#ffffff';
-const textMuted = 'rgba(255,255,255,0.5)';
-const textGold = '#D4AF37';
+const textMuted = '#888888';
 const greenAccent = '#22c55e';
+const orangeAccent = '#D4AF37';
+const textGold = '#D4AF37';
+const darkBg = creamBg;
+const goldGradientSubtle = 'linear-gradient(135deg, rgba(200,16,46,0.08) 0%, rgba(200,16,46,0.03) 100%)';
 
 const INVITATION_CODE = '552331597041';
 const REFERRAL_LINK = `https://app.example.com/register?code=${INVITATION_CODE}`;
@@ -27,9 +33,9 @@ const REFERRAL_LINK = `https://app.example.com/register?code=${INVITATION_CODE}`
 /* ── Sub-page header ── */
 function SubPageHeader({ title, onClose }: { title: string; onClose: () => void }) {
   return (
-    <div style={{ background: 'linear-gradient(135deg, #1a1200 0%, #0d0d0d 100%)', padding: '0 16px', height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
+    <div style={{ background: redGradient, padding: '0 16px', height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
       <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-        <ArrowLeft size={22} color={goldPrimary} />
+        <ArrowLeft size={22} color="#fff" />
       </button>
       <span style={{ fontWeight: 700, fontSize: 17, color: textWhite }}>{title}</span>
       <div style={{ width: 28 }} />
@@ -57,16 +63,16 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
       <div style={{ padding: '12px' }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
           <input type="text" placeholder={t('search_subordinate_uid')} value={searchUID} onChange={e => setSearchUID(e.target.value)}
-            style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: `1px solid ${cardBorder}`, background: cardBg, fontSize: 14, outline: 'none', color: textWhite }} />
+            style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: `1px solid ${cardBorder}`, background: cardBg, fontSize: 14, outline: 'none', color: textDark }} />
           <button style={{ width: 42, height: 42, borderRadius: 8, background: goldGradient, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <Search size={18} color="#000" />
           </button>
         </div>
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-          <div style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, color: textWhite }}>
+          <div style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, color: textDark }}>
             {t('all')} <ChevronDown size={14} color={textMuted} />
           </div>
-          <div style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, color: textWhite }}>
+          <div style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, color: textDark }}>
             {filterDate} <ChevronDown size={14} color={textMuted} />
           </div>
         </div>
@@ -82,7 +88,7 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
                   borderRight: ci === 0 ? '1px solid rgba(212,175,55,0.15)' : 'none',
                   borderBottom: ri < 2 ? '1px solid rgba(212,175,55,0.15)' : 'none',
                 }}>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: textWhite }}>{s.value}</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: textDark }}>{s.value}</div>
                   <div style={{ fontSize: 11, color: textMuted, marginTop: 4 }}>{s.label}</div>
                 </div>
               ))}
@@ -95,7 +101,7 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
             border: `1px solid ${cardBorder}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, paddingBottom: 10, borderBottom: `1px solid ${cardBorder}` }}>
-              <span style={{ fontSize: 15, fontWeight: 700, color: textWhite }}>UID:{sub.uid}</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: textDark }}>UID:{sub.uid}</span>
               <button onClick={() => { navigator.clipboard.writeText(sub.uid); toast.success('UID copied'); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
                 <Copy size={14} color={textMuted} />
@@ -130,7 +136,7 @@ function CommissionDetailPage({ onClose }: { onClose: () => void }) {
       <SubPageHeader title={t('commission_detail')} onClose={onClose} />
       <div style={{ padding: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: cardBg, borderRadius: 8, border: `1px solid ${cardBorder}`, marginBottom: 16 }}>
-          <span style={{ fontSize: 14, color: textWhite }}>{date}</span>
+          <span style={{ fontSize: 14, color: textDark }}>{date}</span>
           <ChevronDown size={16} color={textMuted} />
         </div>
         <div style={{ textAlign: 'center', padding: '80px 0' }}>
@@ -155,21 +161,21 @@ function InvitePage({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: darkBg }}>
       <SubPageHeader title={t('invite')} onClose={onClose} />
       <div style={{ padding: '12px 16px' }}>
-        <p style={{ fontSize: 12, color: textGold, textAlign: 'center', marginBottom: 16 }}>{t('swipe_poster')}</p>
-        <div style={{ background: cardBg, borderRadius: 16, padding: '24px 20px', textAlign: 'center', marginBottom: 20, border: `2px solid rgba(212,175,55,0.3)`, boxShadow: '0 4px 30px rgba(212,175,55,0.1)' }}>
+        <p style={{ fontSize: 12, color: redPrimary, textAlign: 'center', marginBottom: 16 }}>{t('swipe_poster')}</p>
+        <div style={{ background: cardBg, borderRadius: 16, padding: '24px 20px', textAlign: 'center', marginBottom: 20, border: `2px solid rgba(212,175,55,0.3)`, boxShadow: '0 4px 15px rgba(200,16,46,0.1)' }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
-            <span style={{ background: 'rgba(212,175,55,0.12)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('fair_justice')}</span>
-            <span style={{ background: 'rgba(212,175,55,0.12)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('open_transparent')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('fair_justice')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('open_transparent')}</span>
           </div>
-          <h3 style={{ fontSize: 18, fontWeight: 800, color: textWhite, marginBottom: 12 }}>{t('full_odds_bonus')}</h3>
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: textDark, marginBottom: 12 }}>{t('full_odds_bonus')}</h3>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 16 }}>
-            <span style={{ background: 'rgba(212,175,55,0.12)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>💰 {t('financial_security')}</span>
-            <span style={{ background: 'rgba(212,175,55,0.12)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>⚡ {t('quick_withdrawal')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>💰 {t('financial_security')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>⚡ {t('quick_withdrawal')}</span>
           </div>
-          <p style={{ fontSize: 14, color: textGold, fontWeight: 700, marginBottom: 16 }}>
+          <p style={{ fontSize: 14, color: redPrimary, fontWeight: 700, marginBottom: 16 }}>
             {t('permanent_commission')} <span style={{ fontSize: 20 }}>85%</span>
           </p>
-          <div style={{ width: 100, height: 100, background: 'rgba(255,255,255,0.05)', border: `2px solid rgba(212,175,55,0.3)`, borderRadius: 8, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 100, height: 100, background: cardBg, border: `2px solid rgba(212,175,55,0.3)`, borderRadius: 8, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <QrCode size={40} color={textGold} />
           </div>
         </div>
@@ -241,7 +247,7 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: darkBg }}>
       <SubPageHeader title={t('invitation_rules')} onClose={onClose} />
       <div style={{ textAlign: 'center', padding: '20px 16px 8px' }}>
-        <h2 style={{ fontSize: 18, fontWeight: 800, color: textGold, margin: 0 }}>【Promotion partner】program</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 800, color: redPrimary, margin: 0 }}>【Promotion partner】program</h2>
         <p style={{ fontSize: 13, color: textMuted, marginTop: 6 }}>This activity is valid for a long time</p>
       </div>
       <div style={{ padding: '12px 12px 24px' }}>
@@ -251,7 +257,7 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
               <span style={{ background: goldGradient, color: '#000', padding: '6px 28px', borderRadius: 20, fontSize: 16, fontWeight: 700, display: 'inline-block', position: 'relative', top: -16, marginBottom: -8 }}>{rule.num}</span>
             </div>
             <div style={{ padding: '0 16px 16px' }}>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, margin: 0 }}>{rule.text}</p>
+              <p style={{ fontSize: 13, color: textDark, lineHeight: 1.7, margin: 0 }}>{rule.text}</p>
               {i === 4 && (
                 <div style={{ marginTop: 16, borderRadius: 10, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', background: goldGradient, padding: '10px 0' }}>
@@ -263,11 +269,11 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
                     <div key={ri} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '8px 0', background: ri % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)', borderTop: `1px solid ${cardBorder}` }}>
                       <div style={{ textAlign: 'center', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
                         <span style={{ fontSize: 14 }}>👑</span>
-                        <span style={{ color: textGold, fontWeight: 600, fontSize: 11 }}>L{row.level}</span>
+                        <span style={{ color: redPrimary, fontWeight: 600, fontSize: 11 }}>L{row.level}</span>
                       </div>
-                      <div style={{ textAlign: 'center', fontSize: 11, color: textWhite }}>{row.team}</div>
-                      <div style={{ textAlign: 'center', fontSize: 11, color: textWhite }}>{row.betting}</div>
-                      <div style={{ textAlign: 'center', fontSize: 11, color: textWhite }}>{row.deposit}</div>
+                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.team}</div>
+                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.betting}</div>
+                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.deposit}</div>
                     </div>
                   ))}
                 </div>
@@ -322,8 +328,8 @@ function RebateRatioPage({ onClose }: { onClose: () => void }) {
         {rebateData.map((level, li) => (
           <div key={li} style={{ background: cardBg, borderRadius: 10, marginBottom: 12, border: `1px solid ${cardBorder}`, overflow: 'hidden' }}>
             <div style={{ padding: '12px 16px', borderBottom: `1px solid ${cardBorder}` }}>
-              <span style={{ fontSize: 15, fontWeight: 700, color: textWhite }}>
-                Rebate level <span style={{ color: textGold, fontStyle: 'italic', fontWeight: 800 }}>{level.level}</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: textDark }}>
+                Rebate level <span style={{ color: redPrimary, fontStyle: 'italic', fontWeight: 800 }}>{level.level}</span>
               </span>
             </div>
             {level.rates.map((rate, ri) => (
@@ -335,9 +341,9 @@ function RebateRatioPage({ onClose }: { onClose: () => void }) {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: goldPrimary, opacity: 0.6 }} />
-                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>{ri + 1} level lower level commission rebate</span>
+                  <span style={{ fontSize: 12, color: textMuted }}>{ri + 1} level lower level commission rebate</span>
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: textGold }}>{rate}%</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: redPrimary }}>{rate}%</span>
               </div>
             ))}
           </div>
@@ -372,12 +378,12 @@ export default function PromotionsDetail() {
   
 
   const menuItems = [
-    { icon: <Copy size={18} color={goldPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
-    { icon: <Users size={18} color={goldPrimary} />, label: t('subordinate_data'), page: 'subordinate' },
-    { icon: <DollarSign size={18} color={goldPrimary} />, label: t('commission_detail'), page: 'commission' },
-    { icon: <ScrollText size={18} color={goldPrimary} />, label: t('invitation_rules'), page: 'rules' },
-    { icon: <Headphones size={18} color={goldPrimary} />, label: t('agent_customer_service'), page: 'service' },
-    { icon: <BadgePercent size={18} color={goldPrimary} />, label: t('rebate_ratio'), page: 'rebate' },
+    { icon: <Copy size={18} color={redPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
+    { icon: <Users size={18} color={redPrimary} />, label: t('subordinate_data'), page: 'subordinate' },
+    { icon: <DollarSign size={18} color={redPrimary} />, label: t('commission_detail'), page: 'commission' },
+    { icon: <ScrollText size={18} color={redPrimary} />, label: t('invitation_rules'), page: 'rules' },
+    { icon: <Headphones size={18} color={redPrimary} />, label: t('agent_customer_service'), page: 'service' },
+    { icon: <BadgePercent size={18} color={redPrimary} />, label: t('rebate_ratio'), page: 'rebate' },
   ];
 
   return (
@@ -386,22 +392,20 @@ export default function PromotionsDetail() {
 
       {/* ── Header with commission ── */}
       <div style={{ background: headerGradient, paddingBottom: 24, position: 'relative', overflow: 'hidden' }}>
-        {/* Decorative gold glow */}
-        <div style={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', width: 300, height: 200, background: 'radial-gradient(ellipse, rgba(212,175,55,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
         
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
           <div style={{ width: 32 }} />
           <span style={{ fontWeight: 700, fontSize: 17, color: textWhite }}>{t('agency')}</span>
           <button onClick={() => setActivePage('newSub')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(212,175,55,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(212,175,55,0.3)' }}>
-              <Users size={16} color={goldPrimary} />
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.3)' }}>
+              <Users size={16} color="#fff" />
             </div>
           </button>
         </div>
 
         {/* Commission display */}
         <div style={{ textAlign: 'center', paddingTop: 8, position: 'relative' }}>
-          <div style={{ fontSize: 44, fontWeight: 800, color: textGold, textShadow: '0 0 30px rgba(212,175,55,0.4)', letterSpacing: '-1px' }}>0.68</div>
+          <div style={{ fontSize: 44, fontWeight: 800, color: textWhite, letterSpacing: '-1px' }}>0.68</div>
           <div style={{
             display: 'inline-block', background: goldGradient,
             padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#000', fontWeight: 700, marginTop: 6,
@@ -409,23 +413,23 @@ export default function PromotionsDetail() {
           }}>
             {t('yesterday_total_commission')}
           </div>
-          <p style={{ fontSize: 11, color: textMuted, marginTop: 10 }}>{t('upgrade_level')}</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 10 }}>{t('upgrade_level')}</p>
         </div>
 
       </div>
 
       {/* ── Side-by-side Stats (Direct | Team) ── */}
       <div style={{ margin: '-10px 14px 0', position: 'relative', zIndex: 10 }}>
-        <div style={{ background: 'rgba(40,40,40,0.95)', borderRadius: 14, overflow: 'hidden', border: `1px solid rgba(212,175,55,0.12)`, backdropFilter: 'blur(10px)' }}>
+        <div style={{ background: cardBg, borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}`, backdropFilter: 'blur(10px)' }}>
           {/* Column Headers */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: '1px solid rgba(255,255,255,0.06)', background: 'rgba(212,175,55,0.06)' }}>
-              <Users size={16} color={goldPrimary} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: textWhite }}>{t('direct_subordinates')}</span>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: `1px solid ${cardBorder}`, background: 'rgba(200,16,46,0.06)' }}>
+              <Users size={16} color={redPrimary} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: textDark }}>{t('direct_subordinates')}</span>
             </div>
-            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(212,175,55,0.06)' }}>
-              <Users size={16} color={goldPrimary} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: textWhite }}>{t('team_subordinates')}</span>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(200,16,46,0.06)' }}>
+              <Users size={16} color={redPrimary} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: textDark }}>{t('team_subordinates')}</span>
             </div>
           </div>
           {/* Stats Rows */}
@@ -435,8 +439,8 @@ export default function PromotionsDetail() {
             { label: t('deposit_amount'), direct: stats.depositAmount, team: teamStats.depositAmount, highlight: true },
             { label: t('first_deposit_people'), direct: stats.firstDeposit, team: teamStats.firstDeposit },
           ].map((row, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: `1px solid ${cardBorder}` }}>
+              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: `1px solid ${cardBorder}` }}>
                 <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? greenAccent : textWhite }}>{row.direct}</div>
                 <div style={{ fontSize: 10, color: textMuted, marginTop: 3, lineHeight: 1.3 }}>{row.label}</div>
               </div>
@@ -454,7 +458,7 @@ export default function PromotionsDetail() {
         <button style={{
           width: '100%', padding: '15px 0', borderRadius: 50, border: 'none', cursor: 'pointer',
           background: goldGradient, color: '#000',
-          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(212,175,55,0.35)',
+          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 15px rgba(200,16,46,0.2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           letterSpacing: '0.5px',
         }}>
@@ -476,10 +480,10 @@ export default function PromotionsDetail() {
             transition: 'background 0.2s',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(212,175,55,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(212,175,55,0.12)' }}>
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(200,16,46,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${cardBorder}` }}>
                 {item.icon}
               </div>
-              <span style={{ fontSize: 14, fontWeight: 600, color: textWhite }}>{item.label}</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: textDark }}>{item.label}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {item.value && (
@@ -498,10 +502,10 @@ export default function PromotionsDetail() {
       {/* ── Promotion Data ── */}
       <div style={{ margin: '18px 14px 0', borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', background: cardBg, borderBottom: `1px solid ${cardBorder}` }}>
-          <div style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(212,175,55,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Gift size={16} color={goldPrimary} />
+          <div style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(200,16,46,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Gift size={16} color={redPrimary} />
           </div>
-          <span style={{ fontWeight: 700, fontSize: 14, color: textWhite }}>{t('promotion_data')}</span>
+          <span style={{ fontWeight: 700, fontSize: 14, color: textDark }}>{t('promotion_data')}</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: cardBg }}>
           {[
@@ -515,7 +519,7 @@ export default function PromotionsDetail() {
               borderRight: i % 2 === 0 ? `1px solid ${cardBorder}` : 'none',
               borderBottom: i < 2 ? `1px solid ${cardBorder}` : 'none',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: textWhite }}>{s.value}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: textDark }}>{s.value}</div>
               <div style={{ fontSize: 10, color: textMuted, marginTop: 4, lineHeight: 1.3 }}>{s.label}</div>
             </div>
           ))}
