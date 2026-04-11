@@ -50,71 +50,101 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
   const [searchUID, setSearchUID] = useState('');
   const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
+  const [filterLevel, setFilterLevel] = useState('all');
 
   const sampleSubordinates = [
-    { uid: '126840', level: 1, depositAmount: 0, commission: 0, time: '2026-04-06' },
-    { uid: '126843', level: 1, depositAmount: 0, commission: 0, time: '2026-04-06' },
+    { uid: '15034449', level: 2, depositAmount: 350, betAmount: 1265, commission: 2.28, time: '2026-04-10' },
+    { uid: '15302421', level: 2, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
+    { uid: '15704061', level: 2, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
+    { uid: '17284408', level: 2, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
+    { uid: '15717837', level: 3, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
+    { uid: '15738548', level: 3, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
+    { uid: '17660851', level: 3, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
   ];
+
+  const filteredSubs = sampleSubordinates.filter(sub => {
+    if (searchUID && !sub.uid.includes(searchUID)) return false;
+    if (filterLevel !== 'all' && sub.level.toString() !== filterLevel) return false;
+    return true;
+  });
+
+  const totalDeposit = sampleSubordinates.reduce((a, b) => a + b.depositAmount, 0);
+  const totalBet = sampleSubordinates.reduce((a, b) => a + b.betAmount, 0);
+  const depositCount = sampleSubordinates.filter(s => s.depositAmount > 0).length;
+  const bettorsCount = sampleSubordinates.filter(s => s.betAmount > 0).length;
+  const firstDepositPeople = sampleSubordinates.filter(s => s.depositAmount > 0).length;
 
   return (
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
       <SubPageHeader title={t('subordinate_data')} onClose={onClose} />
       <div style={{ padding: '12px' }}>
+        {/* Search */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
           <input type="text" placeholder={t('search_subordinate_uid')} value={searchUID} onChange={e => setSearchUID(e.target.value)}
             style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: `1px solid ${cardBorder}`, background: cardBg, fontSize: 14, outline: 'none', color: textDark }} />
-          <button style={{ width: 42, height: 42, borderRadius: 8, background: redGradient, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-            <Search size={18} color="#000" />
+          <button onClick={() => {}} style={{ width: 42, height: 42, borderRadius: 8, background: redGradient, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <Search size={18} color="#fff" />
           </button>
         </div>
+
+        {/* Filters */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-          <div style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, color: textDark }}>
-            {t('all')} <ChevronDown size={14} color={textMuted} />
-          </div>
-          <div style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, color: textDark }}>
-            {filterDate} <ChevronDown size={14} color={textMuted} />
-          </div>
+          <select value={filterLevel} onChange={e => setFilterLevel(e.target.value)}
+            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', appearance: 'auto', cursor: 'pointer' }}>
+            <option value="all">{t('all')}</option>
+            <option value="1">Level 1</option>
+            <option value="2">Level 2</option>
+            <option value="3">Level 3</option>
+          </select>
+          <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)}
+            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', cursor: 'pointer' }} />
         </div>
-        <div style={{ background: redSubtle, borderRadius: 12, overflow: 'hidden', marginBottom: 16, border: `1px solid rgba(200,16,46,0.2)` }}>
-          {[[{ label: t('deposit_number'), value: '0' }, { label: t('deposit_amount'), value: '0' }],
-            [{ label: t('number_of_bettors'), value: '0' }, { label: t('total_bet'), value: '0' }],
-            [{ label: t('first_deposit_people'), value: '0' }, { label: t('first_deposit_amount'), value: '0' }]
+
+        {/* Summary Stats */}
+        <div style={{ background: cardBg, borderRadius: 12, overflow: 'hidden', marginBottom: 16, border: `1px solid ${cardBorder}`, boxShadow: '0 2px 10px rgba(200,16,46,0.08)' }}>
+          {[[{ label: t('deposit_number'), value: depositCount.toString() }, { label: t('deposit_amount'), value: totalDeposit.toString() }],
+            [{ label: t('number_of_bettors'), value: bettorsCount.toString() }, { label: t('total_bet'), value: totalBet.toString() }],
+            [{ label: t('first_deposit_people'), value: firstDepositPeople.toString() }, { label: t('first_deposit_amount'), value: '0' }]
           ].map((row, ri) => (
             <div key={ri} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
               {row.map((s, ci) => (
                 <div key={ci} style={{
                   padding: '14px 8px', textAlign: 'center',
-                  borderRight: ci === 0 ? '1px solid rgba(200,16,46,0.15)' : 'none',
-                  borderBottom: ri < 2 ? '1px solid rgba(200,16,46,0.15)' : 'none',
+                  borderRight: ci === 0 ? `1px solid ${cardBorder}` : 'none',
+                  borderBottom: ri < 2 ? `1px solid ${cardBorder}` : 'none',
+                  background: ri === 0 ? 'rgba(200,16,46,0.04)' : 'transparent',
                 }}>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: textDark }}>{s.value}</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: redPrimary }}>{s.value}</div>
                   <div style={{ fontSize: 11, color: textMuted, marginTop: 4 }}>{s.label}</div>
                 </div>
               ))}
             </div>
           ))}
         </div>
-        {sampleSubordinates.map((sub, i) => (
+
+        {/* Subordinate Cards */}
+        {filteredSubs.map((sub, i) => (
           <div key={i} style={{
             background: cardBg, borderRadius: 10, padding: '14px 16px', marginBottom: 10,
-            border: `1px solid ${cardBorder}`,
+            border: `1px solid ${cardBorder}`, boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, paddingBottom: 10, borderBottom: `1px solid ${cardBorder}` }}>
               <span style={{ fontSize: 15, fontWeight: 700, color: textDark }}>UID:{sub.uid}</span>
               <button onClick={() => { navigator.clipboard.writeText(sub.uid); toast.success('UID copied'); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
-                <Copy size={14} color={textMuted} />
+                <Copy size={14} color={redPrimary} />
               </button>
             </div>
             {[
-              { label: 'Level', value: sub.level.toString() },
-              { label: t('deposit_amount'), value: sub.depositAmount.toString(), hl: true },
-              { label: t('commission_detail'), value: sub.commission.toString(), hl: true },
-              { label: 'Time', value: sub.time },
+              { label: 'Level', value: sub.level.toString(), color: textDark },
+              { label: t('deposit_amount'), value: sub.depositAmount.toString(), color: sub.depositAmount > 0 ? redPrimary : redPrimary },
+              { label: 'Bet amount', value: sub.betAmount.toString(), color: sub.betAmount > 0 ? redPrimary : redPrimary },
+              { label: 'Commission', value: sub.commission.toFixed(2), color: sub.commission > 0 ? redPrimary : redPrimary },
+              { label: 'Time', value: sub.time, color: textMuted },
             ].map((row, ri) => (
               <div key={ri} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 13 }}>
                 <span style={{ color: textMuted }}>{row.label}</span>
-                <span style={{ color: row.hl ? greenAccent : textWhite, fontWeight: row.hl ? 600 : 400 }}>{row.value}</span>
+                <span style={{ color: row.color, fontWeight: 600 }}>{row.value}</span>
               </div>
             ))}
           </div>
