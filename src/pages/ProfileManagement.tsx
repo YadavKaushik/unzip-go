@@ -246,7 +246,7 @@ export default function ProfileManagement() {
           <span className="text-[12px] font-bold block mb-2.5" style={{ color: '#333' }}>{t('service_center')}</span>
           <div className="grid grid-cols-3 gap-y-3">
             {serviceCenter.map((s, i) => (
-              <button key={i} onClick={() => toast.info(`${s.label} — Coming soon`)} className="flex flex-col items-center gap-1">
+              <button key={i} onClick={() => s.label === t('about') ? setShowAbout(true) : toast.info(`${s.label} — Coming soon`)} className="flex flex-col items-center gap-1">
                 <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(200,16,46,0.08)' }}>
                   <s.icon size={15} style={{ color: '#C8102E' }} />
                 </div>
@@ -270,6 +270,14 @@ export default function ProfileManagement() {
       </div>
 
       <BottomNav />
+
+      <AnimatePresence>
+        {showAbout && (
+          <motion.div key="about" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 280 }}>
+            <AboutUsPage onClose={() => setShowAbout(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
