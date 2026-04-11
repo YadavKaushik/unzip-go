@@ -205,11 +205,16 @@ const LIVE_WINNERS = [
 
 
 const TOP_EARNERS = [
-{ id: 'earn-001', rank: 1, user: 'Mem***J9L', amount: 5274433715.60, avatarBg: 'from-yellow-400 to-orange-500', initials: 'J9' },
-{ id: 'earn-002', rank: 2, user: 'Mem***NPD', amount: 628224335.20, avatarBg: 'from-gray-300 to-gray-500', initials: 'NP' },
-{ id: 'earn-003', rank: 3, user: 'Mem***R2T', amount: 120945955.70, avatarBg: 'from-orange-400 to-amber-600', initials: 'R2' },
-{ id: 'earn-004', rank: 4, user: 'Mem***JTY', amount: 43094382.80, avatarBg: 'from-pink-400 to-rose-600', initials: 'JT' },
-{ id: 'earn-005', rank: 5, user: 'Mem***SH0', amount: 29417640.00, avatarBg: 'from-blue-400 to-indigo-600', initials: 'SH' }];
+{ id: 'earn-001', rank: 1, user: 'AZA***RH', amount: 16501785370.00, avatarBg: 'from-yellow-400 to-orange-500', initials: 'AZ' },
+{ id: 'earn-002', rank: 2, user: 'Mem***LB2', amount: 672550039.00, avatarBg: 'from-gray-300 to-gray-500', initials: 'LB' },
+{ id: 'earn-003', rank: 3, user: 'Mem***MAL', amount: 224813287.72, avatarBg: 'from-orange-400 to-amber-600', initials: 'MA' },
+{ id: 'earn-004', rank: 4, user: 'Bo***ss', amount: 130260620.00, avatarBg: 'from-pink-400 to-rose-600', initials: 'Bo' },
+{ id: 'earn-005', rank: 5, user: 'Mem***CEZ', amount: 90952883.70, avatarBg: 'from-blue-400 to-indigo-600', initials: 'CE' },
+{ id: 'earn-006', rank: 6, user: 'TR***X', amount: 51034676.00, avatarBg: 'from-purple-400 to-violet-600', initials: 'TR' },
+{ id: 'earn-007', rank: 7, user: 'GO***OA', amount: 14904036.00, avatarBg: 'from-green-400 to-emerald-600', initials: 'GO' },
+{ id: 'earn-008', rank: 8, user: 'San***Raj', amount: 13600636.00, avatarBg: 'from-red-400 to-rose-600', initials: 'SR' },
+{ id: 'earn-009', rank: 9, user: 'Mem***KEC', amount: 7408803.92, avatarBg: 'from-cyan-400 to-teal-600', initials: 'KE' },
+{ id: 'earn-010', rank: 10, user: 'Mem***LBQ', amount: 6572084.66, avatarBg: 'from-amber-400 to-yellow-600', initials: 'LB' }];
 
 
 // ── Premium Card Wrapper ───────────────────────────────────────────────────────
