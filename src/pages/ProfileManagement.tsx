@@ -94,6 +94,7 @@ export default function ProfileManagement() {
   const { user, profile, wallet, signOut } = useAuth();
   const { t, languages, lang } = useI18n();
   const [copied, setCopied] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   const avatarUrl = profile?.avatar_url || '/avatars/avatar-1.jpg';
 
