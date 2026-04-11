@@ -19,7 +19,7 @@ const translations: Record<Lang, Record<string, string>> = {
     hi: 'Hi', we_have_gift: 'We have a gift for you',
     enter_gift_code_below: 'Please enter the gift code below',
     settings: 'Settings', promotions: 'Promotions',
-    activity: 'Activity', spin: 'Spin', promote: 'Promote',
+    activity: 'Activity', spin: 'Spin', promote: 'Promotion',
     total_balance: 'Total balance', my_wallet: 'My Wallet',
     vip: 'VIP', transaction: 'Transaction',
     deposit_desc: 'Deposit history', withdraw_desc: 'Withdraw history',
