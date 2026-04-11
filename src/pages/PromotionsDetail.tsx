@@ -36,7 +36,7 @@ function SubPageHeader({ title, onClose }: { title: string; onClose: () => void 
       <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
         <ArrowLeft size={22} color="#fff" />
       </button>
-      <span style={{ fontWeight: 700, fontSize: 17, color: textDark }}>{title}</span>
+      <span style={{ fontWeight: 700, fontSize: 17, color: '#fff' }}>{title}</span>
       <div style={{ width: 28 }} />
     </div>
   );
@@ -394,16 +394,16 @@ export default function PromotionsDetail() {
         <div style={{ position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)', width: 300, height: 180, background: 'radial-gradient(ellipse, rgba(200,16,46,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
           <div style={{ width: 32 }} />
-          <span style={{ fontWeight: 700, fontSize: 17, color: textDark }}>{t('agency')}</span>
+          <span style={{ fontWeight: 700, fontSize: 17, color: '#fff' }}>{t('agency')}</span>
           <button onClick={() => setActivePage('newSub')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(200,16,46,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(200,16,46,0.25)' }}>
-              <Users size={16} color={goldPrimary} />
+              <Users size={16} color="#fff" />
             </div>
           </button>
         </div>
         <div style={{ textAlign: 'center', paddingTop: 8, position: 'relative' }}>
-          <div style={{ fontSize: 44, fontWeight: 800, color: textDark, textShadow: '0 0 40px rgba(200,16,46,0.3)', letterSpacing: '-1px' }}>0.68</div>
-          <div style={{ display: 'inline-block', background: redGradient, padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#fff', fontWeight: 700, marginTop: 6, boxShadow: '0 4px 15px rgba(200,16,46,0.25)' }}>
+          <div style={{ fontSize: 44, fontWeight: 800, color: '#fff', textShadow: '0 0 40px rgba(255,255,255,0.3)', letterSpacing: '-1px' }}>0.68</div>
+          <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#fff', fontWeight: 700, marginTop: 6, boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
             {t('yesterday_total_commission')}
           </div>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 10 }}>{t('upgrade_level')}</p>
@@ -412,15 +412,15 @@ export default function PromotionsDetail() {
 
       {/* ── Side-by-side Stats (Direct | Team) ── */}
       <div style={{ margin: '-10px 14px 0', position: 'relative', zIndex: 10 }}>
-        <div style={{ background: 'rgba(50,50,50,0.9)', borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)' }}>
+        <div style={{ background: '#fff', borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}`, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: '1px solid rgba(255,255,255,0.06)', background: 'rgba(200,16,46,0.06)' }}>
-              <Users size={15} color={goldPrimary} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: textDark }}>{t('direct_subordinates')}</span>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: `1px solid ${cardBorder}`, background: 'rgba(200,16,46,0.05)' }}>
+              <Users size={15} color={redPrimary} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary }}>{t('direct_subordinates')}</span>
             </div>
-            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(200,16,46,0.06)' }}>
-              <Users size={15} color={goldPrimary} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: textDark }}>{t('team_subordinates')}</span>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(200,16,46,0.05)' }}>
+              <Users size={15} color={redPrimary} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary }}>{t('team_subordinates')}</span>
             </div>
           </div>
           {[
@@ -429,13 +429,13 @@ export default function PromotionsDetail() {
             { label: t('deposit_amount'), direct: stats.depositAmount, team: teamStats.depositAmount, highlight: true },
             { label: t('first_deposit_people'), direct: stats.firstDeposit, team: teamStats.firstDeposit },
           ].map((row, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? greenAccent : textWhite }}>{row.direct}</div>
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: `1px solid ${cardBorder}` }}>
+              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: `1px solid ${cardBorder}` }}>
+                <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? redPrimary : textDark }}>{row.direct}</div>
                 <div style={{ fontSize: 10, color: textMuted, marginTop: 3, lineHeight: 1.3 }}>{row.label}</div>
               </div>
               <div style={{ textAlign: 'center', padding: '14px 8px' }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? greenAccent : textWhite }}>{row.team}</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? redPrimary : textDark }}>{row.team}</div>
                 <div style={{ fontSize: 10, color: textMuted, marginTop: 3, lineHeight: 1.3 }}>{row.label}</div>
               </div>
             </div>
