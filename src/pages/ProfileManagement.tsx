@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { toast, Toaster } from 'sonner';
 import { Copy, CheckCircle, LogOut, ChevronRight, Wallet, Camera, ArrowUpRight, Download, Upload, Crown, Bell, Gift, Gamepad2, BarChart3, Globe, Settings, MessageCircle, Megaphone, HelpCircle, BookOpen, Info } from 'lucide-react';
 import { ProfileSkeleton } from '@/components/SkeletonScreens';
