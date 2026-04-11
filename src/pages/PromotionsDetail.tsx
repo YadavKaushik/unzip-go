@@ -391,55 +391,46 @@ export default function PromotionsDetail() {
 
       {/* ── Header with commission ── */}
       <div style={{ background: headerGradient, paddingBottom: 24, position: 'relative', overflow: 'hidden' }}>
-        
+        <div style={{ position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)', width: 300, height: 180, background: 'radial-gradient(ellipse, rgba(212,175,55,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
           <div style={{ width: 32 }} />
           <span style={{ fontWeight: 700, fontSize: 17, color: textWhite }}>{t('agency')}</span>
           <button onClick={() => setActivePage('newSub')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.3)' }}>
-              <Users size={16} color="#fff" />
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(212,175,55,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(212,175,55,0.25)' }}>
+              <Users size={16} color={goldPrimary} />
             </div>
           </button>
         </div>
-
-        {/* Commission display */}
         <div style={{ textAlign: 'center', paddingTop: 8, position: 'relative' }}>
-          <div style={{ fontSize: 44, fontWeight: 800, color: textWhite, letterSpacing: '-1px' }}>0.68</div>
-          <div style={{
-            display: 'inline-block', background: goldGradient,
-            padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#000', fontWeight: 700, marginTop: 6,
-            boxShadow: '0 4px 15px rgba(212,175,55,0.3)',
-          }}>
+          <div style={{ fontSize: 44, fontWeight: 800, color: textGold, textShadow: '0 0 40px rgba(212,175,55,0.3)', letterSpacing: '-1px' }}>0.68</div>
+          <div style={{ display: 'inline-block', background: goldGradient, padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#000', fontWeight: 700, marginTop: 6, boxShadow: '0 4px 15px rgba(212,175,55,0.25)' }}>
             {t('yesterday_total_commission')}
           </div>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 10 }}>{t('upgrade_level')}</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 10 }}>{t('upgrade_level')}</p>
         </div>
-
       </div>
 
       {/* ── Side-by-side Stats (Direct | Team) ── */}
       <div style={{ margin: '-10px 14px 0', position: 'relative', zIndex: 10 }}>
-        <div style={{ background: cardBg, borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}`, backdropFilter: 'blur(10px)' }}>
-          {/* Column Headers */}
+        <div style={{ background: 'rgba(50,50,50,0.9)', borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: `1px solid ${cardBorder}`, background: 'rgba(200,16,46,0.06)' }}>
-              <Users size={16} color={redPrimary} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: textDark }}>{t('direct_subordinates')}</span>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: '1px solid rgba(255,255,255,0.06)', background: 'rgba(212,175,55,0.06)' }}>
+              <Users size={15} color={goldPrimary} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: textWhite }}>{t('direct_subordinates')}</span>
             </div>
-            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(200,16,46,0.06)' }}>
-              <Users size={16} color={redPrimary} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: textDark }}>{t('team_subordinates')}</span>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(212,175,55,0.06)' }}>
+              <Users size={15} color={goldPrimary} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: textWhite }}>{t('team_subordinates')}</span>
             </div>
           </div>
-          {/* Stats Rows */}
           {[
             { label: t('number_of_register'), direct: stats.register, team: teamStats.register },
             { label: t('deposit_number'), direct: stats.depositNumber, team: teamStats.depositNumber, highlight: true },
             { label: t('deposit_amount'), direct: stats.depositAmount, team: teamStats.depositAmount, highlight: true },
             { label: t('first_deposit_people'), direct: stats.firstDeposit, team: teamStats.firstDeposit },
           ].map((row, i) => (
-            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: `1px solid ${cardBorder}` }}>
-              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: `1px solid ${cardBorder}` }}>
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
                 <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? greenAccent : textWhite }}>{row.direct}</div>
                 <div style={{ fontSize: 10, color: textMuted, marginTop: 3, lineHeight: 1.3 }}>{row.label}</div>
               </div>
@@ -452,37 +443,39 @@ export default function PromotionsDetail() {
         </div>
       </div>
 
-      {/* ── Download QR Code Button ── */}
+      {/* ── Copy Referral Link Button ── */}
       <div style={{ padding: '18px 14px 0' }}>
-        <button style={{
+        <button onClick={() => {
+          navigator.clipboard.writeText(REFERRAL_LINK).then(() => {
+            toast.success('Referral link copied!');
+          });
+        }} style={{
           width: '100%', padding: '15px 0', borderRadius: 50, border: 'none', cursor: 'pointer',
           background: goldGradient, color: '#000',
-          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 15px rgba(200,16,46,0.2)',
+          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(212,175,55,0.3)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          letterSpacing: '0.5px',
         }}>
-          <Download size={18} />
-          {t('download_qr')}
+          <Copy size={18} />
+          Copy Referral Link
         </button>
       </div>
 
       {/* ── Menu Items ── */}
-      <div style={{ margin: '18px 14px 0', borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
+      <div style={{ margin: '18px 14px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {menuItems.map((item, i) => (
           <button key={i} onClick={() => {
             if (item.isCode) { copyCode(); return; }
             if (item.page) setActivePage(item.page);
           }} style={{
             width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '15px 16px', background: cardBg, border: 'none', cursor: 'pointer',
-            borderBottom: i < menuItems.length - 1 ? `1px solid ${cardBorder}` : 'none',
-            transition: 'background 0.2s',
+            padding: '16px 16px', background: cardBg, border: `1px solid ${cardBorder}`, cursor: 'pointer',
+            borderRadius: 12,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(200,16,46,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${cardBorder}` }}>
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(212,175,55,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(212,175,55,0.12)' }}>
                 {item.icon}
               </div>
-              <span style={{ fontSize: 14, fontWeight: 600, color: textDark }}>{item.label}</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: textWhite }}>{item.label}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {item.value && (
@@ -499,14 +492,12 @@ export default function PromotionsDetail() {
       </div>
 
       {/* ── Promotion Data ── */}
-      <div style={{ margin: '18px 14px 0', borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', background: cardBg, borderBottom: `1px solid ${cardBorder}` }}>
-          <div style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(200,16,46,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Gift size={16} color={redPrimary} />
-          </div>
-          <span style={{ fontWeight: 700, fontSize: 14, color: textDark }}>{t('promotion_data')}</span>
+      <div style={{ margin: '18px 14px 0', borderRadius: 14, overflow: 'hidden', background: cardBg, border: `1px solid ${cardBorder}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', borderBottom: `1px solid ${cardBorder}` }}>
+          <span style={{ fontSize: 18 }}>🎮</span>
+          <span style={{ fontWeight: 700, fontSize: 14, color: textWhite }}>{t('promotion_data')}</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: cardBg }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
           {[
             { label: t('this_week'), value: '0.68' },
             { label: t('total_commission'), value: '2369.7' },
@@ -518,7 +509,7 @@ export default function PromotionsDetail() {
               borderRight: i % 2 === 0 ? `1px solid ${cardBorder}` : 'none',
               borderBottom: i < 2 ? `1px solid ${cardBorder}` : 'none',
             }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: textDark }}>{s.value}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: textWhite }}>{s.value}</div>
               <div style={{ fontSize: 10, color: textMuted, marginTop: 4, lineHeight: 1.3 }}>{s.label}</div>
             </div>
           ))}
