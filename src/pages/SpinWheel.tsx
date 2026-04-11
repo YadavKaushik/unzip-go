@@ -1045,20 +1045,6 @@ function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
 // ─── Page Entry ────────────────────────────────────────────────────────────────
 export default function SpinWheelPage() {
   const [step, setStep] = useState<'gift' | 'spin'>('gift');
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem('techie404-isLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
-    if (!loggedIn) {
-      navigate('/sign-up-login-screen');
-    }
-  }, [navigate]);
-
-  if (isLoggedIn === null || !isLoggedIn) {
-    return <SpinSkeleton />;
-  }
 
   if (step === 'gift') {
     return <GiftBoxStep onSelect={() => setStep('spin')} />;
