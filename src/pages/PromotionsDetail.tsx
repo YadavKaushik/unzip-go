@@ -48,9 +48,15 @@ function SubPageHeader({ title, onClose }: { title: string; onClose: () => void 
 
 function SubordinateDataPage({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
+  const { user } = useAuth();
   const [searchUID, setSearchUID] = useState('');
   const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
   const [filterLevel, setFilterLevel] = useState('all');
+
+  // Calculate days from user's account creation date to today
+  const createdAt = user?.created_at ? new Date(user.created_at) : new Date();
+  const today = new Date();
+  const daysSinceCreation = Math.max(1, Math.ceil((today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)) + 1);
 
   const sampleSubordinates = [
     { uid: '15034449', level: 2, depositAmount: 350, betAmount: 1265, commission: 2.28, time: '2026-04-10' },
@@ -101,7 +107,7 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
           </select>
           <select value={filterDate} onChange={e => setFilterDate(e.target.value)}
             style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', appearance: 'auto', cursor: 'pointer' }}>
-            {Array.from({ length: 30 }, (_, i) => {
+            {Array.from({ length: daysSinceCreation }, (_, i) => {
               const d = new Date();
               d.setDate(d.getDate() - i);
               const val = d.toISOString().split('T')[0];
