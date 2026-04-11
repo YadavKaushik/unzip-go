@@ -33,11 +33,11 @@ const REFERRAL_LINK = `https://app.example.com/register?code=${INVITATION_CODE}`
 /* ── Sub-page header ── */
 function SubPageHeader({ title, onClose }: { title: string; onClose: () => void }) {
   return (
-    <div style={{ background: redGradient, padding: '0 16px', height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
+    <div style={{ background: redGradient, padding: '0 16px', height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
       <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
         <ArrowLeft size={22} color="#fff" />
       </button>
-      <span style={{ fontWeight: 700, fontSize: 17, color: textDark }}>{title}</span>
+      <span style={{ fontWeight: 700, fontSize: 17, color: textWhite }}>{title}</span>
       <div style={{ width: 28 }} />
     </div>
   );
