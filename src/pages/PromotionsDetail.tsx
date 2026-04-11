@@ -23,6 +23,11 @@ const textWhite = '#ffffff';
 const textMuted = '#888888';
 const greenAccent = '#22c55e';
 const orangeAccent = '#D4AF37';
+const textGold = '#D4AF37';
+const darkBg = creamBg;
+const goldGradientSubtle = 'linear-gradient(135deg, rgba(200,16,46,0.08) 0%, rgba(200,16,46,0.03) 100%)';
+
+const INVITATION_CODE = '552331597041';
 const REFERRAL_LINK = `https://app.example.com/register?code=${INVITATION_CODE}`;
 
 /* ── Sub-page header ── */
