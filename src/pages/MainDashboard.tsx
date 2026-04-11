@@ -938,8 +938,8 @@ export default function MainDashboard() {
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-2 pb-3 px-1"
                 style={{ background: 'linear-gradient(180deg, #f5e6b8 0%, #e8d5a0 100%)', minHeight: '75px' }}>
                 <div className="text-[10px] font-700 text-center leading-tight" style={{ color: '#5a3e00' }}>{TOP_EARNERS[1].user}</div>
-                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
-                  <span className="text-[10px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[1].amount / 1e7).toFixed(2)}Cr</span>
+                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+                  <span className="text-[10px] font-700 text-white">₹{(TOP_EARNERS[1].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -961,8 +961,8 @@ export default function MainDashboard() {
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-3 pb-4 px-1"
                 style={{ background: 'linear-gradient(180deg, #fff5d6 0%, #f5e6b8 100%)', minHeight: '95px' }}>
                 <div className="text-[11px] font-700 text-center leading-tight" style={{ color: '#3a2000' }}>{TOP_EARNERS[0].user}</div>
-                <div className="mt-1.5 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
-                  <span className="text-[10px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[0].amount / 1e7).toFixed(2)}Cr</span>
+                <div className="mt-1.5 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+                  <span className="text-[10px] font-700 text-white">₹{(TOP_EARNERS[0].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -984,8 +984,8 @@ export default function MainDashboard() {
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-2 pb-3 px-1"
                 style={{ background: 'linear-gradient(180deg, #eed9a8 0%, #dcc890 100%)', minHeight: '65px' }}>
                 <div className="text-[10px] font-700 text-center leading-tight" style={{ color: '#5a3e00' }}>{TOP_EARNERS[2].user}</div>
-                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
-                  <span className="text-[9px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[2].amount / 1e7).toFixed(2)}Cr</span>
+                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+                  <span className="text-[9px] font-700 text-white">₹{(TOP_EARNERS[2].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -1008,8 +1008,8 @@ export default function MainDashboard() {
                   <div className="flex-1">
                     <div className="text-white font-600 text-sm">{earner.user}</div>
                   </div>
-                  <div className="rounded-full px-3 py-1.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
-                    <span className="font-700 text-xs" style={{ color: '#5a3e00' }}>₹{earner.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                  <div className="rounded-full px-3 py-1.5" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+                    <span className="font-700 text-xs text-white">₹{earner.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                   </div>
                 </div>
               );
