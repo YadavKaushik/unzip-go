@@ -994,27 +994,28 @@ export default function MainDashboard() {
             </div>
           </div>
 
-          {/* Rank 4 & 5 */}
-          <div className="bg-white mx-0 px-3 py-2 space-y-2">
-            {TOP_EARNERS.slice(3, 5).map((earner, idx) =>
-            <div key={earner.id} className="flex items-center gap-3 py-2 border-b border-red-50 last:border-0">
-                <div className="w-7 text-center">
-                  <span className="text-gray-400 font-700 text-base">{earner.rank}</span>
+          {/* Rank 4-10 */}
+          <div className="px-2 py-2 space-y-2" style={{ background: '#FAF5E9' }}>
+            {TOP_EARNERS.slice(3).map((earner, idx) => {
+              const avatarComponents = [CartoonAvatar4, CartoonAvatar5, CartoonAvatar1, CartoonAvatar2, CartoonAvatar3, CartoonAvatar4, CartoonAvatar5];
+              const AvatarComp = avatarComponents[idx % avatarComponents.length];
+              return (
+                <div key={earner.id} className="flex items-center gap-3 py-3 px-3 rounded-xl" style={{ background: '#3a2020', border: '1px solid rgba(200,16,46,0.2)' }}>
+                  <div className="w-7 text-center">
+                    <span className="text-white/60 font-800 text-base">{earner.rank}</span>
+                  </div>
+                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor: '#C8102E' }}>
+                    <AvatarComp size={44} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-600 text-sm">{earner.user}</div>
+                  </div>
+                  <div className="rounded-full px-3 py-1.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                    <span className="font-700 text-xs" style={{ color: '#5a3e00' }}>₹{earner.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                  </div>
                 </div>
-                <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border border-red-900/40">
-                  {idx === 0 ? <CartoonAvatar4 size={44} /> : <CartoonAvatar5 size={44} />}
-                </div>
-                <div className="flex-1">
-                  <div className="text-gray-800 font-600 text-sm">{earner.user}</div>
-                </div>
-                <div
-                className="rounded-full px-3 py-1.5"
-                style={{ background: 'linear-gradient(135deg, #e87070, #c03030)' }}>
-                
-                  <span className="text-white font-700 text-xs">₹{earner.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                </div>
-              </div>
-            )}
+              );
+            })}
           </div>
         </div>
       </div>
