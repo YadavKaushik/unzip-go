@@ -7,25 +7,24 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useI18n } from '@/hooks/useI18n';
 
-/* ── Cream/Red Theme (matching game UI) ── */
-const creamBg = '#FAF5E9';
-const cardBg = '#FFFFFF';
-const cardBorder = '#f0e0c0';
+/* ── Dark/Gold Theme (matching game UI) ── */
+const darkBg = '#121212';
+const cardBg = 'rgba(255,255,255,0.05)';
+const cardBorder = 'rgba(255,255,255,0.08)';
 const redPrimary = '#C8102E';
 const redDark = '#8B0000';
 const goldPrimary = '#D4AF37';
 const goldLight = '#F5D060';
 const redGradient = 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)';
 const goldGradient = 'linear-gradient(135deg, #D4AF37 0%, #F5D060 50%, #D4AF37 100%)';
-const headerGradient = 'linear-gradient(180deg, #C8102E 0%, #8B0000 100%)';
-const textDark = '#1a1a1a';
+const headerGradient = 'linear-gradient(180deg, #2a1800 0%, #1a1000 60%, #121212 100%)';
+const textDark = '#ffffff';
 const textWhite = '#ffffff';
-const textMuted = '#888888';
+const textMuted = 'rgba(255,255,255,0.5)';
 const greenAccent = '#22c55e';
-const orangeAccent = '#D4AF37';
+const orangeAccent = '#e89a1c';
 const textGold = '#D4AF37';
-const darkBg = creamBg;
-const goldGradientSubtle = 'linear-gradient(135deg, rgba(200,16,46,0.08) 0%, rgba(200,16,46,0.03) 100%)';
+const goldGradientSubtle = 'linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(212,175,55,0.04) 100%)';
 
 const INVITATION_CODE = '552331597041';
 const REFERRAL_LINK = `https://app.example.com/register?code=${INVITATION_CODE}`;
