@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { toast, Toaster } from 'sonner';
 import { Copy, CheckCircle, LogOut, ChevronRight, Wallet, Camera, ArrowUpRight, Download, Upload, Crown, Bell, Gift, Gamepad2, BarChart3, Globe, Settings, MessageCircle, Megaphone, HelpCircle, BookOpen, Info } from 'lucide-react';
 import { ProfileSkeleton } from '@/components/SkeletonScreens';
@@ -7,11 +8,93 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useI18n } from '@/hooks/useI18n';
 
+/* ── About Us Page ── */
+function AboutUsPage({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: '#FAF5E9' }}>
+      <div className="sticky top-0 z-50 flex items-center justify-between px-4" style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)', height: 50 }}>
+        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+          <ChevronRight size={22} color="#fff" style={{ transform: 'rotate(180deg)' }} />
+        </button>
+        <span className="font-bold text-[17px] text-white">About Us</span>
+        <div style={{ width: 28 }} />
+      </div>
+      <div className="px-5 py-6">
+        {/* Logo / Brand */}
+        <div className="text-center mb-6">
+          <div className="w-20 h-20 rounded-2xl mx-auto flex items-center justify-center mb-3" style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)', boxShadow: '0 4px 20px rgba(200,16,46,0.25)' }}>
+            <Crown size={36} color="#FFD700" />
+          </div>
+          <h1 className="text-xl font-extrabold" style={{ color: '#1a1a1a' }}>Techie<span style={{ color: '#C8102E' }}>404</span></h1>
+          <p className="text-xs mt-1" style={{ color: '#999' }}>Version 1.0.0</p>
+        </div>
+
+        {/* About Content */}
+        <div className="rounded-2xl p-5 mb-4" style={{ background: '#fff', border: '1px solid #f0e0c0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+          <h2 className="text-sm font-bold mb-3" style={{ color: '#C8102E' }}>Who We Are</h2>
+          <p className="text-xs leading-relaxed mb-4" style={{ color: '#555' }}>
+            Techie404 is a premium entertainment and gaming platform designed to deliver an exceptional experience to users worldwide. Built with cutting-edge technology, our platform offers a seamless, secure, and thrilling gaming environment.
+          </p>
+          <h2 className="text-sm font-bold mb-3" style={{ color: '#C8102E' }}>Our Mission</h2>
+          <p className="text-xs leading-relaxed mb-4" style={{ color: '#555' }}>
+            To provide a world-class gaming experience with transparency, fairness, and top-notch security. We believe in creating a platform where every user feels valued and rewarded.
+          </p>
+          <h2 className="text-sm font-bold mb-3" style={{ color: '#C8102E' }}>Key Features</h2>
+          <div className="space-y-2.5">
+            {[
+              { icon: '🔒', title: 'Secure & Safe', desc: 'Bank-grade encryption protecting all transactions and data' },
+              { icon: '⚡', title: 'Instant Transactions', desc: 'Lightning-fast deposits and withdrawals with multiple payment methods' },
+              { icon: '🎮', title: 'Premium Games', desc: 'Curated collection of top-tier games from leading providers' },
+              { icon: '🎁', title: 'Generous Rewards', desc: 'Daily bonuses, VIP programs, and referral commissions up to 85%' },
+              { icon: '📱', title: 'Mobile First', desc: 'Optimized for mobile with a smooth, responsive interface' },
+              { icon: '🌐', title: '24/7 Support', desc: 'Round-the-clock customer service in multiple languages' },
+            ].map((f, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 rounded-xl" style={{ background: 'rgba(200,16,46,0.04)' }}>
+                <span className="text-lg mt-0.5">{f.icon}</span>
+                <div>
+                  <div className="text-xs font-bold" style={{ color: '#333' }}>{f.title}</div>
+                  <div className="text-[10px] mt-0.5" style={{ color: '#888' }}>{f.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Legal */}
+        <div className="rounded-2xl p-5 mb-4" style={{ background: '#fff', border: '1px solid #f0e0c0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+          <h2 className="text-sm font-bold mb-3" style={{ color: '#C8102E' }}>Legal & Compliance</h2>
+          <p className="text-xs leading-relaxed" style={{ color: '#555' }}>
+            Techie404 operates in compliance with applicable regulations and promotes responsible gaming practices. Users must be 18+ to participate. We are committed to fair play and employ certified random number generators for all games.
+          </p>
+        </div>
+
+        {/* Contact */}
+        <div className="rounded-2xl p-5" style={{ background: '#fff', border: '1px solid #f0e0c0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+          <h2 className="text-sm font-bold mb-3" style={{ color: '#C8102E' }}>Contact Us</h2>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs">📧</span>
+              <span className="text-xs" style={{ color: '#555' }}>support@techie404.app</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs">🌐</span>
+              <span className="text-xs" style={{ color: '#555' }}>www.techie404.app</span>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-[10px] mt-6 mb-4" style={{ color: '#bbb' }}>© 2026 Techie404. All rights reserved.</p>
+      </div>
+    </div>
+  );
+}
+
 export default function ProfileManagement() {
   const navigate = useNavigate();
   const { user, profile, wallet, signOut } = useAuth();
   const { t, languages, lang } = useI18n();
   const [copied, setCopied] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   const avatarUrl = profile?.avatar_url || '/avatars/avatar-1.jpg';
 
@@ -163,7 +246,7 @@ export default function ProfileManagement() {
           <span className="text-[12px] font-bold block mb-2.5" style={{ color: '#333' }}>{t('service_center')}</span>
           <div className="grid grid-cols-3 gap-y-3">
             {serviceCenter.map((s, i) => (
-              <button key={i} onClick={() => toast.info(`${s.label} — Coming soon`)} className="flex flex-col items-center gap-1">
+              <button key={i} onClick={() => s.label === t('about') ? setShowAbout(true) : toast.info(`${s.label} — Coming soon`)} className="flex flex-col items-center gap-1">
                 <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(200,16,46,0.08)' }}>
                   <s.icon size={15} style={{ color: '#C8102E' }} />
                 </div>
@@ -187,6 +270,14 @@ export default function ProfileManagement() {
       </div>
 
       <BottomNav />
+
+      <AnimatePresence>
+        {showAbout && (
+          <motion.div key="about" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 280 }}>
+            <AboutUsPage onClose={() => setShowAbout(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
