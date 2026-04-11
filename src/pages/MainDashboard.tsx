@@ -918,17 +918,17 @@ export default function MainDashboard() {
             <h3 className={`font-700 text-sm ${textPrimary}`}>Today&apos;s Earnings Ranking</h3>
           </div>
         </div>
-        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#2a1a1a', border: '1px solid rgba(200,16,46,0.2)' }}>
+        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#3a1515', border: '1px solid rgba(200,16,46,0.15)' }}>
           {/* Top 3 Podium */}
-          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative" style={{ background: 'linear-gradient(180deg, #3a2020 0%, #2a1a1a 100%)' }}>
+          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative" style={{ background: 'linear-gradient(180deg, #4a1a1a 0%, #3a1515 100%)' }}>
             {/* NO2 - Left */}
             <div className="flex flex-col items-center flex-1 relative z-10">
               <div className="relative mb-1">
                 <SilverCrown size={24} />
               </div>
               <div className="relative">
-                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#C0C0C0' }}>
-                  <CartoonAvatar2 size={56} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#6db36d', background: '#6db36d' }}>
+                  <img src="/avatars/avatar-6.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(192,192,192,0.3)' }}>
@@ -973,8 +973,8 @@ export default function MainDashboard() {
                 <BronzeCrown size={22} />
               </div>
               <div className="relative">
-                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#CD7F32' }}>
-                  <CartoonAvatar3 size={56} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#e8943a', background: '#e8943a' }}>
+                  <img src="/avatars/avatar-3.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(205,127,50,0.4)' }}>
