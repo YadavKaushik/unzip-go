@@ -273,7 +273,7 @@ export default function MainDashboard() {
   const [activeCategory, setActiveCategory] = useState('cat-lobby');
   const [currentBanner, setCurrentBanner] = useState(0);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const walletBalance = wallet ? Number(wallet.balance) + Number(wallet.bonus_balance) : 0;
+  const walletBalance = wallet ? (Number(wallet.balance) || 0) + (Number(wallet.bonus_balance) || 0) : 0;
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [winnerIndex, setWinnerIndex] = useState(0);
