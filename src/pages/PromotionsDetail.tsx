@@ -356,7 +356,7 @@ export default function PromotionsDetail() {
   const { user } = useAuth();
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'direct' | 'team'>('direct');
+  
   const [activePage, setActivePage] = useState<string | null>(null);
 
   const copyCode = () => {
@@ -369,7 +369,7 @@ export default function PromotionsDetail() {
 
   const stats = { register: 0, depositNumber: 0, depositAmount: 0, firstDeposit: 0 };
   const teamStats = { register: 0, depositNumber: 1, depositAmount: 350, firstDeposit: 0 };
-  const currentStats = activeTab === 'direct' ? stats : teamStats;
+  
 
   const menuItems = [
     { icon: <Copy size={18} color={goldPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
@@ -412,50 +412,40 @@ export default function PromotionsDetail() {
           <p style={{ fontSize: 11, color: textMuted, marginTop: 10 }}>{t('upgrade_level')}</p>
         </div>
 
-        {/* Tabs */}
-        <div style={{ display: 'flex', margin: '18px 14px 0', background: 'rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
-          {(['direct', 'team'] as const).map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{
-              flex: 1, padding: '12px 0', border: 'none', cursor: 'pointer',
-              background: activeTab === tab ? goldGradientSubtle : 'transparent',
-              color: activeTab === tab ? textGold : textMuted,
-              fontSize: 13, fontWeight: 700, borderRadius: 12,
-              transition: 'all 0.3s',
-              borderBottom: activeTab === tab ? `2px solid ${goldPrimary}` : '2px solid transparent',
-            }}>
-              <Users size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
-              {tab === 'direct' ? t('direct_subordinates') : t('team_subordinates')}
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* ── Stats Card ── */}
+      {/* ── Side-by-side Stats (Direct | Team) ── */}
       <div style={{ margin: '-10px 14px 0', position: 'relative', zIndex: 10 }}>
-        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 14, padding: '4px', border: `1px solid rgba(212,175,55,0.12)`, backdropFilter: 'blur(10px)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
-            {[
-              { label: t('number_of_register'), value: currentStats.register },
-              { label: t('number_of_register'), value: currentStats.register },
-              { label: t('deposit_number'), value: currentStats.depositNumber, highlight: true },
-              { label: t('deposit_number'), value: currentStats.depositNumber, highlight: true },
-              { label: t('deposit_amount'), value: currentStats.depositAmount, highlight: true },
-              { label: t('deposit_amount'), value: currentStats.depositAmount, highlight: true },
-              { label: t('first_deposit_people'), value: currentStats.firstDeposit },
-              { label: t('first_deposit_people'), value: currentStats.firstDeposit },
-            ].filter((_, i) => i % 2 === (activeTab === 'direct' ? 0 : 1) || true)
-            .slice(0, 4)
-            .map((s, i) => (
-              <div key={i} style={{
-                textAlign: 'center', padding: '14px 8px',
-                borderRight: i % 2 === 0 ? `1px solid rgba(255,255,255,0.06)` : 'none',
-                borderBottom: i < 2 ? `1px solid rgba(255,255,255,0.06)` : 'none',
-              }}>
-                <div style={{ fontSize: 22, fontWeight: 800, color: s.highlight ? greenAccent : textWhite }}>{s.value}</div>
-                <div style={{ fontSize: 10, color: textMuted, marginTop: 4, lineHeight: 1.3 }}>{s.label}</div>
-              </div>
-            ))}
+        <div style={{ background: 'rgba(40,40,40,0.95)', borderRadius: 14, overflow: 'hidden', border: `1px solid rgba(212,175,55,0.12)`, backdropFilter: 'blur(10px)' }}>
+          {/* Column Headers */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: '1px solid rgba(255,255,255,0.06)', background: 'rgba(212,175,55,0.06)' }}>
+              <Users size={16} color={goldPrimary} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: textWhite }}>{t('direct_subordinates')}</span>
+            </div>
+            <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(212,175,55,0.06)' }}>
+              <Users size={16} color={goldPrimary} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: textWhite }}>{t('team_subordinates')}</span>
+            </div>
           </div>
+          {/* Stats Rows */}
+          {[
+            { label: t('number_of_register'), direct: stats.register, team: teamStats.register },
+            { label: t('deposit_number'), direct: stats.depositNumber, team: teamStats.depositNumber, highlight: true },
+            { label: t('deposit_amount'), direct: stats.depositAmount, team: teamStats.depositAmount, highlight: true },
+            { label: t('first_deposit_people'), direct: stats.firstDeposit, team: teamStats.firstDeposit },
+          ].map((row, i) => (
+            <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? greenAccent : textWhite }}>{row.direct}</div>
+                <div style={{ fontSize: 10, color: textMuted, marginTop: 3, lineHeight: 1.3 }}>{row.label}</div>
+              </div>
+              <div style={{ textAlign: 'center', padding: '14px 8px' }}>
+                <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? greenAccent : textWhite }}>{row.team}</div>
+                <div style={{ fontSize: 10, color: textMuted, marginTop: 3, lineHeight: 1.3 }}>{row.label}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
