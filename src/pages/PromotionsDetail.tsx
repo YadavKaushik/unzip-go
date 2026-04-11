@@ -369,7 +369,7 @@ export default function PromotionsDetail() {
 
   const stats = { register: 0, depositNumber: 0, depositAmount: 0, firstDeposit: 0 };
   const teamStats = { register: 0, depositNumber: 1, depositAmount: 350, firstDeposit: 0 };
-  const currentStats = activeTab === 'direct' ? stats : teamStats;
+  
 
   const menuItems = [
     { icon: <Copy size={18} color={goldPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
