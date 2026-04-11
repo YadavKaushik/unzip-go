@@ -918,17 +918,17 @@ export default function MainDashboard() {
             <h3 className={`font-700 text-sm ${textPrimary}`}>Today&apos;s Earnings Ranking</h3>
           </div>
         </div>
-        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#2a1a1a', border: '1px solid rgba(200,16,46,0.2)' }}>
+        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#3a1515', border: '1px solid rgba(200,16,46,0.15)' }}>
           {/* Top 3 Podium */}
-          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative" style={{ background: 'linear-gradient(180deg, #3a2020 0%, #2a1a1a 100%)' }}>
+          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative" style={{ background: 'linear-gradient(180deg, #4a1a1a 0%, #3a1515 100%)' }}>
             {/* NO2 - Left */}
             <div className="flex flex-col items-center flex-1 relative z-10">
               <div className="relative mb-1">
                 <SilverCrown size={24} />
               </div>
               <div className="relative">
-                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#C0C0C0' }}>
-                  <CartoonAvatar2 size={56} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#6db36d', background: '#6db36d' }}>
+                  <img src="/avatars/avatar-6.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(192,192,192,0.3)' }}>
@@ -950,8 +950,8 @@ export default function MainDashboard() {
                 <GoldCrown size={32} />
               </div>
               <div className="relative">
-                <div className="w-18 h-18 rounded-full overflow-hidden shadow-lg" style={{ width: 72, height: 72, borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFD700' }}>
-                  <CartoonAvatar1 size={72} />
+                <div className="rounded-full overflow-hidden shadow-lg" style={{ width: 72, height: 72, borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFD700', background: '#4a9ee8' }}>
+                  <img src="/avatars/avatar-2.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="mt-1 bg-yellow-400 rounded-full px-3 py-0.5 shadow">
@@ -973,8 +973,8 @@ export default function MainDashboard() {
                 <BronzeCrown size={22} />
               </div>
               <div className="relative">
-                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#CD7F32' }}>
-                  <CartoonAvatar3 size={56} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#e8943a', background: '#e8943a' }}>
+                  <img src="/avatars/avatar-3.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(205,127,50,0.4)' }}>
@@ -994,15 +994,16 @@ export default function MainDashboard() {
           {/* Rank 4-10 */}
           <div className="px-2 py-2 space-y-2" style={{ background: '#FAF5E9' }}>
             {TOP_EARNERS.slice(3).map((earner, idx) => {
-              const avatarComponents = [CartoonAvatar4, CartoonAvatar5, CartoonAvatar1, CartoonAvatar2, CartoonAvatar3, CartoonAvatar4, CartoonAvatar5];
-              const AvatarComp = avatarComponents[idx % avatarComponents.length];
+              const avatarIndex = [4, 5, 7, 8, 9, 10, 12][idx % 7];
+              const borderColors = ['#e84393', '#3498db', '#C8102E', '#27ae60', '#8e44ad', '#e67e22', '#2c3e50'];
+              const borderColor = borderColors[idx % borderColors.length];
               return (
-                <div key={earner.id} className="flex items-center gap-3 py-3 px-3 rounded-xl" style={{ background: '#3a2020', border: '1px solid rgba(200,16,46,0.2)' }}>
+                <div key={earner.id} className="flex items-center gap-3 py-3 px-3 rounded-xl" style={{ background: '#3a1515', border: '1px solid rgba(200,16,46,0.15)' }}>
                   <div className="w-7 text-center">
-                    <span className="text-white/60 font-800 text-base">{earner.rank}</span>
+                    <span className="text-white/50 font-800 text-base">{earner.rank}</span>
                   </div>
-                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor: '#C8102E' }}>
-                    <AvatarComp size={44} />
+                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor }}>
+                    <img src={`/avatars/avatar-${avatarIndex}.jpg`} alt="" className="w-full h-full object-cover" loading="lazy" />
                   </div>
                   <div className="flex-1">
                     <div className="text-white font-600 text-sm">{earner.user}</div>
