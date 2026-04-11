@@ -356,7 +356,7 @@ export default function PromotionsDetail() {
   const { user } = useAuth();
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'direct' | 'team'>('direct');
+  
   const [activePage, setActivePage] = useState<string | null>(null);
 
   const copyCode = () => {
