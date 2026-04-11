@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast, Toaster } from 'sonner';
-import { ChevronRight, Copy, Check, Search, ChevronDown, ArrowLeft, Users, DollarSign, ScrollText, Headphones, BadgePercent, Gift, QrCode, Download } from 'lucide-react';
+import { ChevronRight, Copy, Check, Search, ChevronDown, ArrowLeft, Users, DollarSign, ScrollText, Headphones, BadgePercent, Gift, QrCode, Download, MessageCircle, Shield, Clock, Star, AlertCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import BottomNav from '@/components/BottomNav';
 import { useNavigate } from 'react-router-dom';
@@ -227,6 +227,63 @@ function InvitePage({ onClose }: { onClose: () => void }) {
         <button onClick={copyLink} style={{ width: '100%', padding: '14px 0', borderRadius: 50, cursor: 'pointer', background: redGradient, border: 'none', color: '#fff', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
           {linkCopied ? <><Check size={16} /> {t('copied')}</> : t('copy_invitation_link')}
         </button>
+      </div>
+    </div>
+  );
+}
+
+function AgentCustomerServicePage({ onClose }: { onClose: () => void }) {
+  const TELEGRAM_ID = '@techie_404';
+  const TELEGRAM_LINK = 'https://t.me/techie_404';
+
+  const conditions = [
+    { icon: <Shield size={18} color={redPrimary} />, title: 'Official Channel Only', desc: 'Only contact through our official Telegram channel. We will never DM you first.' },
+    { icon: <AlertCircle size={18} color={redPrimary} />, title: 'Never Share Password', desc: 'Our support team will never ask for your password, OTP, or bank details.' },
+    { icon: <Clock size={18} color={redPrimary} />, title: 'Response Time', desc: 'Our agent support team is available 24/7. Typical response time is within 5-10 minutes.' },
+    { icon: <Star size={18} color={redPrimary} />, title: 'Agent Level Required', desc: 'You must be a registered agent to access agent-level support services.' },
+    { icon: <MessageCircle size={18} color={redPrimary} />, title: 'Be Respectful', desc: 'Please communicate politely. Abusive language may result in support being denied.' },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
+      <SubPageHeader title="Agent Customer Service" onClose={onClose} />
+      <div style={{ padding: '16px' }}>
+        {/* Telegram ID Card */}
+        <div style={{ background: cardBg, borderRadius: 14, padding: '20px', marginBottom: 20, border: `1px solid ${cardBorder}`, boxShadow: '0 2px 12px rgba(200,16,46,0.08)', textAlign: 'center' }}>
+          <div style={{ width: 60, height: 60, borderRadius: '50%', background: redGradient, margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Headphones size={28} color="#fff" />
+          </div>
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: textDark, margin: '0 0 4px' }}>Agent Support</h3>
+          <p style={{ fontSize: 14, color: redPrimary, fontWeight: 700, margin: '0 0 4px' }}>{TELEGRAM_ID}</p>
+          <p style={{ fontSize: 12, color: textMuted, margin: 0 }}>Available 24/7 on Telegram</p>
+        </div>
+
+        {/* Conditions */}
+        <h4 style={{ fontSize: 14, fontWeight: 700, color: textDark, marginBottom: 12, paddingLeft: 4 }}>📋 Terms & Conditions</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+          {conditions.map((c, i) => (
+            <div key={i} style={{ background: cardBg, borderRadius: 12, padding: '14px 16px', border: `1px solid ${cardBorder}`, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(200,16,46,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                {c.icon}
+              </div>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: textDark, margin: '0 0 3px' }}>{c.title}</p>
+                <p style={{ fontSize: 12, color: textMuted, margin: 0, lineHeight: 1.5 }}>{c.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Chat on Telegram Button */}
+        <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+          width: '100%', padding: '15px 0', borderRadius: 50, textDecoration: 'none',
+          background: redGradient, color: '#fff',
+          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(200,16,46,0.3)',
+        }}>
+          <MessageCircle size={20} />
+          Chat on Telegram
+        </a>
       </div>
     </div>
   );
@@ -582,8 +639,8 @@ export default function PromotionsDetail() {
           </motion.div>
         )}
         {activePage === 'service' && (
-          <motion.div key="invite" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 280 }}>
-            <InvitePage onClose={() => setActivePage(null)} />
+          <motion.div key="service" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 280 }}>
+            <AgentCustomerServicePage onClose={() => setActivePage(null)} />
           </motion.div>
         )}
         {activePage === 'rebate' && (
