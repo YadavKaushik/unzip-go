@@ -2328,6 +2328,10 @@ export default function ActivityPage() {
                 ? () => setShowSuperJackpot(true)
                 : action?.key === 'qa-wheel'
                 ? () => navigate('/spin-wheel')
+                : action?.key === 'qa-activity'
+                ? () => setActivePromo('activityAward')
+                : action?.key === 'qa-firstgift'
+                ? () => setActivePromo('firstGift')
                 : undefined
             }
           >
