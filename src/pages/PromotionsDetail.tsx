@@ -377,12 +377,12 @@ export default function PromotionsDetail() {
   
 
   const menuItems = [
-    { icon: <Copy size={18} color={goldPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
-    { icon: <Users size={18} color={goldPrimary} />, label: t('subordinate_data'), page: 'subordinate' },
-    { icon: <DollarSign size={18} color={goldPrimary} />, label: t('commission_detail'), page: 'commission' },
-    { icon: <ScrollText size={18} color={goldPrimary} />, label: t('invitation_rules'), page: 'rules' },
-    { icon: <Headphones size={18} color={goldPrimary} />, label: t('agent_customer_service'), page: 'service' },
-    { icon: <BadgePercent size={18} color={goldPrimary} />, label: t('rebate_ratio'), page: 'rebate' },
+    { icon: <Copy size={18} color={redPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
+    { icon: <Users size={18} color={redPrimary} />, label: t('subordinate_data'), page: 'subordinate' },
+    { icon: <DollarSign size={18} color={redPrimary} />, label: t('commission_detail'), page: 'commission' },
+    { icon: <ScrollText size={18} color={redPrimary} />, label: t('invitation_rules'), page: 'rules' },
+    { icon: <Headphones size={18} color={redPrimary} />, label: t('agent_customer_service'), page: 'service' },
+    { icon: <BadgePercent size={18} color={redPrimary} />, label: t('rebate_ratio'), page: 'rebate' },
   ];
 
   return (
@@ -468,11 +468,11 @@ export default function PromotionsDetail() {
             if (item.page) setActivePage(item.page);
           }} style={{
             width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '16px 16px', background: cardBg, border: `1px solid ${cardBorder}`, cursor: 'pointer',
+            padding: '16px 16px', background: '#fff', border: `1px solid ${cardBorder}`, cursor: 'pointer',
             borderRadius: 12,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(200,16,46,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(200,16,46,0.12)' }}>
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(200,16,46,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(200,16,46,0.12)' }}>
                 {item.icon}
               </div>
               <span style={{ fontSize: 14, fontWeight: 600, color: textDark }}>{item.label}</span>
