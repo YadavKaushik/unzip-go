@@ -205,11 +205,16 @@ const LIVE_WINNERS = [
 
 
 const TOP_EARNERS = [
-{ id: 'earn-001', rank: 1, user: 'Mem***J9L', amount: 5274433715.60, avatarBg: 'from-yellow-400 to-orange-500', initials: 'J9' },
-{ id: 'earn-002', rank: 2, user: 'Mem***NPD', amount: 628224335.20, avatarBg: 'from-gray-300 to-gray-500', initials: 'NP' },
-{ id: 'earn-003', rank: 3, user: 'Mem***R2T', amount: 120945955.70, avatarBg: 'from-orange-400 to-amber-600', initials: 'R2' },
-{ id: 'earn-004', rank: 4, user: 'Mem***JTY', amount: 43094382.80, avatarBg: 'from-pink-400 to-rose-600', initials: 'JT' },
-{ id: 'earn-005', rank: 5, user: 'Mem***SH0', amount: 29417640.00, avatarBg: 'from-blue-400 to-indigo-600', initials: 'SH' }];
+{ id: 'earn-001', rank: 1, user: 'AZA***RH', amount: 16501785370.00, avatarBg: 'from-yellow-400 to-orange-500', initials: 'AZ' },
+{ id: 'earn-002', rank: 2, user: 'Mem***LB2', amount: 672550039.00, avatarBg: 'from-gray-300 to-gray-500', initials: 'LB' },
+{ id: 'earn-003', rank: 3, user: 'Mem***MAL', amount: 224813287.72, avatarBg: 'from-orange-400 to-amber-600', initials: 'MA' },
+{ id: 'earn-004', rank: 4, user: 'Bo***ss', amount: 130260620.00, avatarBg: 'from-pink-400 to-rose-600', initials: 'Bo' },
+{ id: 'earn-005', rank: 5, user: 'Mem***CEZ', amount: 90952883.70, avatarBg: 'from-blue-400 to-indigo-600', initials: 'CE' },
+{ id: 'earn-006', rank: 6, user: 'TR***X', amount: 51034676.00, avatarBg: 'from-purple-400 to-violet-600', initials: 'TR' },
+{ id: 'earn-007', rank: 7, user: 'GO***OA', amount: 14904036.00, avatarBg: 'from-green-400 to-emerald-600', initials: 'GO' },
+{ id: 'earn-008', rank: 8, user: 'San***Raj', amount: 13600636.00, avatarBg: 'from-red-400 to-rose-600', initials: 'SR' },
+{ id: 'earn-009', rank: 9, user: 'Mem***KEC', amount: 7408803.92, avatarBg: 'from-cyan-400 to-teal-600', initials: 'KE' },
+{ id: 'earn-010', rank: 10, user: 'Mem***LBQ', amount: 6572084.66, avatarBg: 'from-amber-400 to-yellow-600', initials: 'LB' }];
 
 
 // ── Premium Card Wrapper ───────────────────────────────────────────────────────
@@ -913,29 +918,28 @@ export default function MainDashboard() {
             <h3 className={`font-700 text-sm ${textPrimary}`}>Today&apos;s Earnings Ranking</h3>
           </div>
         </div>
-        <div className={`rounded-xl overflow-hidden ${cardBg} border border-red-100 shadow-sm`}>
+        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#2a1a1a', border: '1px solid rgba(200,16,46,0.2)' }}>
           {/* Top 3 Podium */}
-          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative">
+          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative" style={{ background: 'linear-gradient(180deg, #3a2020 0%, #2a1a1a 100%)' }}>
             {/* NO2 - Left */}
             <div className="flex flex-col items-center flex-1 relative z-10">
               <div className="relative mb-1">
                 <SilverCrown size={24} />
               </div>
               <div className="relative">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md">
-                  <CartoonAvatar2 size={64} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#C0C0C0' }}>
+                  <CartoonAvatar2 size={56} />
                 </div>
               </div>
-              <div className="mt-1 bg-white/30 rounded-full px-2 py-0.5">
+              <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(192,192,192,0.3)' }}>
                 <span className="text-white text-[10px] font-700">NO2</span>
               </div>
               <div
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-2 pb-3 px-1"
-                style={{ background: 'linear-gradient(180deg, #e87070 0%, #d45050 100%)', minHeight: '80px' }}>
-                
-                <div className="text-white text-[10px] font-700 text-center leading-tight">{TOP_EARNERS[1].user}</div>
-                <div className="mt-1 bg-white/20 rounded-full px-2 py-0.5">
-                  <span className="text-white text-[10px] font-700">₹{(TOP_EARNERS[1].amount / 1e7).toFixed(2)}Cr</span>
+                style={{ background: 'linear-gradient(180deg, #f5e6b8 0%, #e8d5a0 100%)', minHeight: '75px' }}>
+                <div className="text-[10px] font-700 text-center leading-tight" style={{ color: '#5a3e00' }}>{TOP_EARNERS[1].user}</div>
+                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                  <span className="text-[10px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[1].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -946,20 +950,19 @@ export default function MainDashboard() {
                 <GoldCrown size={32} />
               </div>
               <div className="relative">
-                <div className="w-20 h-20 rounded-full overflow-hidden border-3 border-yellow-300 shadow-lg" style={{ borderWidth: '3px', borderColor: '#FFD700' }}>
-                  <CartoonAvatar1 size={80} />
+                <div className="w-18 h-18 rounded-full overflow-hidden shadow-lg" style={{ width: 72, height: 72, borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFD700' }}>
+                  <CartoonAvatar1 size={72} />
                 </div>
               </div>
               <div className="mt-1 bg-yellow-400 rounded-full px-3 py-0.5 shadow">
-                <span className="text-red-900 text-[11px] font-800">NO1</span>
+                <span className="text-[11px] font-800" style={{ color: '#8B0000' }}>NO1</span>
               </div>
               <div
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-3 pb-4 px-1"
-                style={{ background: 'linear-gradient(180deg, #d45050 0%, #c03030 100%)', minHeight: '100px' }}>
-                
-                <div className="text-white text-[11px] font-700 text-center leading-tight">{TOP_EARNERS[0].user}</div>
-                <div className="mt-1.5 bg-white/20 rounded-full px-2 py-0.5">
-                  <span className="text-white text-[10px] font-700">₹{(TOP_EARNERS[0].amount / 1e7).toFixed(2)}Cr</span>
+                style={{ background: 'linear-gradient(180deg, #fff5d6 0%, #f5e6b8 100%)', minHeight: '95px' }}>
+                <div className="text-[11px] font-700 text-center leading-tight" style={{ color: '#3a2000' }}>{TOP_EARNERS[0].user}</div>
+                <div className="mt-1.5 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                  <span className="text-[10px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[0].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -970,46 +973,46 @@ export default function MainDashboard() {
                 <BronzeCrown size={22} />
               </div>
               <div className="relative">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-orange-300 shadow-md">
-                  <CartoonAvatar3 size={64} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#CD7F32' }}>
+                  <CartoonAvatar3 size={56} />
                 </div>
               </div>
-              <div className="mt-1 bg-orange-400 rounded-full px-2 py-0.5">
+              <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(205,127,50,0.4)' }}>
                 <span className="text-white text-[10px] font-700">NO3</span>
               </div>
               <div
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-2 pb-3 px-1"
-                style={{ background: 'linear-gradient(180deg, #e87070 0%, #d45050 100%)', minHeight: '70px' }}>
-                
-                <div className="text-white text-[10px] font-700 text-center leading-tight">{TOP_EARNERS[2].user}</div>
-                <div className="mt-1 bg-white/20 rounded-full px-2 py-0.5">
-                  <span className="text-white text-[9px] font-700">₹{(TOP_EARNERS[2].amount / 1e7).toFixed(2)}Cr</span>
+                style={{ background: 'linear-gradient(180deg, #eed9a8 0%, #dcc890 100%)', minHeight: '65px' }}>
+                <div className="text-[10px] font-700 text-center leading-tight" style={{ color: '#5a3e00' }}>{TOP_EARNERS[2].user}</div>
+                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                  <span className="text-[9px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[2].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Rank 4 & 5 */}
-          <div className="bg-white mx-0 px-3 py-2 space-y-2">
-            {TOP_EARNERS.slice(3, 5).map((earner, idx) =>
-            <div key={earner.id} className="flex items-center gap-3 py-2 border-b border-red-50 last:border-0">
-                <div className="w-7 text-center">
-                  <span className="text-gray-400 font-700 text-base">{earner.rank}</span>
+          {/* Rank 4-10 */}
+          <div className="px-2 py-2 space-y-2" style={{ background: '#FAF5E9' }}>
+            {TOP_EARNERS.slice(3).map((earner, idx) => {
+              const avatarComponents = [CartoonAvatar4, CartoonAvatar5, CartoonAvatar1, CartoonAvatar2, CartoonAvatar3, CartoonAvatar4, CartoonAvatar5];
+              const AvatarComp = avatarComponents[idx % avatarComponents.length];
+              return (
+                <div key={earner.id} className="flex items-center gap-3 py-3 px-3 rounded-xl" style={{ background: '#3a2020', border: '1px solid rgba(200,16,46,0.2)' }}>
+                  <div className="w-7 text-center">
+                    <span className="text-white/60 font-800 text-base">{earner.rank}</span>
+                  </div>
+                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border-2" style={{ borderColor: '#C8102E' }}>
+                    <AvatarComp size={44} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-600 text-sm">{earner.user}</div>
+                  </div>
+                  <div className="rounded-full px-3 py-1.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                    <span className="font-700 text-xs" style={{ color: '#5a3e00' }}>₹{earner.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                  </div>
                 </div>
-                <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 border border-red-900/40">
-                  {idx === 0 ? <CartoonAvatar4 size={44} /> : <CartoonAvatar5 size={44} />}
-                </div>
-                <div className="flex-1">
-                  <div className="text-gray-800 font-600 text-sm">{earner.user}</div>
-                </div>
-                <div
-                className="rounded-full px-3 py-1.5"
-                style={{ background: 'linear-gradient(135deg, #e87070, #c03030)' }}>
-                
-                  <span className="text-white font-700 text-xs">₹{earner.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                </div>
-              </div>
-            )}
+              );
+            })}
           </div>
         </div>
       </div>
