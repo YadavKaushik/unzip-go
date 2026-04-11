@@ -918,29 +918,28 @@ export default function MainDashboard() {
             <h3 className={`font-700 text-sm ${textPrimary}`}>Today&apos;s Earnings Ranking</h3>
           </div>
         </div>
-        <div className={`rounded-xl overflow-hidden ${cardBg} border border-red-100 shadow-sm`}>
+        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#2a1a1a', border: '1px solid rgba(200,16,46,0.2)' }}>
           {/* Top 3 Podium */}
-          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative">
+          <div className="flex items-end justify-center gap-0 px-2 pt-6 pb-0 relative" style={{ background: 'linear-gradient(180deg, #3a2020 0%, #2a1a1a 100%)' }}>
             {/* NO2 - Left */}
             <div className="flex flex-col items-center flex-1 relative z-10">
               <div className="relative mb-1">
                 <SilverCrown size={24} />
               </div>
               <div className="relative">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-md">
-                  <CartoonAvatar2 size={64} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#C0C0C0' }}>
+                  <CartoonAvatar2 size={56} />
                 </div>
               </div>
-              <div className="mt-1 bg-white/30 rounded-full px-2 py-0.5">
+              <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(192,192,192,0.3)' }}>
                 <span className="text-white text-[10px] font-700">NO2</span>
               </div>
               <div
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-2 pb-3 px-1"
-                style={{ background: 'linear-gradient(180deg, #e87070 0%, #d45050 100%)', minHeight: '80px' }}>
-                
-                <div className="text-white text-[10px] font-700 text-center leading-tight">{TOP_EARNERS[1].user}</div>
-                <div className="mt-1 bg-white/20 rounded-full px-2 py-0.5">
-                  <span className="text-white text-[10px] font-700">₹{(TOP_EARNERS[1].amount / 1e7).toFixed(2)}Cr</span>
+                style={{ background: 'linear-gradient(180deg, #f5e6b8 0%, #e8d5a0 100%)', minHeight: '75px' }}>
+                <div className="text-[10px] font-700 text-center leading-tight" style={{ color: '#5a3e00' }}>{TOP_EARNERS[1].user}</div>
+                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                  <span className="text-[10px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[1].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -951,20 +950,19 @@ export default function MainDashboard() {
                 <GoldCrown size={32} />
               </div>
               <div className="relative">
-                <div className="w-20 h-20 rounded-full overflow-hidden border-3 border-yellow-300 shadow-lg" style={{ borderWidth: '3px', borderColor: '#FFD700' }}>
-                  <CartoonAvatar1 size={80} />
+                <div className="w-18 h-18 rounded-full overflow-hidden shadow-lg" style={{ width: 72, height: 72, borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFD700' }}>
+                  <CartoonAvatar1 size={72} />
                 </div>
               </div>
               <div className="mt-1 bg-yellow-400 rounded-full px-3 py-0.5 shadow">
-                <span className="text-red-900 text-[11px] font-800">NO1</span>
+                <span className="text-[11px] font-800" style={{ color: '#8B0000' }}>NO1</span>
               </div>
               <div
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-3 pb-4 px-1"
-                style={{ background: 'linear-gradient(180deg, #d45050 0%, #c03030 100%)', minHeight: '100px' }}>
-                
-                <div className="text-white text-[11px] font-700 text-center leading-tight">{TOP_EARNERS[0].user}</div>
-                <div className="mt-1.5 bg-white/20 rounded-full px-2 py-0.5">
-                  <span className="text-white text-[10px] font-700">₹{(TOP_EARNERS[0].amount / 1e7).toFixed(2)}Cr</span>
+                style={{ background: 'linear-gradient(180deg, #fff5d6 0%, #f5e6b8 100%)', minHeight: '95px' }}>
+                <div className="text-[11px] font-700 text-center leading-tight" style={{ color: '#3a2000' }}>{TOP_EARNERS[0].user}</div>
+                <div className="mt-1.5 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                  <span className="text-[10px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[0].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
@@ -975,20 +973,19 @@ export default function MainDashboard() {
                 <BronzeCrown size={22} />
               </div>
               <div className="relative">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-orange-300 shadow-md">
-                  <CartoonAvatar3 size={64} />
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 shadow-md" style={{ borderColor: '#CD7F32' }}>
+                  <CartoonAvatar3 size={56} />
                 </div>
               </div>
-              <div className="mt-1 bg-orange-400 rounded-full px-2 py-0.5">
+              <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'rgba(205,127,50,0.4)' }}>
                 <span className="text-white text-[10px] font-700">NO3</span>
               </div>
               <div
                 className="w-full mt-2 rounded-t-lg flex flex-col items-center pt-2 pb-3 px-1"
-                style={{ background: 'linear-gradient(180deg, #e87070 0%, #d45050 100%)', minHeight: '70px' }}>
-                
-                <div className="text-white text-[10px] font-700 text-center leading-tight">{TOP_EARNERS[2].user}</div>
-                <div className="mt-1 bg-white/20 rounded-full px-2 py-0.5">
-                  <span className="text-white text-[9px] font-700">₹{(TOP_EARNERS[2].amount / 1e7).toFixed(2)}Cr</span>
+                style={{ background: 'linear-gradient(180deg, #eed9a8 0%, #dcc890 100%)', minHeight: '65px' }}>
+                <div className="text-[10px] font-700 text-center leading-tight" style={{ color: '#5a3e00' }}>{TOP_EARNERS[2].user}</div>
+                <div className="mt-1 rounded-full px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)' }}>
+                  <span className="text-[9px] font-700" style={{ color: '#5a3e00' }}>₹{(TOP_EARNERS[2].amount / 1e7).toFixed(2)}Cr</span>
                 </div>
               </div>
             </div>
