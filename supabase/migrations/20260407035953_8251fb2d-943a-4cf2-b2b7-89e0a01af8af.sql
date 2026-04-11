@@ -1,0 +1,1 @@
+ALTER TABLE public.wallets DROP COLUMN IF EXISTS bonus;
