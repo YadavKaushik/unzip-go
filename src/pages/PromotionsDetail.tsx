@@ -35,7 +35,7 @@ function SubPageHeader({ title, onClose }: { title: string; onClose: () => void 
   return (
     <div style={{ background: redGradient, padding: '0 16px', height: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
       <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-        <ArrowLeft size={22} color={redPrimary} />
+        <ArrowLeft size={22} color="#fff" />
       </button>
       <span style={{ fontWeight: 700, fontSize: 17, color: textDark }}>{title}</span>
       <div style={{ width: 28 }} />
@@ -161,18 +161,18 @@ function InvitePage({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: darkBg }}>
       <SubPageHeader title={t('invite')} onClose={onClose} />
       <div style={{ padding: '12px 16px' }}>
-        <p style={{ fontSize: 12, color: textGold, textAlign: 'center', marginBottom: 16 }}>{t('swipe_poster')}</p>
-        <div style={{ background: cardBg, borderRadius: 16, padding: '24px 20px', textAlign: 'center', marginBottom: 20, border: `2px solid rgba(212,175,55,0.3)`, boxShadow: '0 4px 30px rgba(212,175,55,0.1)' }}>
+        <p style={{ fontSize: 12, color: redPrimary, textAlign: 'center', marginBottom: 16 }}>{t('swipe_poster')}</p>
+        <div style={{ background: cardBg, borderRadius: 16, padding: '24px 20px', textAlign: 'center', marginBottom: 20, border: `2px solid rgba(212,175,55,0.3)`, boxShadow: '0 4px 15px rgba(200,16,46,0.1)' }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('fair_justice')}</span>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('open_transparent')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('fair_justice')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('open_transparent')}</span>
           </div>
           <h3 style={{ fontSize: 18, fontWeight: 800, color: textDark, marginBottom: 12 }}>{t('full_odds_bonus')}</h3>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 16 }}>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>💰 {t('financial_security')}</span>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: textGold, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>⚡ {t('quick_withdrawal')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>💰 {t('financial_security')}</span>
+            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>⚡ {t('quick_withdrawal')}</span>
           </div>
-          <p style={{ fontSize: 14, color: textGold, fontWeight: 700, marginBottom: 16 }}>
+          <p style={{ fontSize: 14, color: redPrimary, fontWeight: 700, marginBottom: 16 }}>
             {t('permanent_commission')} <span style={{ fontSize: 20 }}>85%</span>
           </p>
           <div style={{ width: 100, height: 100, background: cardBg, border: `2px solid rgba(212,175,55,0.3)`, borderRadius: 8, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -247,7 +247,7 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: darkBg }}>
       <SubPageHeader title={t('invitation_rules')} onClose={onClose} />
       <div style={{ textAlign: 'center', padding: '20px 16px 8px' }}>
-        <h2 style={{ fontSize: 18, fontWeight: 800, color: textGold, margin: 0 }}>【Promotion partner】program</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 800, color: redPrimary, margin: 0 }}>【Promotion partner】program</h2>
         <p style={{ fontSize: 13, color: textMuted, marginTop: 6 }}>This activity is valid for a long time</p>
       </div>
       <div style={{ padding: '12px 12px 24px' }}>
@@ -269,7 +269,7 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
                     <div key={ri} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '8px 0', background: ri % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)', borderTop: `1px solid ${cardBorder}` }}>
                       <div style={{ textAlign: 'center', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
                         <span style={{ fontSize: 14 }}>👑</span>
-                        <span style={{ color: textGold, fontWeight: 600, fontSize: 11 }}>L{row.level}</span>
+                        <span style={{ color: redPrimary, fontWeight: 600, fontSize: 11 }}>L{row.level}</span>
                       </div>
                       <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.team}</div>
                       <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.betting}</div>
@@ -329,7 +329,7 @@ function RebateRatioPage({ onClose }: { onClose: () => void }) {
           <div key={li} style={{ background: cardBg, borderRadius: 10, marginBottom: 12, border: `1px solid ${cardBorder}`, overflow: 'hidden' }}>
             <div style={{ padding: '12px 16px', borderBottom: `1px solid ${cardBorder}` }}>
               <span style={{ fontSize: 15, fontWeight: 700, color: textDark }}>
-                Rebate level <span style={{ color: textGold, fontStyle: 'italic', fontWeight: 800 }}>{level.level}</span>
+                Rebate level <span style={{ color: redPrimary, fontStyle: 'italic', fontWeight: 800 }}>{level.level}</span>
               </span>
             </div>
             {level.rates.map((rate, ri) => (
@@ -343,7 +343,7 @@ function RebateRatioPage({ onClose }: { onClose: () => void }) {
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: goldPrimary, opacity: 0.6 }} />
                   <span style={{ fontSize: 12, color: textMuted }}>{ri + 1} level lower level commission rebate</span>
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: textGold }}>{rate}%</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: redPrimary }}>{rate}%</span>
               </div>
             ))}
           </div>
@@ -407,11 +407,11 @@ export default function PromotionsDetail() {
 
         {/* Commission display */}
         <div style={{ textAlign: 'center', paddingTop: 8, position: 'relative' }}>
-          <div style={{ fontSize: 44, fontWeight: 800, color: textGold, textShadow: '0 0 30px rgba(212,175,55,0.4)', letterSpacing: '-1px' }}>0.68</div>
+          <div style={{ fontSize: 44, fontWeight: 800, color: redPrimary, textShadow: 'none', letterSpacing: '-1px' }}>0.68</div>
           <div style={{
             display: 'inline-block', background: goldGradient,
             padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#000', fontWeight: 700, marginTop: 6,
-            boxShadow: '0 4px 15px rgba(212,175,55,0.3)',
+            boxShadow: '0 4px 15px rgba(200,16,46,0.2)',
           }}>
             {t('yesterday_total_commission')}
           </div>
@@ -460,7 +460,7 @@ export default function PromotionsDetail() {
         <button style={{
           width: '100%', padding: '15px 0', borderRadius: 50, border: 'none', cursor: 'pointer',
           background: goldGradient, color: '#000',
-          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(212,175,55,0.35)',
+          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 15px rgba(200,16,46,0.2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           letterSpacing: '0.5px',
         }}>
