@@ -1952,12 +1952,297 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ─── Generic Promo Modal ─────────────────────────────────────────────────────
+function PromoModal({ onClose, title, icon, heroGradient, heroDesc, rules, features }: {
+  onClose: () => void;
+  title: string;
+  icon: string;
+  heroGradient: string;
+  heroDesc: string;
+  rules: string[];
+  features?: { label: string; value: string; icon: string }[];
+}) {
+  const navigate = useNavigate();
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-stretch justify-center"
+        style={{ background: 'rgba(0,0,0,0.65)' }}
+      >
+        <motion.div
+          initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          className="relative w-full flex flex-col"
+          style={{ maxWidth: 540, margin: '0 auto', background: '#FFF8F0', height: '100dvh' }}
+        >
+          {/* Top Bar */}
+          <div className="flex-shrink-0 flex items-center justify-between px-4 pt-5 pb-4"
+            style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)', boxShadow: '0 2px 16px rgba(200,16,46,0.4)' }}>
+            <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full"
+              style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)' }}>
+              <ChevronLeft size={20} className="text-white" />
+            </button>
+            <span className="text-white font-black text-base tracking-wide" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.35)' }}>
+              {icon} {title}
+            </span>
+            <div className="w-9 h-9" />
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', paddingBottom: 100 }}>
+            {/* Hero */}
+            <div className="relative overflow-hidden" style={{ background: heroGradient, minHeight: 180 }}>
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-conic-gradient(from 0deg at 80% 50%, transparent 0deg, rgba(255,255,255,0.4) 5deg, transparent 10deg)' }} />
+              <div className="relative px-5 py-6">
+                <div className="text-6xl mb-3">{icon}</div>
+                <h2 className="text-white font-black text-2xl leading-tight" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>{title}</h2>
+                <p className="text-white/90 text-xs mt-2 leading-relaxed font-medium">{heroDesc}</p>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 h-8" style={{ background: 'linear-gradient(to bottom, transparent, #FFF8F0)' }} />
+            </div>
+
+            {/* Features */}
+            {features && features.length > 0 && (
+              <div className="px-4 mt-4 grid grid-cols-2 gap-3">
+                {features.map((f, i) => (
+                  <div key={i} className="rounded-2xl p-3 flex flex-col items-center" style={{ background: '#ffffff', border: '1.5px solid #ffd0d0', boxShadow: '0 2px 12px rgba(200,16,46,0.08)' }}>
+                    <span className="text-2xl mb-1">{f.icon}</span>
+                    <div className="font-black text-base" style={{ color: '#C8102E' }}>{f.value}</div>
+                    <div className="text-[10px] text-gray-500 mt-0.5">{f.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Rules */}
+            <div className="px-4 mt-4">
+              <div className="rounded-2xl overflow-hidden" style={{ background: '#ffffff', border: '1.5px solid #ffd0d0', boxShadow: '0 4px 20px rgba(200,16,46,0.08)' }}>
+                <div className="px-4 py-3 flex items-center gap-2" style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)' }}>
+                  <span className="text-base">📋</span>
+                  <span className="font-black text-sm text-white tracking-wide">Rules & Details</span>
+                </div>
+                <div className="p-4 space-y-2">
+                  {rules.map((rule, i) => (
+                    <div key={i} className="flex items-start gap-3 p-3 rounded-xl" style={{ background: '#fff5f5', border: '1px solid #ffd0d0' }}>
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black text-white mt-0.5"
+                        style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)', minWidth: 20 }}>{i + 1}</div>
+                      <span className="text-xs leading-relaxed" style={{ color: '#5a0000' }}>{rule}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="px-4 mt-4">
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => { onClose(); navigate('/main-dashboard'); }}
+                className="w-full py-4 rounded-full font-black text-base tracking-wide"
+                style={{ background: 'linear-gradient(135deg, #C8102E 0%, #FF1744 40%, #C8102E 70%, #8B0000 100%)', color: '#ffffff', boxShadow: '0 6px 24px rgba(200,16,46,0.5)', border: '1px solid rgba(255,100,100,0.4)', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}
+              >
+                🎰 Play Now
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+// Promo modal configs
+const PROMO_CONFIGS: Record<string, { title: string; icon: string; heroGradient: string; heroDesc: string; rules: string[]; features?: { label: string; value: string; icon: string }[] }> = {
+  activityAward: {
+    title: 'Activity Award',
+    icon: '🎖️',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #FF4444 40%, #FF6B00 100%)',
+    heroDesc: 'Complete daily activities and earn amazing rewards! The more active you are, the bigger your rewards.',
+    features: [
+      { label: 'Daily Login', value: '₹10', icon: '📅' },
+      { label: 'First Bet', value: '₹25', icon: '🎲' },
+      { label: 'Win Streak', value: '₹50', icon: '🔥' },
+      { label: 'VIP Bonus', value: '₹100', icon: '👑' },
+    ],
+    rules: [
+      'Complete daily tasks to earn activity points and bonuses.',
+      'Daily login reward is credited automatically at midnight.',
+      'First bet bonus requires minimum ₹100 bet amount.',
+      'Win streak bonus activates after 3 consecutive wins.',
+      'All rewards are credited directly to your main wallet.',
+      'Activity resets daily at 00:00 IST.',
+    ],
+  },
+  firstGift: {
+    title: 'First Deposit Gift',
+    icon: '🎁',
+    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%)',
+    heroDesc: 'Make your first deposit and receive an exclusive welcome bonus! Limited time offer for new members.',
+    features: [
+      { label: 'Min Deposit', value: '₹200', icon: '💳' },
+      { label: 'Bonus', value: '50%', icon: '🎉' },
+      { label: 'Max Bonus', value: '₹5,000', icon: '💰' },
+      { label: 'Valid', value: '7 Days', icon: '⏰' },
+    ],
+    rules: [
+      'Available only for first-time depositors.',
+      'Minimum deposit of ₹200 required to qualify.',
+      'Bonus is 50% of your first deposit amount, up to ₹5,000.',
+      'Bonus must be wagered 5x before withdrawal.',
+      'Offer expires 7 days after account creation.',
+      'Cannot be combined with other welcome offers.',
+    ],
+  },
+  rechargeBonus: {
+    title: 'Recharge Bonus',
+    icon: '🃏',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #8B0000 50%, #5a0000 100%)',
+    heroDesc: 'Get instant bonus on every recharge! Deposit more and earn bigger rewards with our recharge bonus program.',
+    features: [
+      { label: '₹500+', value: '3%', icon: '🥉' },
+      { label: '₹5,000+', value: '5%', icon: '🥈' },
+      { label: '₹20,000+', value: '8%', icon: '🥇' },
+      { label: '₹50,000+', value: '12%', icon: '💎' },
+    ],
+    rules: [
+      'Bonus is calculated as a percentage of your deposit amount.',
+      'Minimum deposit of ₹500 required to qualify.',
+      'Higher deposits unlock higher bonus percentages.',
+      'Maximum bonus per transaction: ₹5,000.',
+      'Bonus is credited instantly to your account.',
+      'Bonus amount must be wagered 3x before withdrawal.',
+    ],
+  },
+  firstSecondRecharge: {
+    title: 'First & Second Recharge',
+    icon: '💎',
+    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
+    heroDesc: 'Exclusive bonus on your 1st & 2nd deposit! Double the rewards for your first two recharges.',
+    features: [
+      { label: '1st Deposit', value: '100%', icon: '1️⃣' },
+      { label: '2nd Deposit', value: '50%', icon: '2️⃣' },
+      { label: 'Max 1st', value: '₹2,000', icon: '💰' },
+      { label: 'Max 2nd', value: '₹1,000', icon: '🎁' },
+    ],
+    rules: [
+      '100% bonus on your first deposit (max ₹2,000).',
+      '50% bonus on your second deposit (max ₹1,000).',
+      'Minimum deposit of ₹300 required for each.',
+      'Bonus must be wagered 5x before withdrawal.',
+      'Second deposit bonus must be claimed within 48 hours of first.',
+      'This offer is exclusive and cannot be combined with other promotions.',
+    ],
+  },
+  lucky10: {
+    title: 'LUCKY 10 Days Recharge',
+    icon: '🔟',
+    heroGradient: 'linear-gradient(135deg, #8B0000 0%, #C8102E 50%, #FF4444 100%)',
+    heroDesc: 'Recharge for 10 consecutive days and unlock mega rewards! The longer your streak, the bigger the bonus.',
+    features: [
+      { label: '3 Days', value: '₹100', icon: '🌟' },
+      { label: '5 Days', value: '₹500', icon: '⭐' },
+      { label: '7 Days', value: '₹1,500', icon: '🏆' },
+      { label: '10 Days', value: '₹5,000', icon: '👑' },
+    ],
+    rules: [
+      'Deposit minimum ₹300 daily to maintain your streak.',
+      'Missing a day resets your consecutive count to 0.',
+      'Rewards are cumulative — you earn all tier bonuses.',
+      'Day 10 mega bonus: ₹5,000 credited to wallet.',
+      'Only one streak can be active at a time.',
+      'Streak resets at 00:00 IST daily.',
+    ],
+  },
+  luckySpin: {
+    title: 'Lucky Spin',
+    icon: '📱',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #E83E52 50%, #FF6B6B 100%)',
+    heroDesc: 'Spin to win iPhone 16 Pro Max! Every spin gives you a chance to win amazing prizes including the latest iPhone.',
+    features: [
+      { label: 'Grand Prize', value: 'iPhone 16', icon: '📱' },
+      { label: 'Cash Prize', value: '₹50,000', icon: '💰' },
+      { label: 'Free Spins', value: 'Daily', icon: '🎡' },
+      { label: 'Bonus', value: '₹1,000', icon: '🎁' },
+    ],
+    rules: [
+      'Every user gets 1 free spin daily.',
+      'Additional spins can be earned by depositing ₹500+.',
+      'Grand prize: iPhone 16 Pro Max (drawn monthly).',
+      'Cash prizes are credited instantly to your wallet.',
+      'Free spin tokens expire at midnight.',
+      'Winners will be notified via in-app notification.',
+    ],
+  },
+  winStreak: {
+    title: 'Win Streak Bonus',
+    icon: '🎲',
+    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #F5D060 50%, #FFE566 100%)',
+    heroDesc: 'Keep winning to unlock streak multipliers! The more consecutive wins you get, the higher your bonus.',
+    features: [
+      { label: '3 Wins', value: '1.5x', icon: '🔥' },
+      { label: '5 Wins', value: '2x', icon: '⚡' },
+      { label: '7 Wins', value: '3x', icon: '💎' },
+      { label: '10 Wins', value: '5x', icon: '👑' },
+    ],
+    rules: [
+      'Win streak is counted across all lottery games.',
+      'Minimum bet of ₹50 per game to qualify.',
+      'Streak multiplier applies to your next win.',
+      'Losing a game resets your streak to 0.',
+      'Maximum streak bonus: ₹10,000 per day.',
+      'Streak bonus is credited instantly after qualifying win.',
+    ],
+  },
+  aviatorBonus: {
+    title: 'Aviator Bonus',
+    icon: '✈️',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #FF4444 50%, #FF6B6B 100%)',
+    heroDesc: 'Fly high and earn exclusive Aviator bonuses! Special rewards for Aviator game players.',
+    features: [
+      { label: 'Daily Bonus', value: '₹200', icon: '🎯' },
+      { label: 'Cashout 5x+', value: '₹500', icon: '🚀' },
+      { label: 'Cashout 10x+', value: '₹2,000', icon: '🌟' },
+      { label: 'Cashout 50x+', value: '₹10,000', icon: '💎' },
+    ],
+    rules: [
+      'Play Aviator and cash out at high multipliers to earn bonuses.',
+      'Daily bonus requires minimum 10 rounds played.',
+      'Cashout bonus triggers automatically on qualifying rounds.',
+      'Minimum bet of ₹100 per round to qualify.',
+      'Maximum daily bonus: ₹15,000.',
+      'Bonuses are credited to your main wallet instantly.',
+    ],
+  },
+  vipUpgrade: {
+    title: 'VIP Upgrade Bonus',
+    icon: '👑',
+    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%)',
+    heroDesc: 'Unlock luxury rewards as you level up! VIP members enjoy exclusive perks, higher limits, and premium bonuses.',
+    features: [
+      { label: 'Silver VIP', value: '₹1,000', icon: '🥈' },
+      { label: 'Gold VIP', value: '₹5,000', icon: '🥇' },
+      { label: 'Platinum', value: '₹15,000', icon: '💎' },
+      { label: 'Diamond', value: '₹50,000', icon: '👑' },
+    ],
+    rules: [
+      'VIP level is determined by total deposit and bet amount.',
+      'Each VIP upgrade gives a one-time bonus.',
+      'Higher VIP levels unlock better rebate rates.',
+      'VIP members get priority customer support.',
+      'Monthly VIP rewards are credited on the 1st of each month.',
+      'VIP status is reviewed quarterly based on activity.',
+    ],
+  },
+};
+
 export default function ActivityPage() {
   const [showInvitationBonus, setShowInvitationBonus] = useState(false);
   const [showBettingRebate, setShowBettingRebate] = useState(false);
   const [showSuperJackpot, setShowSuperJackpot] = useState(false);
   const [showGift, setShowGift] = useState(false);
   const [showAttendance, setShowAttendance] = useState(false);
+  const [activePromo, setActivePromo] = useState<string | null>(null);
   const navigate = useNavigate();
 
   return (
@@ -1971,6 +2256,9 @@ export default function ActivityPage() {
       {showSuperJackpot && <SuperJackpotModal onClose={() => setShowSuperJackpot(false)} />}
       {showGift && <GiftModal onClose={() => setShowGift(false)} />}
       {showAttendance && <AttendanceBonusModal onClose={() => setShowAttendance(false)} />}
+      {activePromo && PROMO_CONFIGS[activePromo] && (
+        <PromoModal onClose={() => setActivePromo(null)} {...PROMO_CONFIGS[activePromo]} />
+      )}
 
       {/* Header */}
       <div
@@ -2040,6 +2328,10 @@ export default function ActivityPage() {
                 ? () => setShowSuperJackpot(true)
                 : action?.key === 'qa-wheel'
                 ? () => navigate('/spin-wheel')
+                : action?.key === 'qa-activity'
+                ? () => setActivePromo('activityAward')
+                : action?.key === 'qa-firstgift'
+                ? () => setActivePromo('firstGift')
                 : undefined
             }
           >
@@ -2119,7 +2411,18 @@ export default function ActivityPage() {
               border: '1px solid #e0e0e0',
               minHeight: 90,
             }}
-            onClick={banner?.key === 'banner-invitation' ? () => setShowInvitationBonus(true) : banner?.key === 'banner-gifts' ? () => setShowGift(true) : undefined}
+            onClick={
+              banner?.key === 'banner-invitation' ? () => setShowInvitationBonus(true)
+              : banner?.key === 'banner-gifts' ? () => setShowGift(true)
+              : banner?.key === 'banner-recharge' ? () => setActivePromo('rechargeBonus')
+              : banner?.key === 'banner-first-second' ? () => setActivePromo('firstSecondRecharge')
+              : banner?.key === 'banner-lucky10' ? () => setActivePromo('lucky10')
+              : banner?.key === 'banner-luckyspin' ? () => setActivePromo('luckySpin')
+              : banner?.key === 'banner-winstreak' ? () => setActivePromo('winStreak')
+              : banner?.key === 'banner-aviator' ? () => setActivePromo('aviatorBonus')
+              : banner?.key === 'banner-vip' ? () => setActivePromo('vipUpgrade')
+              : undefined
+            }
           >
             <div className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3 flex-1">
