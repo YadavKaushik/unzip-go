@@ -2411,7 +2411,18 @@ export default function ActivityPage() {
               border: '1px solid #e0e0e0',
               minHeight: 90,
             }}
-            onClick={banner?.key === 'banner-invitation' ? () => setShowInvitationBonus(true) : banner?.key === 'banner-gifts' ? () => setShowGift(true) : undefined}
+            onClick={
+              banner?.key === 'banner-invitation' ? () => setShowInvitationBonus(true)
+              : banner?.key === 'banner-gifts' ? () => setShowGift(true)
+              : banner?.key === 'banner-recharge' ? () => setActivePromo('rechargeBonus')
+              : banner?.key === 'banner-first-second' ? () => setActivePromo('firstSecondRecharge')
+              : banner?.key === 'banner-lucky10' ? () => setActivePromo('lucky10')
+              : banner?.key === 'banner-luckyspin' ? () => setActivePromo('luckySpin')
+              : banner?.key === 'banner-winstreak' ? () => setActivePromo('winStreak')
+              : banner?.key === 'banner-aviator' ? () => setActivePromo('aviatorBonus')
+              : banner?.key === 'banner-vip' ? () => setActivePromo('vipUpgrade')
+              : undefined
+            }
           >
             <div className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-3 flex-1">
