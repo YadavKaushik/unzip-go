@@ -950,8 +950,8 @@ export default function MainDashboard() {
                 <GoldCrown size={32} />
               </div>
               <div className="relative">
-                <div className="w-18 h-18 rounded-full overflow-hidden shadow-lg" style={{ width: 72, height: 72, borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFD700' }}>
-                  <CartoonAvatar1 size={72} />
+                <div className="rounded-full overflow-hidden shadow-lg" style={{ width: 72, height: 72, borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFD700', background: '#4a9ee8' }}>
+                  <img src="/avatars/avatar-2.jpg" alt="" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="mt-1 bg-yellow-400 rounded-full px-3 py-0.5 shadow">
