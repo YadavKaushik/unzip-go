@@ -392,30 +392,28 @@ export default function PromotionsDetail() {
 
       {/* ── Header with commission ── */}
       <div style={{ background: headerGradient, paddingBottom: 24, position: 'relative', overflow: 'hidden' }}>
-        {/* Decorative gold glow */}
-        <div style={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', width: 300, height: 200, background: 'radial-gradient(ellipse, rgba(212,175,55,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
         
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
           <div style={{ width: 32 }} />
-          <span style={{ fontWeight: 700, fontSize: 17, color: textDark }}>{t('agency')}</span>
+          <span style={{ fontWeight: 700, fontSize: 17, color: textWhite }}>{t('agency')}</span>
           <button onClick={() => setActivePage('newSub')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(200,16,46,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(200,16,46,0.15)' }}>
-              <Users size={16} color={redPrimary} />
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.3)' }}>
+              <Users size={16} color="#fff" />
             </div>
           </button>
         </div>
 
         {/* Commission display */}
         <div style={{ textAlign: 'center', paddingTop: 8, position: 'relative' }}>
-          <div style={{ fontSize: 44, fontWeight: 800, color: redPrimary, textShadow: 'none', letterSpacing: '-1px' }}>0.68</div>
+          <div style={{ fontSize: 44, fontWeight: 800, color: textWhite, letterSpacing: '-1px' }}>0.68</div>
           <div style={{
             display: 'inline-block', background: goldGradient,
             padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#000', fontWeight: 700, marginTop: 6,
-            boxShadow: '0 4px 15px rgba(200,16,46,0.2)',
+            boxShadow: '0 4px 15px rgba(212,175,55,0.3)',
           }}>
             {t('yesterday_total_commission')}
           </div>
-          <p style={{ fontSize: 11, color: textMuted, marginTop: 10 }}>{t('upgrade_level')}</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 10 }}>{t('upgrade_level')}</p>
         </div>
 
       </div>
