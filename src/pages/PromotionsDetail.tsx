@@ -95,9 +95,19 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
             <option value="1">Level 1</option>
             <option value="2">Level 2</option>
             <option value="3">Level 3</option>
+            <option value="4">Level 4</option>
+            <option value="5">Level 5</option>
+            <option value="6">Level 6</option>
           </select>
-          <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)}
-            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', cursor: 'pointer' }} />
+          <select value={filterDate} onChange={e => setFilterDate(e.target.value)}
+            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', appearance: 'auto', cursor: 'pointer' }}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const d = new Date();
+              d.setDate(d.getDate() - i);
+              const val = d.toISOString().split('T')[0];
+              return <option key={val} value={val}>{val}</option>;
+            })}
+          </select>
         </div>
 
         {/* Summary Stats */}
