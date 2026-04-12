@@ -506,9 +506,13 @@ function InvitationBonusModal({ onClose }: { onClose: () => void }) {
                 <ChevronLeft size={20} className="text-white" />
               </button>
               <span className="text-white font-bold text-base tracking-wide">Invitation bonus</span>
-              <div className="w-8 h-8 flex items-center justify-center rounded-full" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                <span className="text-white text-xs">ℹ</span>
-              </div>
+              <button
+                onClick={() => setActiveTab(activeTab === 'record' ? 'rules' : 'record')}
+                className="h-8 flex items-center justify-center rounded-full px-3 gap-1"
+                style={{ background: 'rgba(255,255,255,0.15)' }}
+              >
+                <span className="text-white text-[10px] font-bold">{activeTab === 'record' ? '📋 Rules' : '📊 Record'}</span>
+              </button>
             </div>
 
             {/* Hero content */}
@@ -534,31 +538,6 @@ function InvitationBonusModal({ onClose }: { onClose: () => void }) {
               </div>
             </div>
 
-            {/* Tab buttons */}
-            <div className="mx-4 mt-3 grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setActiveTab('rules')}
-                className="flex flex-col items-center gap-1 py-3 rounded-2xl transition-all"
-                style={{
-                  background: activeTab === 'rules' ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  border: activeTab === 'rules' ? '1.5px solid rgba(255,68,68,0.6)' : '1.5px solid rgba(255,255,255,0.1)',
-                }}
-              >
-                <span className="text-xl">📋</span>
-                <span className="text-white text-[11px] font-semibold">Invitation reward rules</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('record')}
-                className="flex flex-col items-center gap-1 py-3 rounded-2xl transition-all"
-                style={{
-                  background: activeTab === 'record' ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  border: activeTab === 'record' ? '1.5px solid rgba(255,68,68,0.6)' : '1.5px solid rgba(255,255,255,0.1)',
-                }}
-              >
-                <span className="text-xl">📊</span>
-                <span className="text-white text-[11px] font-semibold">Invitation record</span>
-              </button>
-            </div>
           </div>
 
           {/* Body — directly below header, no separate scroll container */}
