@@ -1675,6 +1675,27 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
               </motion.div>
             </div>
 
+            {/* ── Check-In Button ── */}
+            <div className="px-3 mt-4">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setClaimed(true)}
+                disabled={claimed}
+                className="w-full py-3.5 rounded-full font-black text-base tracking-wide text-white"
+                style={{
+                  background: claimed
+                    ? 'linear-gradient(135deg, #888 0%, #666 100%)'
+                    : 'linear-gradient(135deg, #FF4444 0%, #C8102E 50%, #8B0000 100%)',
+                  boxShadow: claimed
+                    ? 'none'
+                    : '0 4px 16px rgba(200,16,46,0.5), 0 0 20px rgba(255,68,68,0.3)',
+                }}
+              >
+                {claimed ? '✓ Attended Today!' : '📅 Check In Today'}
+              </motion.button>
+            </div>
+
             {/* ── Rules Section ── */}
             <div className="px-3 mt-4 mb-4">
               <div
