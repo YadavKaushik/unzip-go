@@ -79,13 +79,13 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                 }}
               />
               {/* Glow circle */}
-              <div className="absolute top-4 right-12 w-36 h-36 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #FFD700 0%, transparent 70%)' }} />
+              <div className="absolute top-4 right-12 w-36 h-36 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #FF4444 0%, transparent 70%)' }} />
 
               <div className="relative flex items-center px-5 py-6 gap-4">
                 {/* Text */}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,215,0,0.25)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.4)' }}>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,68,68,0.25)', color: '#FF4444', border: '1px solid rgba(255,68,68,0.4)' }}>
                       PREMIUM
                     </span>
                   </div>
@@ -95,7 +95,7 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                   <p className="text-white/90 text-[12px] mt-2 leading-relaxed font-medium">
                     Win the Super Jackpot in 【Slots】 and get 1 additional bonus reward!
                   </p>
-                  <p className="text-yellow-200 text-[11px] mt-1 leading-relaxed font-medium">
+                  <p className="text-red-200 text-[11px] mt-1 leading-relaxed font-medium">
                     ⏰ Valid for 30 days — claim before expiry!
                   </p>
                 </div>
@@ -105,7 +105,7 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                     className="w-24 h-24 rounded-2xl flex items-center justify-center text-6xl"
                     style={{
                       background: 'rgba(255,255,255,0.18)',
-                      border: '2px solid rgba(255,215,0,0.5)',
+                      border: '2px solid rgba(255,68,68,0.5)',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2)',
                     }}
                   >
@@ -156,8 +156,8 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                 onClick={() => setShowRuleModal(true)}
                 className="flex items-center justify-center gap-2.5 py-4 rounded-2xl font-bold text-sm"
                 style={{
-                  background: 'linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%)',
-                  border: '1.5px solid #FFB347',
+                  background: 'linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%)',
+                  border: '1.5px solid #FF6B6B',
                   color: '#C8102E',
                   boxShadow: '0 4px 16px rgba(200,16,46,0.1)',
                 }}
@@ -173,8 +173,8 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                 onClick={() => setShowWinningStarModal(true)}
                 className="flex items-center justify-center gap-2.5 py-4 rounded-2xl font-bold text-sm"
                 style={{
-                  background: 'linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%)',
-                  border: '1.5px solid #FFB347',
+                  background: 'linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%)',
+                  border: '1.5px solid #FF6B6B',
                   color: '#C8102E',
                   boxShadow: '0 4px 16px rgba(200,16,46,0.1)',
                 }}
@@ -200,13 +200,13 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                   <div
                     className="w-24 h-24 rounded-2xl flex items-center justify-center"
                     style={{
-                      background: 'linear-gradient(135deg, #ffe8e8 0%, #fff0e0 100%)',
+                      background: 'linear-gradient(135deg, #ffe8e8 0%, #ffe8e8 100%)',
                       border: '1.5px solid #ffb3b3',
                     }}
                   >
                     <span className="text-5xl opacity-60">🎰</span>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full" style={{ background: '#FFD700' }} />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full" style={{ background: '#FF4444' }} />
                   <div className="absolute -bottom-1 -left-2 w-2 h-2 rounded-full" style={{ background: '#FF9A3C' }} />
                   <div className="absolute top-2 -left-3 w-1.5 h-1.5 rounded-full" style={{ background: '#C8102E' }} />
                 </div>
@@ -239,18 +239,18 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
               </motion.button>
             </div>
 
-            {/* ── Gold accent strip ── */}
+            {/* ── Red accent strip ── */}
             <div className="mx-4 mt-4 rounded-xl py-3 px-4 flex items-center gap-3"
               style={{
-                background: 'linear-gradient(135deg, #FFF8E1 0%, #FFF3CD 100%)',
-                border: '1.5px solid #FFD700',
-                boxShadow: '0 2px 12px rgba(255,215,0,0.2)',
+                background: 'linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%)',
+                border: '1.5px solid #FF4444',
+                boxShadow: '0 2px 12px rgba(255,68,68,0.2)',
               }}
             >
               <span className="text-2xl">💰</span>
               <div>
-                <p className="text-xs font-black" style={{ color: '#B8860B' }}>Jackpot Bonus credited instantly</p>
-                <p className="text-[10px] mt-0.5" style={{ color: '#D4A017' }}>Directly to your main wallet balance</p>
+                <p className="text-xs font-black" style={{ color: '#C8102E' }}>Jackpot Bonus credited instantly</p>
+                <p className="text-[10px] mt-0.5" style={{ color: '#8B0000' }}>Directly to your main wallet balance</p>
               </div>
             </div>
           </div>
@@ -336,10 +336,10 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                         <div className="py-3 px-2 text-xs font-bold text-white border-r" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                           {row.day} {row.day === 1 ? 'Day' : 'Days'}
                         </div>
-                        <div className="py-3 px-2 text-xs font-semibold border-r" style={{ color: '#FFD700', borderColor: 'rgba(255,255,255,0.08)' }}>
+                        <div className="py-3 px-2 text-xs font-semibold border-r" style={{ color: '#FF4444', borderColor: 'rgba(255,255,255,0.08)' }}>
                           {row.accumulated}
                         </div>
-                        <div className="py-3 px-2 text-xs font-bold" style={{ color: '#FF8C00' }}>
+                        <div className="py-3 px-2 text-xs font-bold" style={{ color: '#FF4444' }}>
                           {row.bonus}
                         </div>
                       </div>
@@ -383,12 +383,12 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                         {/* Customer service link */}
                         <div
                           className="flex items-center justify-center gap-2 py-3 rounded-xl mt-1"
-                          style={{ background: 'linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%)', border: '1.5px solid #FFB347' }}
+                          style={{ background: 'linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%)', border: '1.5px solid #FF6B6B' }}
                         >
                           <span className="text-base">💬</span>
                           <span className="text-xs font-bold" style={{ color: '#C8102E' }}>
                             Need help?{' '}
-                            <span className="underline" style={{ color: '#FF8C00' }}>Contact Customer Service</span>
+                            <span className="underline" style={{ color: '#FF4444' }}>Contact Customer Service</span>
                           </span>
                         </div>
                       </div>
@@ -437,9 +437,9 @@ function SuperJackpotModal({ onClose }: { onClose: () => void }) {
                       key={i}
                       className="flex flex-col items-center p-3 rounded-2xl"
                       style={{
-                        background: 'linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%)',
-                        border: '1.5px solid #FFD700',
-                        boxShadow: '0 2px 12px rgba(255,215,0,0.15)',
+                        background: 'linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%)',
+                        border: '1.5px solid #FF4444',
+                        boxShadow: '0 2px 12px rgba(255,68,68,0.15)',
                       }}
                     >
                       <div className="text-2xl mb-1">{'⭐'.repeat(Math.min(tier.stars, 3))}{tier.stars > 3 ? `×${tier.stars}` : ''}</div>
@@ -529,7 +529,7 @@ function InvitationBonusModal({ onClose }: { onClose: () => void }) {
                 className="flex items-center justify-center gap-2 py-2 px-4 rounded-xl"
                 style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
-                <span className="text-[11px] font-bold" style={{ color: '#FFD700' }}>📅</span>
+                <span className="text-[11px] font-bold" style={{ color: '#FF4444' }}>📅</span>
                 <span className="text-white font-bold text-xs tracking-wide">2023-12-01 — 2030-01-01</span>
               </div>
             </div>
@@ -541,7 +541,7 @@ function InvitationBonusModal({ onClose }: { onClose: () => void }) {
                 className="flex flex-col items-center gap-1 py-3 rounded-2xl transition-all"
                 style={{
                   background: activeTab === 'rules' ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  border: activeTab === 'rules' ? '1.5px solid rgba(255,215,0,0.6)' : '1.5px solid rgba(255,255,255,0.1)',
+                  border: activeTab === 'rules' ? '1.5px solid rgba(255,68,68,0.6)' : '1.5px solid rgba(255,255,255,0.1)',
                 }}
               >
                 <span className="text-xl">📋</span>
@@ -552,7 +552,7 @@ function InvitationBonusModal({ onClose }: { onClose: () => void }) {
                 className="flex flex-col items-center gap-1 py-3 rounded-2xl transition-all"
                 style={{
                   background: activeTab === 'record' ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  border: activeTab === 'record' ? '1.5px solid rgba(255,215,0,0.6)' : '1.5px solid rgba(255,255,255,0.1)',
+                  border: activeTab === 'record' ? '1.5px solid rgba(255,68,68,0.6)' : '1.5px solid rgba(255,255,255,0.1)',
                 }}
               >
                 <span className="text-xl">📊</span>
@@ -596,7 +596,7 @@ function BonusTierCard({ tier, index }: { tier: typeof bonusTiers[0]; index: num
     badgeBorder: '1px solid rgba(255,255,255,0.3)',
     numberCircleBg: 'rgba(255,255,255,0.9)',
     numberCircleColor: '#C8102E',
-    bonusColor: '#FFD700',
+    bonusColor: '#FF4444',
     statsBg: '#fff5f5',
     statsBorder: '1px solid #ffd0d0',
     statsText: '#C8102E',
@@ -670,7 +670,7 @@ function BonusTierCard({ tier, index }: { tier: typeof bonusTiers[0]; index: num
           </div>
           {cardTheme.iconEl}
         </div>
-        <div className="font-black text-base" style={{ color: cardTheme.bonusColor, textShadow: '0 0 20px rgba(255,215,0,0.5)' }}>
+        <div className="font-black text-base" style={{ color: cardTheme.bonusColor, textShadow: '0 0 20px rgba(255,68,68,0.5)' }}>
           ₹{tier.bonus.toLocaleString('en-IN')}.00
         </div>
       </div>
@@ -772,7 +772,7 @@ function InvitationRecord() {
           >
             <div className="flex items-center justify-between px-4 py-2" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
               <span className="text-white font-bold text-xs">{rec.uid}</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,215,0,0.2)', color: '#FFD700', border: '1px solid #FFD700' }}>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,68,68,0.2)', color: '#FF4444', border: '1px solid #FF4444' }}>
                 Tier {rec.tier}
               </span>
             </div>
@@ -783,7 +783,7 @@ function InvitationRecord() {
               </div>
               <div className="text-right">
                 <div className="text-[10px] text-gray-400">Bonus earned</div>
-                <div className="font-black text-base mt-0.5" style={{ color: '#FFD700' }}>₹{rec.bonus}.00</div>
+                <div className="font-black text-base mt-0.5" style={{ color: '#FF4444' }}>₹{rec.bonus}.00</div>
               </div>
             </div>
           </motion.div>
@@ -811,7 +811,7 @@ const quickActions = [
     key: 'qa-rebate',
     label: 'Betting\nRebate',
     icon: '💰',
-    gradient: 'linear-gradient(135deg, #D4AF37, #F5D060)',
+    gradient: 'linear-gradient(135deg, #C8102E, #F5D060)',
   },
   {
     key: 'qa-jackpot',
@@ -823,7 +823,7 @@ const quickActions = [
     key: 'qa-firstgift',
     label: 'First\nGift',
     icon: '🎁',
-    gradient: 'linear-gradient(135deg, #D4AF37, #B8860B)',
+    gradient: 'linear-gradient(135deg, #C8102E, #C8102E)',
   },
   {
     key: 'qa-wheel',
@@ -848,10 +848,10 @@ const banners = [
     title: 'Attendance\nBonus',
     subtitle: 'Check in daily for rewards',
     icon: '📅',
-    gradient: 'linear-gradient(135deg, #D4AF37 0%, #F5D060 100%)',
+    gradient: 'linear-gradient(135deg, #C8102E 0%, #F5D060 100%)',
     half: true,
     tag: 'Streak',
-    border: '#D4AF37',
+    border: '#C8102E',
   },
   {
     key: 'banner-recharge',
@@ -860,7 +860,7 @@ const banners = [
     icon: '🃏',
     gradient: 'linear-gradient(135deg, #C8102E, #8B0000)',
     tag: 'HOT',
-    tagColor: '#FFD700',
+    tagColor: '#FF4444',
     detail: 'Up to ₹5,000 bonus',
   },
   {
@@ -868,7 +868,7 @@ const banners = [
     title: 'First / Second Recharge Bonus',
     subtitle: 'Exclusive bonus on your 1st & 2nd deposit',
     icon: '💎',
-    gradient: 'linear-gradient(135deg, #D4AF37, #B8860B)',
+    gradient: 'linear-gradient(135deg, #C8102E, #C8102E)',
     tag: 'NEW',
     tagColor: '#fff',
     detail: 'Get up to ₹2,000 extra',
@@ -880,7 +880,7 @@ const banners = [
     icon: '🔟',
     gradient: 'linear-gradient(135deg, #8B0000, #C8102E)',
     tag: 'LIMITED',
-    tagColor: '#FFD700',
+    tagColor: '#FF4444',
     detail: '10-day streak reward',
   },
   {
@@ -890,7 +890,7 @@ const banners = [
     icon: '📱',
     gradient: 'linear-gradient(135deg, #C8102E, #E83E52)',
     tag: 'WIN',
-    tagColor: '#FFD700',
+    tagColor: '#FF4444',
     detail: 'iPhone 16 Pro Max Giveaway 🎉',
   },
   {
@@ -900,7 +900,7 @@ const banners = [
     icon: '👥',
     gradient: 'linear-gradient(135deg, #8B0000, #C8102E)',
     tag: 'MEGA',
-    tagColor: '#FFD700',
+    tagColor: '#FF4444',
     detail: 'Bonus up to ₹3,655,555',
     bigText: true,
   },
@@ -909,7 +909,7 @@ const banners = [
     title: 'Win Streak Bonus',
     subtitle: 'Keep winning to unlock streak multipliers',
     icon: '🎲',
-    gradient: 'linear-gradient(135deg, #D4AF37, #F5D060)',
+    gradient: 'linear-gradient(135deg, #C8102E, #F5D060)',
     tag: 'STREAK',
     tagColor: '#fff',
     detail: 'Lottery game rewards',
@@ -921,7 +921,7 @@ const banners = [
     icon: '✈️',
     gradient: 'linear-gradient(135deg, #C8102E, #FF4444)',
     tag: 'FLY',
-    tagColor: '#FFD700',
+    tagColor: '#FF4444',
     detail: 'Pilot bonus rewards',
   },
   {
@@ -929,10 +929,10 @@ const banners = [
     title: 'VIP Upgrade Bonus',
     subtitle: 'Unlock luxury rewards as you level up',
     icon: '👑',
-    gradient: 'linear-gradient(135deg, #D4AF37, #B8860B)',
+    gradient: 'linear-gradient(135deg, #C8102E, #C8102E)',
     tag: 'VIP',
     tagColor: '#fff',
-    detail: 'Exclusive gold tier rewards',
+    detail: 'Exclusive premium rewards',
   },
 ];
 
@@ -955,7 +955,7 @@ const itemVariants = {
 const rebateTiers = [
   { level: 'Bronze', minBet: 1000, maxBet: 9999, rebate: 0.3, icon: '🥉', color: '#CD7F32', bg: 'linear-gradient(135deg, #3d1f00, #7a3f00)' },
   { level: 'Silver', minBet: 10000, maxBet: 49999, rebate: 0.5, icon: '🥈', color: '#C0C0C0', bg: 'linear-gradient(135deg, #1a1a1a, #3a3a3a)' },
-  { level: 'Gold', minBet: 50000, maxBet: 199999, rebate: 0.8, icon: '🥇', color: '#FFD700', bg: 'linear-gradient(135deg, #2a1a00, #5a3a00)' },
+  { level: 'Gold', minBet: 50000, maxBet: 199999, rebate: 0.8, icon: '🥇', color: '#FF4444', bg: 'linear-gradient(135deg, #1a0000, #3a0000)' },
   { level: 'Platinum', minBet: 200000, maxBet: 499999, rebate: 1.0, icon: '💎', color: '#00E5FF', bg: 'linear-gradient(135deg, #001a2a, #003a5a)' },
   { level: 'Diamond', minBet: 500000, maxBet: 999999, rebate: 1.2, icon: '👑', color: '#FF6B6B', bg: 'linear-gradient(135deg, #1a0000, #5a0000)' },
   { level: 'VIP', minBet: 1000000, maxBet: null, rebate: 1.5, icon: '🌟', color: '#FF4500', bg: 'linear-gradient(135deg, #1a0a00, #6a2000)' },
@@ -1059,7 +1059,7 @@ function BettingRebateModal({ onClose }: { onClose: () => void }) {
                 className="flex flex-col items-center gap-1 py-3 rounded-2xl transition-all"
                 style={{
                   background: activeTab === 'tiers' ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  border: activeTab === 'tiers' ? '1.5px solid rgba(255,215,0,0.8)' : '1.5px solid rgba(255,255,255,0.15)',
+                  border: activeTab === 'tiers' ? '1.5px solid rgba(255,68,68,0.8)' : '1.5px solid rgba(255,255,255,0.15)',
                   boxShadow: activeTab === 'tiers' ? '0 0 12px rgba(212,175,55,0.3)' : 'none',
                 }}
               >
@@ -1071,7 +1071,7 @@ function BettingRebateModal({ onClose }: { onClose: () => void }) {
                 className="flex flex-col items-center gap-1 py-3 rounded-2xl transition-all"
                 style={{
                   background: activeTab === 'record' ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)',
-                  border: activeTab === 'record' ? '1.5px solid rgba(255,215,0,0.8)' : '1.5px solid rgba(255,255,255,0.15)',
+                  border: activeTab === 'record' ? '1.5px solid rgba(255,68,68,0.8)' : '1.5px solid rgba(255,255,255,0.15)',
                   boxShadow: activeTab === 'record' ? '0 0 12px rgba(212,175,55,0.3)' : 'none',
                 }}
               >
@@ -1158,8 +1158,8 @@ function BettingRebateModal({ onClose }: { onClose: () => void }) {
                     <div className="text-[10px] text-gray-500">Total Rebate Earned</div>
                   </div>
                   <div className="rounded-2xl p-3 flex flex-col items-center" style={{ background: '#ffffff', border: '1px solid #ffd0d0' }}>
-                    <Clock size={18} style={{ color: '#FF8C00' }} />
-                    <div className="font-black text-lg mt-1" style={{ color: '#FF8C00' }}>₹6.30</div>
+                    <Clock size={18} style={{ color: '#FF4444' }} />
+                    <div className="font-black text-lg mt-1" style={{ color: '#FF4444' }}>₹6.30</div>
                     <div className="text-[10px] text-gray-500">Pending Rebate</div>
                   </div>
                 </div>
@@ -1179,9 +1179,9 @@ function BettingRebateModal({ onClose }: { onClose: () => void }) {
                       <span
                         className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                         style={{
-                          background: rec.status === 'Credited' ? 'rgba(0,200,83,0.15)' : 'rgba(255,215,0,0.15)',
-                          color: rec.status === 'Credited' ? '#00C853' : '#FF8C00',
-                          border: `1px solid ${rec.status === 'Credited' ? '#00C853' : '#FF8C00'}`,
+                          background: rec.status === 'Credited' ? 'rgba(0,200,83,0.15)' : 'rgba(255,68,68,0.15)',
+                          color: rec.status === 'Credited' ? '#00C853' : '#FF4444',
+                          border: `1px solid ${rec.status === 'Credited' ? '#00C853' : '#FF4444'}`,
                         }}
                       >
                         {rec.status}
@@ -1314,7 +1314,7 @@ function GiftModal({ onClose }: { onClose: () => void }) {
                     style={{
                       width: 110,
                       height: 80,
-                      background: 'linear-gradient(160deg, #FF9500 0%, #E07000 100%)',
+                      background: 'linear-gradient(160deg, #FF9500 0%, #8B0000 100%)',
                       border: '2px solid rgba(255,255,255,0.25)',
                       boxShadow: '0 10px 30px rgba(0,0,0,0.22)',
                     }}
@@ -1331,7 +1331,7 @@ function GiftModal({ onClose }: { onClose: () => void }) {
                       bottom: 76,
                       left: '50%',
                       transform: 'translateX(-50%) rotate(-4deg)',
-                      background: 'linear-gradient(135deg, #FFB347 0%, #FF8C00 100%)',
+                      background: 'linear-gradient(135deg, #FF6B6B 0%, #FF4444 100%)',
                       border: '2px solid rgba(255,255,255,0.3)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.18)',
                     }}
@@ -1399,10 +1399,10 @@ function GiftModal({ onClose }: { onClose: () => void }) {
                 {/* Info strip */}
                 <div
                   className="mt-3 rounded-xl py-2 px-3 flex items-center gap-2"
-                  style={{ background: '#FFF8E1', border: '1px solid #FFD700' }}
+                  style={{ background: '#fff0f0', border: '1px solid #FF4444' }}
                 >
                   <span className="text-sm">💡</span>
-                  <span className="text-[11px] font-medium" style={{ color: '#B8860B' }}>Gift codes are case-sensitive</span>
+                  <span className="text-[11px] font-medium" style={{ color: '#C8102E' }}>Gift codes are case-sensitive</span>
                 </div>
 
                 {/* Receive Button */}
@@ -1443,7 +1443,7 @@ function GiftModal({ onClose }: { onClose: () => void }) {
                 <div className="flex items-center gap-2.5 px-4 py-3.5">
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: 'linear-gradient(135deg, #F5C842 0%, #E8A800 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #F5C842 0%, #C8102E 100%)' }}
                   >
                     <span className="text-sm">📋</span>
                   </div>
@@ -1465,7 +1465,7 @@ function GiftModal({ onClose }: { onClose: () => void }) {
                     >
                       <span className="text-4xl opacity-60">🎁</span>
                     </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full" style={{ background: '#FFD700' }} />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full" style={{ background: '#FF4444' }} />
                     <div className="absolute -bottom-1 -left-1 w-2 h-2 rounded-full" style={{ background: '#C8102E' }} />
                   </div>
                   <p className="text-sm font-semibold" style={{ color: '#C8102E' }}>No data</p>
@@ -1600,7 +1600,7 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
                     onClick={() => setShowRules(true)}
                     className="flex-1 py-2.5 rounded-full font-bold text-sm"
                     style={{
-                      background: 'linear-gradient(135deg, #FFB347 0%, #FF8C00 100%)',
+                      background: 'linear-gradient(135deg, #FF6B6B 0%, #FF4444 100%)',
                       color: '#fff',
                       boxShadow: '0 3px 12px rgba(255,140,0,0.4)',
                     }}
@@ -1612,7 +1612,7 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
                     onClick={() => setShowHistory(true)}
                     className="flex-1 py-2.5 rounded-full font-bold text-sm"
                     style={{
-                      background: 'linear-gradient(135deg, #FFB347 0%, #FF8C00 100%)',
+                      background: 'linear-gradient(135deg, #FF6B6B 0%, #FF4444 100%)',
                       color: '#fff',
                       boxShadow: '0 3px 12px rgba(255,140,0,0.4)',
                     }}
@@ -1662,9 +1662,9 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
                     <div
                       className="w-12 h-12 rounded-full flex items-center justify-center mb-2"
                       style={{
-                        background: 'radial-gradient(circle at 35% 35%, #FFE566 0%, #FFD700 40%, #E8A800 70%, #C87800 100%)',
-                        boxShadow: '0 4px 12px rgba(255,215,0,0.5), inset 0 1px 0 rgba(255,255,255,0.4)',
-                        border: '2px solid #E8A800',
+                        background: 'radial-gradient(circle at 35% 35%, #FF6B6B 0%, #FF4444 40%, #C8102E 70%, #8B0000 100%)',
+                        boxShadow: '0 4px 12px rgba(255,68,68,0.5), inset 0 1px 0 rgba(255,255,255,0.4)',
+                        border: '2px solid #C8102E',
                       }}
                     >
                       <span className="text-xl" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }}>⭐</span>
@@ -1753,7 +1753,7 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
               style={{
                 background: claimed
                   ? 'linear-gradient(135deg, #00c853 0%, #43a047 100%)'
-                  : 'linear-gradient(135deg, #FFB347 0%, #FF8C00 50%, #E07000 100%)',
+                  : 'linear-gradient(135deg, #FF6B6B 0%, #FF4444 50%, #8B0000 100%)',
                 color: claimed ? '#ffffff' : '#7a3800',
                 boxShadow: claimed
                   ? '0 4px 16px rgba(0,200,83,0.4)'
@@ -1883,10 +1883,10 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
                           <div className="py-3 px-2 text-xs font-bold text-white border-r" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                             {row.day} {row.day === 1 ? 'Day' : 'Days'}
                           </div>
-                          <div className="py-3 px-2 text-xs font-semibold border-r" style={{ color: '#FFD700', borderColor: 'rgba(255,255,255,0.08)' }}>
+                          <div className="py-3 px-2 text-xs font-semibold border-r" style={{ color: '#FF4444', borderColor: 'rgba(255,255,255,0.08)' }}>
                             {row.accumulated}
                           </div>
-                          <div className="py-3 px-2 text-xs font-bold" style={{ color: '#FF8C00' }}>
+                          <div className="py-3 px-2 text-xs font-bold" style={{ color: '#FF4444' }}>
                             {row.bonus}
                           </div>
                         </div>
@@ -1931,12 +1931,12 @@ function AttendanceBonusModal({ onClose }: { onClose: () => void }) {
                         {/* Customer service link */}
                         <div
                           className="flex items-center justify-center gap-2 py-3 rounded-xl mt-1"
-                          style={{ background: 'linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%)', border: '1.5px solid #FFB347' }}
+                          style={{ background: 'linear-gradient(135deg, #fff0f0 0%, #ffe8e8 100%)', border: '1.5px solid #FF6B6B' }}
                         >
                           <span className="text-base">💬</span>
                           <span className="text-xs font-bold" style={{ color: '#C8102E' }}>
                             Need help?{' '}
-                            <span className="underline" style={{ color: '#FF8C00' }}>Contact Customer Service</span>
+                            <span className="underline" style={{ color: '#FF4444' }}>Contact Customer Service</span>
                           </span>
                         </div>
                       </div>
@@ -2077,7 +2077,7 @@ const PROMO_CONFIGS: Record<string, { title: string; icon: string; heroGradient:
   firstGift: {
     title: 'First Deposit Gift',
     icon: '🎁',
-    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%)',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #C8102E 50%, #8B0000 100%)',
     heroDesc: 'Make your first deposit and receive an exclusive welcome bonus! Limited time offer for new members.',
     features: [
       { label: 'Min Deposit', value: '₹200', icon: '💳' },
@@ -2117,7 +2117,7 @@ const PROMO_CONFIGS: Record<string, { title: string; icon: string; heroGradient:
   firstSecondRecharge: {
     title: 'First & Second Recharge',
     icon: '💎',
-    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #C8102E 100%)',
     heroDesc: 'Exclusive bonus on your 1st & 2nd deposit! Double the rewards for your first two recharges.',
     features: [
       { label: '1st Deposit', value: '100%', icon: '1️⃣' },
@@ -2177,7 +2177,7 @@ const PROMO_CONFIGS: Record<string, { title: string; icon: string; heroGradient:
   winStreak: {
     title: 'Win Streak Bonus',
     icon: '🎲',
-    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #F5D060 50%, #FFE566 100%)',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #F5D060 50%, #FF6B6B 100%)',
     heroDesc: 'Keep winning to unlock streak multipliers! The more consecutive wins you get, the higher your bonus.',
     features: [
       { label: '3 Wins', value: '1.5x', icon: '🔥' },
@@ -2217,11 +2217,11 @@ const PROMO_CONFIGS: Record<string, { title: string; icon: string; heroGradient:
   vipUpgrade: {
     title: 'VIP Upgrade Bonus',
     icon: '👑',
-    heroGradient: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%)',
+    heroGradient: 'linear-gradient(135deg, #C8102E 0%, #C8102E 50%, #8B0000 100%)',
     heroDesc: 'Unlock luxury rewards as you level up! VIP members enjoy exclusive perks, higher limits, and premium bonuses.',
     features: [
       { label: 'Silver VIP', value: '₹1,000', icon: '🥈' },
-      { label: 'Gold VIP', value: '₹5,000', icon: '🥇' },
+      { label: 'Premium VIP', value: '₹5,000', icon: '🥇' },
       { label: 'Platinum', value: '₹15,000', icon: '💎' },
       { label: 'Diamond', value: '₹50,000', icon: '👑' },
     ],
@@ -2266,14 +2266,14 @@ export default function ActivityPage() {
         style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)' }}
       >
         <div className="flex items-center justify-center gap-2">
-          <Crown size={22} color="#FFD700" fill="#FFD700" />
+          <Crown size={22} color="#FF4444" fill="#FF4444" />
           <span
             className="text-xl font-black tracking-widest"
-            style={{ color: '#FFD700', textShadow: '0 1px 8px rgba(0,0,0,0.3)' }}
+            style={{ color: '#FF4444', textShadow: '0 1px 8px rgba(0,0,0,0.3)' }}
           >
             𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴
           </span>
-          <Crown size={22} color="#FFD700" fill="#FFD700" />
+          <Crown size={22} color="#FF4444" fill="#FF4444" />
         </div>
       </div>
 
@@ -2292,7 +2292,7 @@ export default function ActivityPage() {
           </div>
           <button
             className="px-4 py-1.5 rounded-full text-xs font-bold"
-            style={{ background: 'linear-gradient(135deg, #D4AF37, #F5D060)', color: '#fff', border: 'none' }}
+            style={{ background: 'linear-gradient(135deg, #C8102E, #F5D060)', color: '#fff', border: 'none' }}
           >
             Bonus details
           </button>
@@ -2452,7 +2452,7 @@ export default function ActivityPage() {
                   {banner?.detail && (
                     <div
                       className={`mt-1 font-bold ${banner?.bigText ? 'text-sm' : 'text-[11px]'}`}
-                      style={{ color: banner?.tagColor || '#FFD700' }}
+                      style={{ color: banner?.tagColor || '#FF4444' }}
                     >
                       {banner?.detail}
                     </div>
@@ -2467,9 +2467,9 @@ export default function ActivityPage() {
 
       {/* No More */}
       <div className="flex items-center justify-center gap-3 py-6 mx-3">
-        <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, #D4AF37)' }} />
-        <span className="text-xs font-medium" style={{ color: '#D4AF37' }}>No more</span>
-        <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, #D4AF37)' }} />
+        <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, #C8102E)' }} />
+        <span className="text-xs font-medium" style={{ color: '#C8102E' }}>No more</span>
+        <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, #C8102E)' }} />
       </div>
       <BottomNav />
     </div>
