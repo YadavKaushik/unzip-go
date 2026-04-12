@@ -430,7 +430,7 @@ export default function MainDashboard() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setShowWalletModal(true)}
+                onClick={() => navigate('/deposit')}
                 className="flex items-center gap-1 bg-black/20 border border-yellow-400/40 rounded-full px-2.5 py-1">
                 <span className="text-yellow-300 text-xs font-700 tabular-nums">₹{walletBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                 <Plus size={11} className="text-yellow-300" />
