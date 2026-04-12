@@ -796,12 +796,6 @@ function InvitationRecord() {
 // ─── Quick Actions ────────────────────────────────────────────────────────────
 const quickActions = [
   {
-    key: 'qa-activity',
-    label: 'Activity\nAward',
-    icon: '🎖️',
-    gradient: 'linear-gradient(135deg, #C8102E, #FF4444)',
-  },
-  {
     key: 'qa-invitation',
     label: 'Invitation\nBonus',
     icon: '🎁',
@@ -818,12 +812,6 @@ const quickActions = [
     label: 'Super\nJackpot',
     icon: '🏆',
     gradient: 'linear-gradient(135deg, #C8102E, #8B0000)',
-  },
-  {
-    key: 'qa-firstgift',
-    label: 'First\nGift',
-    icon: '🎁',
-    gradient: 'linear-gradient(135deg, #C8102E, #C8102E)',
   },
   {
     key: 'qa-wheel',
