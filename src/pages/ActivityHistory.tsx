@@ -796,12 +796,6 @@ function InvitationRecord() {
 // ─── Quick Actions ────────────────────────────────────────────────────────────
 const quickActions = [
   {
-    key: 'qa-activity',
-    label: 'Activity\nAward',
-    icon: '🎖️',
-    gradient: 'linear-gradient(135deg, #C8102E, #FF4444)',
-  },
-  {
     key: 'qa-invitation',
     label: 'Invitation\nBonus',
     icon: '🎁',
@@ -818,12 +812,6 @@ const quickActions = [
     label: 'Super\nJackpot',
     icon: '🏆',
     gradient: 'linear-gradient(135deg, #C8102E, #8B0000)',
-  },
-  {
-    key: 'qa-firstgift',
-    label: 'First\nGift',
-    icon: '🎁',
-    gradient: 'linear-gradient(135deg, #C8102E, #C8102E)',
   },
   {
     key: 'qa-wheel',
@@ -2308,7 +2296,7 @@ export default function ActivityPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="mx-3 mt-4 p-3 rounded-2xl grid grid-cols-4 gap-3"
+        className="mx-3 mt-4 p-3 rounded-2xl grid grid-cols-4 gap-4 justify-items-center"
         style={{ background: '#fff', border: '1px solid #f0e0c0' }}
       >
         {quickActions?.map((action) => (
@@ -2328,10 +2316,6 @@ export default function ActivityPage() {
                 ? () => setShowSuperJackpot(true)
                 : action?.key === 'qa-wheel'
                 ? () => navigate('/spin-wheel')
-                : action?.key === 'qa-activity'
-                ? () => setActivePromo('activityAward')
-                : action?.key === 'qa-firstgift'
-                ? () => setActivePromo('firstGift')
                 : undefined
             }
           >
