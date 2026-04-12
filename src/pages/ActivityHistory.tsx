@@ -2296,7 +2296,7 @@ export default function ActivityPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="mx-3 mt-4 p-3 rounded-2xl grid grid-cols-4 gap-3"
+        className="mx-3 mt-4 p-3 rounded-2xl grid grid-cols-4 gap-4 justify-items-center"
         style={{ background: '#fff', border: '1px solid #f0e0c0' }}
       >
         {quickActions?.map((action) => (
@@ -2316,10 +2316,6 @@ export default function ActivityPage() {
                 ? () => setShowSuperJackpot(true)
                 : action?.key === 'qa-wheel'
                 ? () => navigate('/spin-wheel')
-                : action?.key === 'qa-activity'
-                ? () => setActivePromo('activityAward')
-                : action?.key === 'qa-firstgift'
-                ? () => setActivePromo('firstGift')
                 : undefined
             }
           >
