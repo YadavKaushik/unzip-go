@@ -627,7 +627,7 @@ function SpinWheelContent() {
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-y-auto"
-      style={{ background: 'linear-gradient(180deg, #FF8C00 0%, #FFA500 30%, #FF8C00 60%, #FF4500 100%)' }}>
+      style={{ background: 'linear-gradient(180deg, #E83030 0%, #C8102E 30%, #B80020 60%, #8B0000 100%)' }}>
 
       <ConfettiCanvas active={showConfetti} />
 
@@ -698,13 +698,13 @@ function SpinWheelContent() {
           whileTap={canCashOut ? { scale: 0.96 } : {}}
           onClick={handleCashOut}
           disabled={!canCashOut}
-          className="px-10 py-2.5 rounded-full font-black text-base tracking-widest relative overflow-hidden"
+          className="px-10 py-3 rounded-full font-black text-base tracking-widest relative overflow-hidden"
           style={{
-            background: canCashOut ? 'linear-gradient(135deg, #1A0A00 0%, #2E1200 100%)' : 'rgba(0,0,0,0.25)',
-            color: canCashOut ? '#FFD700' : 'rgba(255,255,255,0.35)',
-            boxShadow: canCashOut ? '0 4px 20px rgba(0,0,0,0.4)' : 'none',
-            border: `2px solid ${canCashOut ? 'rgba(255,215,100,0.5)' : 'rgba(255,255,255,0.1)'}`,
-            fontSize: '14px',
+            background: canCashOut ? 'linear-gradient(135deg, #FFB800 0%, #FF8C00 50%, #FFB800 100%)' : 'rgba(0,0,0,0.25)',
+            color: canCashOut ? '#fff' : 'rgba(255,255,255,0.35)',
+            boxShadow: canCashOut ? '0 4px 20px rgba(255,140,0,0.5)' : 'none',
+            border: 'none',
+            fontSize: '15px',
             cursor: canCashOut ? 'pointer' : 'not-allowed',
           }}
         >
@@ -778,10 +778,10 @@ function SpinWheelContent() {
           style={{
             background: isSpinning || spinsLeft <= 0
               ? 'rgba(255,255,255,0.15)'
-              : 'linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FFD700 100%)',
-            color: isSpinning || spinsLeft <= 0 ? 'rgba(255,255,255,0.5)' : '#000',
-            boxShadow: isSpinning || spinsLeft <= 0 ? 'none' : '0 6px 24px rgba(255,215,0,0.5)',
-            border: '2px solid rgba(255,220,100,0.4)',
+              : 'linear-gradient(135deg, #FFB800 0%, #FF8C00 50%, #FFB800 100%)',
+            color: isSpinning || spinsLeft <= 0 ? 'rgba(255,255,255,0.5)' : '#fff',
+            boxShadow: isSpinning || spinsLeft <= 0 ? 'none' : '0 6px 24px rgba(255,140,0,0.5)',
+            border: 'none',
             fontSize: '14px',
             letterSpacing: '0.1em',
           }}
@@ -796,35 +796,31 @@ function SpinWheelContent() {
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
             />
           )}
-          {isSpinning ? '🎰 SPINNING...' : spinsLeft <= 0 ? '✅ SPIN USED' : '🎯 SPIN NOW'}
+          {isSpinning ? '🎰 SPINNING...' : spinsLeft <= 0 ? '✅ SPIN USED' : 'INVITE FRIENDS TO GET SPIN'}
         </motion.button>
         <p className="mt-2 text-center" style={{ color: 'rgba(255,255,255,0.85)', fontSize: '12px' }}>
           {spinsLeft > 0 ? `🎁 ${spinsLeft} Free Spin Available` : `Only ₹${remaining} left to get ₹500 wallet transfer`}
         </p>
       </div>
 
-      {/* Recent Spins Section */}
-      <div className="mx-4 mb-6 rounded-2xl overflow-hidden flex-shrink-0" style={{ background: 'rgba(255,255,255,0.95)' }}>
-        <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-          <h3 style={{ color: '#1A1A1A', fontSize: '16px', fontWeight: 700 }}>Recent Spins</h3>
-        </div>
+      {/* Record Section */}
+      <div className="mx-4 mb-6 flex-shrink-0">
+        <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>Record</h3>
         {spinRecords.length === 0 ? (
-          <div className="px-4 pb-4">
-            <p style={{ color: '#999', fontSize: '13px' }}>No spins yet. Spin to win!</p>
-          </div>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>No spins yet. Spin to win!</p>
         ) : (
           spinRecords.slice(0, 5).map((rec, idx) => (
-            <div key={idx} className="flex items-center justify-between px-4 py-3 border-t" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+            <div key={idx} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center" style={{ background: '#FFF3E0' }}>
-                  <span style={{ fontSize: '18px' }}>🎰</span>
+                <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                  <span style={{ fontSize: '20px' }}>👤</span>
                 </div>
-                <div>
-                  <span style={{ color: '#333', fontSize: '14px', fontWeight: 500 }}>{rec.name}</span>
-                  <p style={{ color: '#999', fontSize: '11px' }}>{rec.date}</p>
-                </div>
+                <span style={{ color: '#fff', fontSize: '14px', fontWeight: 600 }}>{rec.name}</span>
               </div>
-              <p style={{ color: '#FF8C00', fontSize: '14px', fontWeight: 700 }}>+₹{rec.amount.toFixed(2)}</p>
+              <div className="text-right">
+                <p style={{ color: '#FF4444', fontSize: '14px', fontWeight: 700 }}>₹{rec.amount.toFixed(2)}</p>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px' }}>{rec.date}</p>
+              </div>
             </div>
           ))
         )}
