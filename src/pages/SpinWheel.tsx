@@ -259,21 +259,21 @@ function PedestalSVG() {
     <svg width="340" height="70" viewBox="0 0 340 70" fill="none">
       <defs>
         <linearGradient id="ped-top" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#C8860A" />
-          <stop offset="30%" stopColor="#FFD700" />
-          <stop offset="50%" stopColor="#FFE566" />
-          <stop offset="70%" stopColor="#FFD700" />
-          <stop offset="100%" stopColor="#C8860A" />
+          <stop offset="0%" stopColor="#8B0000" />
+          <stop offset="30%" stopColor="#C8102E" />
+          <stop offset="50%" stopColor="#E83030" />
+          <stop offset="70%" stopColor="#C8102E" />
+          <stop offset="100%" stopColor="#8B0000" />
         </linearGradient>
         <linearGradient id="ped-body" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#E8A020" />
-          <stop offset="50%" stopColor="#C8860A" />
-          <stop offset="100%" stopColor="#8B5E00" />
+          <stop offset="0%" stopColor="#C8102E" />
+          <stop offset="50%" stopColor="#8B0000" />
+          <stop offset="100%" stopColor="#5C0000" />
         </linearGradient>
       </defs>
       <path d="M 30 10 L 310 10 L 330 65 L 10 65 Z" fill="url(#ped-body)" />
       <ellipse cx="170" cy="10" rx="140" ry="10" fill="url(#ped-top)" />
-      <path d="M 60 10 L 80 10 L 95 65 L 75 65 Z" fill="rgba(255,255,255,0.12)" />
+      <path d="M 60 10 L 80 10 L 95 65 L 75 65 Z" fill="rgba(255,255,255,0.08)" />
     </svg>
   );
 }
@@ -636,7 +636,7 @@ function SpinWheelContent() {
         <button
           onClick={() => navigate('/main-dashboard')}
           className="w-9 h-9 flex items-center justify-center rounded-full"
-          style={{ background: 'rgba(255,255,255,0.2)' }}
+          style={{ background: 'rgba(0,0,0,0.2)' }}
         >
           <ArrowLeft size={20} color="#fff" />
         </button>
