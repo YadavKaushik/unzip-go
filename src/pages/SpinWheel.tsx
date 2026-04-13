@@ -924,9 +924,10 @@ function SpinWheelContent() {
 function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
   const navigate = useNavigate();
   const [opened, setOpened] = useState<number | null>(null);
-  const [rewards] = useState<number[]>(() =>
-    Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 490)
-  );
+  const [rewards] = useState<number[]>(() => {
+    const values = Object.values(SEGMENT_VALUES);
+    return Array.from({ length: 4 }, () => values[Math.floor(Math.random() * values.length)]);
+  });
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
 
   const handleBoxClick = (idx: number) => {
