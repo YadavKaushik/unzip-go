@@ -1041,10 +1041,11 @@ function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
 // ─── Page Entry ────────────────────────────────────────────────────────────────
 export default function SpinWheelPage() {
   const [step, setStep] = useState<'gift' | 'spin'>('gift');
+  const [giftAmount, setGiftAmount] = useState(0);
 
   if (step === 'gift') {
-    return <GiftBoxStep onSelect={() => setStep('spin')} />;
+    return <GiftBoxStep onSelect={(amount) => { setGiftAmount(amount); setStep('spin'); }} />;
   }
 
-  return <SpinWheelContent />;
+  return <SpinWheelContent initialGiftAmount={giftAmount} />;
 }
