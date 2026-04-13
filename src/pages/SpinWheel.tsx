@@ -499,7 +499,7 @@ function RulesModal({ onClose }: { onClose: () => void }) {
 }
 
 // ─── Spin Wheel Content ───────────────────────────────────────────────────────
-function SpinWheelContent() {
+function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: number }) {
   const navigate = useNavigate();
   const [isSpinning, setIsSpinning] = useState(false);
   const [targetRotation, setTargetRotation] = useState(0);
@@ -522,7 +522,11 @@ function SpinWheelContent() {
     const savedTotal = parseFloat(localStorage.getItem(LS_TOTAL_AMOUNT) || '0');
     const savedSpinRecords = JSON.parse(localStorage.getItem(LS_SPIN_RECORDS) || '[]');
     const savedCashoutRecords = JSON.parse(localStorage.getItem(LS_CASHOUT_RECORDS) || '[]');
-    setTotalAmount(savedTotal);
+    const newTotal = savedTotal + initialGiftAmount;
+    setTotalAmount(newTotal);
+    if (initialGiftAmount > 0) {
+      localStorage.setItem(LS_TOTAL_AMOUNT, String(newTotal));
+    }
     setSpinRecords(savedSpinRecords);
     setCashoutRecords(savedCashoutRecords);
 
