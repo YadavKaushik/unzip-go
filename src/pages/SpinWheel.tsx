@@ -8,23 +8,19 @@ import { useNavigate } from 'react-router-dom';
 // ─── Constants ────────────────────────────────────────────────────────────────
 // Wheel segments: 0-10 range only
 const WHEEL_SEGMENTS = [
-  { label: '₹0',  colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹2',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹5',  colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹1',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹8',  colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹3',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹10', colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹6',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹4',  colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹7',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹9',  colorA: '#F5C842', colorB: '#E8C800' },
+  { label: '₹198', colorA: '#F5C842', colorB: '#E8C800' },
+  { label: '₹58',  colorA: '#FFF8DC', colorB: '#F5E642' },
+  { label: '₹178', colorA: '#F5C842', colorB: '#E8C800' },
+  { label: '₹38',  colorA: '#FFF8DC', colorB: '#F5E642' },
+  { label: '₹86',  colorA: '#F5C842', colorB: '#E8C800' },
+  { label: '₹10',  colorA: '#FFF8DC', colorB: '#F5E642' },
+  { label: '₹158', colorA: '#F5C842', colorB: '#E8C800' },
+  { label: '₹118', colorA: '#FFF8DC', colorB: '#F5E642' },
 ];
 
-// Map label to amount value
 const SEGMENT_VALUES: Record<string, number> = {
-  '₹0': 0, '₹1': 1, '₹2': 2, '₹3': 3, '₹4': 4,
-  '₹5': 5, '₹6': 6, '₹7': 7, '₹8': 8, '₹9': 9, '₹10': 10,
+  '₹198': 198, '₹58': 58, '₹178': 178, '₹38': 38,
+  '₹86': 86, '₹10': 10, '₹158': 158, '₹118': 118,
 };
 
 const segAngle = 360 / WHEEL_SEGMENTS.length;
