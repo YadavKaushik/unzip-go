@@ -499,7 +499,7 @@ function RulesModal({ onClose }: { onClose: () => void }) {
 }
 
 // ─── Spin Wheel Content ───────────────────────────────────────────────────────
-function SpinWheelContent() {
+function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: number }) {
   const navigate = useNavigate();
   const [isSpinning, setIsSpinning] = useState(false);
   const [targetRotation, setTargetRotation] = useState(0);
@@ -522,7 +522,11 @@ function SpinWheelContent() {
     const savedTotal = parseFloat(localStorage.getItem(LS_TOTAL_AMOUNT) || '0');
     const savedSpinRecords = JSON.parse(localStorage.getItem(LS_SPIN_RECORDS) || '[]');
     const savedCashoutRecords = JSON.parse(localStorage.getItem(LS_CASHOUT_RECORDS) || '[]');
-    setTotalAmount(savedTotal);
+    const newTotal = savedTotal + initialGiftAmount;
+    setTotalAmount(newTotal);
+    if (initialGiftAmount > 0) {
+      localStorage.setItem(LS_TOTAL_AMOUNT, String(newTotal));
+    }
     setSpinRecords(savedSpinRecords);
     setCashoutRecords(savedCashoutRecords);
 
@@ -921,7 +925,7 @@ function SpinWheelContent() {
 }
 
 // ─── Gift Box Step ─────────────────────────────────────────────────────────────
-function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
+function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
   const navigate = useNavigate();
   const [opened, setOpened] = useState<number | null>(null);
   const [rewards] = useState<number[]>(() =>
@@ -940,7 +944,7 @@ function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
     }));
     setParticles(newParticles);
     setTimeout(() => setParticles([]), 1200);
-    setTimeout(() => onSelect(), 900);
+    setTimeout(() => onSelect(rewards[idx]), 900);
   };
 
   return (
@@ -1037,10 +1041,11 @@ function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
 // ─── Page Entry ────────────────────────────────────────────────────────────────
 export default function SpinWheelPage() {
   const [step, setStep] = useState<'gift' | 'spin'>('gift');
+  const [giftAmount, setGiftAmount] = useState(0);
 
   if (step === 'gift') {
-    return <GiftBoxStep onSelect={() => setStep('spin')} />;
+    return <GiftBoxStep onSelect={(amount) => { setGiftAmount(amount); setStep('spin'); }} />;
   }
 
-  return <SpinWheelContent />;
+  return <SpinWheelContent initialGiftAmount={giftAmount} />;
 }
