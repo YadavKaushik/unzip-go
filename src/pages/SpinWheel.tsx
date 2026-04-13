@@ -921,7 +921,7 @@ function SpinWheelContent() {
 }
 
 // ─── Gift Box Step ─────────────────────────────────────────────────────────────
-function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
+function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
   const navigate = useNavigate();
   const [opened, setOpened] = useState<number | null>(null);
   const [rewards] = useState<number[]>(() =>
@@ -940,7 +940,7 @@ function GiftBoxStep({ onSelect }: { onSelect: () => void }) {
     }));
     setParticles(newParticles);
     setTimeout(() => setParticles([]), 1200);
-    setTimeout(() => onSelect(), 900);
+    setTimeout(() => onSelect(rewards[idx]), 900);
   };
 
   return (
