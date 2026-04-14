@@ -1042,11 +1042,32 @@ function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
 
 // ─── Page Entry ────────────────────────────────────────────────────────────────
 export default function SpinWheelPage() {
-  const [step, setStep] = useState<'gift' | 'spin'>('gift');
+  const [step, setStep] = useState<'gift' | 'spin'>(() => {
+    const savedTimestamp = localStorage.getItem(LS_GIFT_TIMESTAMP);
+    if (savedTimestamp) {
+      const elapsed = Date.now() - Number(savedTimestamp);
+      if (elapsed < GIFT_COOLDOWN_MS) {
+        return 'spin'; // Within 72 hours, skip gift boxes
+      } else {
+        // 72 hours passed, reset spin data
+        localStorage.removeItem(LS_GIFT_TIMESTAMP);
+        localStorage.removeItem(LS_TOTAL_AMOUNT);
+        localStorage.removeItem(LS_SPIN_RECORDS);
+        return 'gift';
+      }
+    }
+    return 'gift';
+  });
   const [giftAmount, setGiftAmount] = useState(0);
 
+  const handleGiftSelect = (amount: number) => {
+    localStorage.setItem(LS_GIFT_TIMESTAMP, String(Date.now()));
+    setGiftAmount(amount);
+    setStep('spin');
+  };
+
   if (step === 'gift') {
-    return <GiftBoxStep onSelect={(amount) => { setGiftAmount(amount); setStep('spin'); }} />;
+    return <GiftBoxStep onSelect={handleGiftSelect} />;
   }
 
   return <SpinWheelContent initialGiftAmount={giftAmount} />;
