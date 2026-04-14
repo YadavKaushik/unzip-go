@@ -29,6 +29,8 @@ const LS_TOTAL_AMOUNT     = 'techie404-total-amount';
 const LS_SPIN_RECORDS     = 'techie404-spin-records';
 const LS_WALLET           = 'techie404-wallet-balance';
 const LS_CASHOUT_RECORDS  = 'techie404-cashout-records';
+const LS_GIFT_TIMESTAMP   = 'techie404-gift-timestamp';
+const GIFT_COOLDOWN_MS    = 72 * 60 * 60 * 1000; // 72 hours
 
 // ─── Confetti Canvas ──────────────────────────────────────────────────────────
 interface ConfettiParticle {
