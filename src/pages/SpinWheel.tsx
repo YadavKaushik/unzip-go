@@ -1,36 +1,106 @@
-import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, HelpCircle, History, X, CheckCircle, Wallet } from 'lucide-react';
-import { SpinSkeleton } from '@/components/SkeletonScreens';
+import { ArrowLeft, HelpCircle, History, X, CheckCircle, Wallet, Share2, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-
 // ─── Constants ────────────────────────────────────────────────────────────────
-// Wheel segments: 0-10 range only
 const WHEEL_SEGMENTS = [
-  { label: '₹198', colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹58',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹178', colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹38',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹86',  colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹10',  colorA: '#FFF8DC', colorB: '#F5E642' },
-  { label: '₹158', colorA: '#F5C842', colorB: '#E8C800' },
-  { label: '₹118', colorA: '#FFF8DC', colorB: '#F5E642' },
+  { label: '₹198', value: 198 },
+  { label: '₹0.10', value: 0.10 },
+  { label: '₹178', value: 178 },
+  { label: '₹38', value: 38 },
+  { label: '₹98', value: 98 },
+  { label: '₹0.05', value: 0.05 },
+  { label: '₹158', value: 158 },
+  { label: '₹118', value: 118 },
 ];
 
-const SEGMENT_VALUES: Record<string, number> = {
-  '₹198': 198, '₹58': 58, '₹178': 178, '₹38': 38,
-  '₹86': 86, '₹10': 10, '₹158': 158, '₹118': 118,
-};
-
 const segAngle = 360 / WHEEL_SEGMENTS.length;
+const PRIZE_TARGET = 500;
 
-const LS_TOTAL_AMOUNT     = 'techie404-total-amount';
-const LS_SPIN_RECORDS     = 'techie404-spin-records';
-const LS_WALLET           = 'techie404-wallet-balance';
-const LS_CASHOUT_RECORDS  = 'techie404-cashout-records';
-const LS_GIFT_TIMESTAMP   = 'techie404-gift-timestamp';
-const GIFT_COOLDOWN_MS    = 72 * 60 * 60 * 1000; // 72 hours
+const LS_TOTAL_AMOUNT    = 'techie404-total-amount';
+const LS_SPIN_RECORDS    = 'techie404-spin-records';
+const LS_WALLET          = 'techie404-wallet-balance';
+const LS_CASHOUT_RECORDS = 'techie404-cashout-records';
+const LS_GIFT_TIMESTAMP  = 'techie404-gift-timestamp';
+const LS_DAILY_SPIN_DATE = 'techie404-daily-spin-date';
+const LS_SPINS_LEFT      = 'techie404-spins-left';
+const GIFT_COOLDOWN_MS   = 72 * 60 * 60 * 1000;
+
+// ─── Weighted Spin Algorithm ──────────────────────────────────────────────────
+function getWeightedSegmentIndex(currentBalance: number): number {
+  const remaining = PRIZE_TARGET - currentBalance;
+
+  if (remaining <= 1) {
+    // Very close to 500 — always land on tiny amounts
+    const tinyIndices = WHEEL_SEGMENTS.map((s, i) => s.value <= 0.10 ? i : -1).filter(i => i >= 0);
+    return tinyIndices[Math.floor(Math.random() * tinyIndices.length)];
+  }
+
+  if (remaining <= 5) {
+    // Close to 500 — heavily weight small amounts
+    const smallIndices = WHEEL_SEGMENTS.map((s, i) => s.value <= 38 ? i : -1).filter(i => i >= 0);
+    return smallIndices[Math.floor(Math.random() * smallIndices.length)];
+  }
+
+  if (remaining <= 50) {
+    // Getting close — weight toward smaller values
+    const weights = WHEEL_SEGMENTS.map(s => {
+      if (s.value <= 0.10) return 40;
+      if (s.value <= 38) return 30;
+      if (s.value <= 98) return 5;
+      return 1;
+    });
+    return weightedRandom(weights);
+  }
+
+  // Far from 500 — normal distribution, slightly favor medium amounts
+  const weights = WHEEL_SEGMENTS.map(s => {
+    if (s.value >= 158) return 8;
+    if (s.value >= 98) return 15;
+    if (s.value >= 38) return 20;
+    return 10;
+  });
+  return weightedRandom(weights);
+}
+
+function weightedRandom(weights: number[]): number {
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < weights.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return i;
+  }
+  return weights.length - 1;
+}
+
+// ─── Daily Spin Check ─────────────────────────────────────────────────────────
+function getDailySpinsLeft(): number {
+  const today = new Date().toDateString();
+  const savedDate = localStorage.getItem(LS_DAILY_SPIN_DATE);
+  if (savedDate !== today) {
+    localStorage.setItem(LS_DAILY_SPIN_DATE, today);
+    localStorage.setItem(LS_SPINS_LEFT, '1');
+    return 1;
+  }
+  return parseInt(localStorage.getItem(LS_SPINS_LEFT) || '0');
+}
+
+// ─── Fake Winners ─────────────────────────────────────────────────────────────
+const FAKE_NAMES = ['Raj***', 'Aman***', 'Priy***', 'Vik***', 'Nee***', 'Ark***', 'Sum***', 'Roh***', 'Ani***', 'Kav***'];
+const FAKE_AVATARS = ['🧑', '👩', '👨', '🧔', '👱', '👩‍🦰', '🧑‍🦱', '👨‍🦳', '👩‍🦳', '🧑‍🦲'];
+
+function generateFakeWinners(): { name: string; avatar: string; amount: number; time: string }[] {
+  return Array.from({ length: 8 }, (_, i) => {
+    const mins = Math.floor(Math.random() * 58) + 1;
+    return {
+      name: FAKE_NAMES[Math.floor(Math.random() * FAKE_NAMES.length)],
+      avatar: FAKE_AVATARS[Math.floor(Math.random() * FAKE_AVATARS.length)],
+      amount: [198, 178, 98, 118, 158, 38, 0.10, 0.05][Math.floor(Math.random() * 8)],
+      time: `${mins}m ago`,
+    };
+  });
+}
 
 // ─── Confetti Canvas ──────────────────────────────────────────────────────────
 interface ConfettiParticle {
@@ -101,7 +171,7 @@ function ConfettiCanvas({ active }: { active: boolean }) {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[100]" style={{ width:'100vw', height:'100vh' }} />;
 }
 
-// ─── Celebration Sound ────────────────────────────────────────────────────────
+// ─── Sound ────────────────────────────────────────────────────────────────────
 function playCelebrationSound() {
   try {
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -120,10 +190,9 @@ function playCelebrationSound() {
 // ─── Gift Box SVG ─────────────────────────────────────────────────────────────
 function GiftBox3D({ size = 110, opened = false }: { size?: number; opened?: boolean }) {
   const uid = React.useId().replace(/:/g,'');
-  let s = size;
   if (opened) {
     return (
-      <svg width={s} height={s} viewBox="0 0 120 120" fill="none">
+      <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
         <defs>
           <radialGradient id={`og-${uid}`} cx="50%" cy="60%" r="55%">
             <stop offset="0%" stopColor="#FFE566" stopOpacity="1" />
@@ -141,7 +210,6 @@ function GiftBox3D({ size = 110, opened = false }: { size?: number; opened?: boo
         <polygon points="22,102 82,102 96,92 36,92" fill="#4A0505" />
         <rect x="50" y="58" width="11" height="44" fill="#FFFFFF" opacity="0.9" />
         <rect x="51" y="58" width="4" height="44" fill="rgba(255,180,200,0.7)" />
-        <ellipse cx="52" cy="64" rx="18" ry="7" fill="#FFE566" opacity="0.5" />
         <polygon points="17,36 79,36 82,58 22,58" fill="#E03030" />
         <polygon points="79,36 93,26 96,48 82,58" fill="#9B0D0D" />
         <polygon points="17,36 79,36 93,26 31,26" fill="#C82020" />
@@ -150,7 +218,7 @@ function GiftBox3D({ size = 110, opened = false }: { size?: number; opened?: boo
     );
   }
   return (
-    <svg width={s} height={s} viewBox="0 0 120 120" fill="none">
+    <svg width={size} height={size} viewBox="0 0 120 120" fill="none">
       <defs>
         <linearGradient id={`bf-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#FF2020" />
@@ -196,42 +264,49 @@ function SpinWheelSVG({ rotation, isSpinning }: { rotation: number; isSpinning: 
     return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y} Z`;
   };
 
+  const segColors = ['#C8102E', '#FFD700', '#E83030', '#FFC107', '#B80020', '#F5C842', '#8B0000', '#FFB800'];
+
   return (
     <div
       style={{
         transform: `rotate(${rotation}deg)`,
-        transition: isSpinning ? 'transform 4.5s cubic-bezier(0.17, 0.67, 0.12, 1.0)' : 'none',
+        transition: isSpinning ? 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 1.0)' : 'none',
         willChange: 'transform',
       }}
     >
-      <svg width="320" height="320" viewBox="0 0 320 320">
+      <svg width="300" height="300" viewBox="0 0 320 320">
         <defs>
           <radialGradient id="wheel-center-grad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#FF6B35" />
+            <stop offset="0%" stopColor="#FFE566" />
             <stop offset="100%" stopColor="#C8102E" />
           </radialGradient>
+          <filter id="wheel-shadow">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="#000" floodOpacity="0.5" />
+          </filter>
         </defs>
-        <circle cx={cx} cy={cy} r={r + 12} fill="#D4880A" />
-        <circle cx={cx} cy={cy} r={r + 9} fill="#E8A020" />
+        {/* Outer ring */}
+        <circle cx={cx} cy={cy} r={r + 12} fill="#8B0000" />
+        <circle cx={cx} cy={cy} r={r + 9} fill="#C8102E" />
         <circle cx={cx} cy={cy} r={r + 6} fill="#FFD700" />
         <circle cx={cx} cy={cy} r={r + 3} fill="#C8102E" />
+        {/* LED dots */}
         {Array.from({ length: 24 }, (_, i) => {
           const dotAngle = (i * 360) / 24;
           const dotPos = polarToCartesian(cx, cy, r + 8, dotAngle);
-          return <circle key={i} cx={dotPos.x} cy={dotPos.y} r="3.5" fill={i % 2 === 0 ? '#FFFFFF' : '#FFD700'} opacity={i % 2 === 0 ? 1 : 0.8} />;
+          return <circle key={i} cx={dotPos.x} cy={dotPos.y} r="3" fill={i % 2 === 0 ? '#FFD700' : '#FFFFFF'} opacity={0.9} />;
         })}
+        {/* Segments */}
         {WHEEL_SEGMENTS.map((seg, i) => {
           const startAngle = i * angle;
           const endAngle = startAngle + angle;
           const midAngle = startAngle + angle / 2;
-          const textPos = polarToCartesian(cx, cy, r * 0.72, midAngle);
-          const isEven = i % 2 === 0;
+          const textPos = polarToCartesian(cx, cy, r * 0.68, midAngle);
           return (
             <g key={i}>
               <path d={describeArc(cx, cy, r, startAngle, endAngle)}
-                fill={isEven ? '#F5C842' : '#FFF8DC'} stroke="#D4880A" strokeWidth="1" />
+                fill={segColors[i % segColors.length]} stroke="#8B0000" strokeWidth="1.5" />
               <text x={textPos.x} y={textPos.y} textAnchor="middle" dominantBaseline="middle"
-                fill="#C8102E" fontSize="12" fontWeight="900"
+                fill={i % 2 === 0 ? '#FFD700' : '#8B0000'} fontSize="11" fontWeight="900"
                 transform={`rotate(${midAngle}, ${textPos.x}, ${textPos.y})`}>
                 {seg.label}
               </text>
@@ -239,44 +314,17 @@ function SpinWheelSVG({ rotation, isSpinning }: { rotation: number; isSpinning: 
           );
         })}
         {/* Center hub */}
-        <circle cx={cx} cy={cy} r={r * 0.38} fill="#E8A020" />
-        <circle cx={cx} cy={cy} r={r * 0.35} fill="#FFD700" />
-        <circle cx={cx} cy={cy} r={r * 0.32} fill="url(#wheel-center-grad)" />
-        <circle cx={cx} cy={cy} r={r * 0.30} fill="#FF4500" />
-        <circle cx={cx} cy={cy} r={r * 0.28} fill="#C8102E" stroke="#FFD700" strokeWidth="2" />
-        <text x={cx} y={cy - 8} textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="20" fontWeight="900">X1</text>
-        <text x={cx} y={cy + 12} textAnchor="middle" dominantBaseline="middle" fill="#FFD700" fontSize="8" fontWeight="700" letterSpacing="1">FREE SPIN</text>
+        <circle cx={cx} cy={cy} r={r * 0.35} fill="#8B0000" />
+        <circle cx={cx} cy={cy} r={r * 0.32} fill="linear-gradient(#FFD700, #C8102E)" />
+        <circle cx={cx} cy={cy} r={r * 0.30} fill="#C8102E" stroke="#FFD700" strokeWidth="2.5" />
+        <text x={cx} y={cy - 6} textAnchor="middle" dominantBaseline="middle" fill="#FFD700" fontSize="18" fontWeight="900">X1</text>
+        <text x={cx} y={cy + 12} textAnchor="middle" dominantBaseline="middle" fill="#FFFFFF" fontSize="7" fontWeight="700" letterSpacing="1.5">FREE SPIN</text>
       </svg>
     </div>
   );
 }
 
-// ─── Pedestal SVG ─────────────────────────────────────────────────────────────
-function PedestalSVG() {
-  return (
-    <svg width="340" height="70" viewBox="0 0 340 70" fill="none">
-      <defs>
-        <linearGradient id="ped-top" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#8B0000" />
-          <stop offset="30%" stopColor="#C8102E" />
-          <stop offset="50%" stopColor="#E83030" />
-          <stop offset="70%" stopColor="#C8102E" />
-          <stop offset="100%" stopColor="#8B0000" />
-        </linearGradient>
-        <linearGradient id="ped-body" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#C8102E" />
-          <stop offset="50%" stopColor="#8B0000" />
-          <stop offset="100%" stopColor="#5C0000" />
-        </linearGradient>
-      </defs>
-      <path d="M 30 10 L 310 10 L 330 65 L 10 65 Z" fill="url(#ped-body)" />
-      <ellipse cx="170" cy="10" rx="140" ry="10" fill="url(#ped-top)" />
-      <path d="M 60 10 L 80 10 L 95 65 L 75 65 Z" fill="rgba(255,255,255,0.08)" />
-    </svg>
-  );
-}
-
-// ─── History Panel (Cashout Only) ─────────────────────────────────────────────
+// ─── History Panel ────────────────────────────────────────────────────────────
 function HistoryPanel({ records, onClose }: { records: { amount: number; date: string }[]; onClose: () => void }) {
   return (
     <motion.div
@@ -285,7 +333,7 @@ function HistoryPanel({ records, onClose }: { records: { amount: number; date: s
       exit={{ opacity: 0, x: 60 }}
       transition={{ type: 'spring', stiffness: 300, damping: 28 }}
       className="fixed top-0 right-0 h-full w-72 z-[200] flex flex-col"
-      style={{ background: 'linear-gradient(180deg, #1A0A00 0%, #2E1200 100%)', borderLeft: '1px solid rgba(255,215,0,0.2)', boxShadow: '-8px 0 32px rgba(0,0,0,0.6)' }}
+      style={{ background: 'linear-gradient(180deg, #1A0000 0%, #2E0505 100%)', borderLeft: '1px solid rgba(255,215,0,0.2)' }}
     >
       <div className="flex items-center justify-between px-4 pt-10 pb-4" style={{ borderBottom: '1px solid rgba(255,215,0,0.15)' }}>
         <div className="flex items-center gap-2">
@@ -325,76 +373,7 @@ function HistoryPanel({ records, onClose }: { records: { amount: number; date: s
   );
 }
 
-// ─── Cashout Confirmation Popup ───────────────────────────────────────────────
-function CashoutConfirmPopup({ amount, onConfirm, onCancel }: { amount: number; onConfirm: () => void; onCancel: () => void }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[300] flex items-center justify-center px-6"
-      style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
-      onClick={onCancel}
-    >
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.8, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-        className="w-full max-w-[300px] rounded-2xl overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #1A0303 0%, #2E0505 100%)', border: '1.5px solid rgba(255,215,0,0.4)', boxShadow: '0 30px 80px rgba(0,0,0,0.7)' }}
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="w-full h-1" style={{ background: 'linear-gradient(90deg, #C8102E, #FFD700, #C8102E)' }} />
-        <div className="px-6 pt-6 pb-6 flex flex-col items-center text-center gap-4">
-          <motion.div
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
-            style={{ fontSize: '48px' }}
-          >
-            💰
-          </motion.div>
-          <div>
-            <p style={{ color: '#FFD700', fontSize: '18px', fontWeight: 900, marginBottom: '6px' }}>Confirm Cashout</p>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.5 }}>
-              Transfer <span style={{ color: '#FFD700', fontWeight: 700 }}>₹{amount.toFixed(2)}</span> to your main wallet?
-            </p>
-          </div>
-          <div className="w-full rounded-xl px-4 py-3" style={{ background: 'rgba(255,215,0,0.06)', border: '1px solid rgba(255,215,0,0.15)' }}>
-            <div className="flex justify-between items-center">
-              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Amount</span>
-              <span style={{ color: '#FFD700', fontSize: '16px', fontWeight: 700 }}>₹{amount.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between items-center mt-2">
-              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Destination</span>
-              <span style={{ color: '#4CAF50', fontSize: '12px', fontWeight: 600 }}>Main Wallet</span>
-            </div>
-          </div>
-          <div className="flex gap-3 w-full">
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={onCancel}
-              className="flex-1 py-3 rounded-xl font-bold text-sm"
-              style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.1)' }}
-            >
-              Cancel
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={onConfirm}
-              className="flex-1 py-3 rounded-xl font-black text-sm"
-              style={{ background: 'linear-gradient(135deg, #FF8C00, #FFD700)', color: '#000' }}
-            >
-              Confirm
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ─── Cashout Success Popup ────────────────────────────────────────────────────
+// ─── Cashout Success Modal ────────────────────────────────────────────────────
 function CashoutSuccessPopup({ amount, onClose }: { amount: number; onClose: () => void }) {
   return (
     <motion.div
@@ -402,7 +381,7 @@ function CashoutSuccessPopup({ amount, onClose }: { amount: number; onClose: () 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[300] flex items-center justify-center px-6"
-      style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+      style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}
     >
       <motion.div
         initial={{ scale: 0.7, opacity: 0 }}
@@ -410,7 +389,7 @@ function CashoutSuccessPopup({ amount, onClose }: { amount: number; onClose: () 
         exit={{ scale: 0.7, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 280, damping: 20 }}
         className="w-full max-w-[300px] rounded-2xl overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #0A1A0A 0%, #0D2E0D 100%)', border: '1.5px solid rgba(76,175,80,0.4)', boxShadow: '0 30px 80px rgba(0,0,0,0.7)' }}
+        style={{ background: 'linear-gradient(160deg, #0A1A0A 0%, #0D2E0D 100%)', border: '1.5px solid rgba(76,175,80,0.4)' }}
       >
         <div className="w-full h-1" style={{ background: 'linear-gradient(90deg, #2E7D32, #4CAF50, #2E7D32)' }} />
         <div className="px-6 pt-6 pb-6 flex flex-col items-center text-center gap-4">
@@ -424,24 +403,69 @@ function CashoutSuccessPopup({ amount, onClose }: { amount: number; onClose: () 
             <CheckCircle size={40} color="#fff" />
           </motion.div>
           <div>
-            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              style={{ color: '#4CAF50', fontSize: '20px', fontWeight: 900, marginBottom: '6px' }}>
-              🎉 Transferred!
-            </motion.p>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-              style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>
-              <span style={{ color: '#FFD700', fontWeight: 700 }}>₹{amount.toFixed(2)}</span> added to your main wallet
-            </motion.p>
+            <p style={{ color: '#4CAF50', fontSize: '20px', fontWeight: 900, marginBottom: '6px' }}>🎉 Bonus Credited!</p>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.6 }}>
+              <span style={{ color: '#FFD700', fontWeight: 700 }}>₹{amount.toFixed(2)}</span> bonus will be credited to your wallet.
+            </p>
+            <p style={{ color: '#FF8C00', fontSize: '12px', fontWeight: 600, marginTop: '8px' }}>
+              1x Turnover required before withdrawal.
+            </p>
           </div>
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={onClose}
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
             className="w-full py-3.5 rounded-xl font-black text-sm"
             style={{ background: 'linear-gradient(135deg, #4CAF50, #2E7D32)', color: '#fff' }}
           >
             OK
           </motion.button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Cashout Confirm ──────────────────────────────────────────────────────────
+function CashoutConfirmPopup({ amount, onConfirm, onCancel }: { amount: number; onConfirm: () => void; onCancel: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[300] flex items-center justify-center px-6"
+      style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+      onClick={onCancel}
+    >
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+        className="w-full max-w-[300px] rounded-2xl overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #1A0303 0%, #2E0505 100%)', border: '1.5px solid rgba(255,215,0,0.4)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="w-full h-1" style={{ background: 'linear-gradient(90deg, #C8102E, #FFD700, #C8102E)' }} />
+        <div className="px-6 pt-6 pb-6 flex flex-col items-center text-center gap-4">
+          <div style={{ fontSize: '48px' }}>💰</div>
+          <div>
+            <p style={{ color: '#FFD700', fontSize: '18px', fontWeight: 900 }}>Confirm Cashout</p>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', marginTop: '6px' }}>
+              Transfer <span style={{ color: '#FFD700', fontWeight: 700 }}>₹{amount.toFixed(2)}</span> to your wallet?
+            </p>
+          </div>
+          <div className="flex gap-3 w-full">
+            <motion.button whileTap={{ scale: 0.97 }} onClick={onCancel}
+              className="flex-1 py-3 rounded-xl font-bold text-sm"
+              style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              Cancel
+            </motion.button>
+            <motion.button whileTap={{ scale: 0.97 }} onClick={onConfirm}
+              className="flex-1 py-3 rounded-xl font-black text-sm"
+              style={{ background: 'linear-gradient(135deg, #FF8C00, #FFD700)', color: '#000' }}>
+              Confirm
+            </motion.button>
+          </div>
         </div>
       </motion.div>
     </motion.div>
@@ -460,38 +484,35 @@ function RulesModal({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <motion.div
-        initial={{ scale: 0.85, opacity: 0, y: 30 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.85, opacity: 0, y: 30 }}
+        initial={{ scale: 0.85, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.85, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 26 }}
         className="w-full max-w-[300px] rounded-2xl overflow-hidden flex flex-col"
-        style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6)', border: '1px solid rgba(100,160,255,0.3)', maxHeight: '70vh' }}
+        style={{ border: '1px solid rgba(255,215,0,0.3)', maxHeight: '70vh' }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-center py-3 relative flex-shrink-0"
-          style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)' }}>
-          <h2 style={{ color: '#FFFFFF', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em' }}>Rules</h2>
+        <div className="flex items-center justify-center py-3" style={{ background: 'linear-gradient(135deg, #C8102E 0%, #8B0000 100%)' }}>
+          <h2 style={{ color: '#FFD700', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em' }}>Rules</h2>
         </div>
-        <div className="overflow-y-auto flex-1 px-4 py-3" style={{ background: '#EEF4FF' }}>
+        <div className="overflow-y-auto flex-1 px-4 py-3" style={{ background: '#1A0303' }}>
           <div className="space-y-2.5">
             {[
-              <>When the accumulated amount reaches the displayed amount, you can apply for a bonus.</>,
-              <>Every time you invite a friend to register, Minimum deposit <span style={{ color: '#EF4444', fontWeight: 700 }}>100RS or more</span>! you will get 1-time free spin.</>,
-              <>The activity lasts for 3 days. After the activity period ends, the accumulated rewards will be reset, and the activity will start again.</>,
-              <>Each user can enjoy 1 free spin opportunity per day.</>,
-              <>After approval of the application, the bonus will be directly deposited into your balance.</>,
-              <>The bonus requires one time of wagering before withdrawal.</>,
-              <>To successfully recommend someone, the invitee must use the inviter's invitation code.</>,
-              <><span style={{ color: '#2563EB', fontWeight: 700 }}>SIKKIMGAME</span> reserves the interpretation of the activity. If you have any questions, please get in touch with customer service.</>,
+              <>When the accumulated amount reaches <span style={{ color: '#FFD700', fontWeight: 700 }}>₹500</span>, you can apply for a bonus.</>,
+              <>Every time you invite a friend to register, Minimum deposit <span style={{ color: '#FF4444', fontWeight: 700 }}>100RS or more</span>! you will get 1-time free spin.</>,
+              <>The activity lasts for <span style={{ color: '#FFD700', fontWeight: 700 }}>3 days (72 hours)</span>. After the activity period ends, the accumulated rewards will be reset.</>,
+              <>Each user can enjoy <span style={{ color: '#FFD700', fontWeight: 700 }}>1 free spin</span> opportunity per day.</>,
+              <>After approval, the bonus will be directly deposited into your balance.</>,
+              <>The bonus requires <span style={{ color: '#FF8C00', fontWeight: 700 }}>1x turnover</span> before withdrawal.</>,
             ].map((text, i) => (
-              <p key={i} style={{ color: '#1A1A2E', fontSize: '12px', lineHeight: 1.6 }}>{text}</p>
+              <p key={i} style={{ color: 'rgba(255,255,255,0.8)', fontSize: '12px', lineHeight: 1.6 }}>{text}</p>
             ))}
           </div>
         </div>
-        <div className="px-4 py-3 flex-shrink-0" style={{ background: '#EEF4FF', borderTop: '1px solid rgba(59,130,246,0.15)' }}>
+        <div className="px-4 py-3" style={{ background: '#1A0303', borderTop: '1px solid rgba(255,215,0,0.1)' }}>
           <motion.button whileTap={{ scale: 0.97 }} onClick={onClose}
             className="w-full py-2.5 rounded-xl font-bold text-sm tracking-widest"
-            style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)', color: '#FFFFFF', fontSize: '13px', boxShadow: '0 4px 12px rgba(37,99,235,0.35)' }}>
+            style={{ background: 'linear-gradient(135deg, #C8102E, #FF4444)', color: '#FFD700', fontSize: '13px' }}>
             OK
           </motion.button>
         </div>
@@ -508,17 +529,18 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
   const [currentBaseRotation, setCurrentBaseRotation] = useState(0);
   const [spinResult, setSpinResult] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [spinsLeft, setSpinsLeft] = useState(1);
+  const [spinsLeft, setSpinsLeft] = useState(() => getDailySpinsLeft());
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [spinRecords, setSpinRecords] = useState<{ name: string; amount: number; date: string }[]>([]);
   const [cashoutRecords, setCashoutRecords] = useState<{ amount: number; date: string }[]>([]);
-  const [timer, setTimer] = useState('71:38:00');
+  const [timer, setTimer] = useState('72:00:00');
   const [showHistory, setShowHistory] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCashoutConfirm, setShowCashoutConfirm] = useState(false);
   const [showCashoutSuccess, setShowCashoutSuccess] = useState(false);
   const [cashedOutAmount, setCashedOutAmount] = useState(0);
+  const [fakeWinners] = useState(() => generateFakeWinners());
 
   useEffect(() => {
     const savedTotal = parseFloat(localStorage.getItem(LS_TOTAL_AMOUNT) || '0');
@@ -532,17 +554,19 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
     setSpinRecords(savedSpinRecords);
     setCashoutRecords(savedCashoutRecords);
 
-    const interval = setInterval(() => {
-      setTimer(prev => {
-        const parts = prev.split(':').map(Number);
-        let [h, m, s] = parts;
-        s--;
-        if (s < 0) { s = 59; m--; }
-        if (m < 0) { m = 59; h--; }
-        if (h < 0) { h = 0; m = 0; s = 0; }
-        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-      });
-    }, 1000);
+    // Calculate timer from gift timestamp
+    const giftTs = localStorage.getItem(LS_GIFT_TIMESTAMP);
+    const updateTimer = () => {
+      if (!giftTs) { setTimer('72:00:00'); return; }
+      const elapsed = Date.now() - Number(giftTs);
+      const left = Math.max(0, GIFT_COOLDOWN_MS - elapsed);
+      const h = Math.floor(left / 3600000);
+      const m = Math.floor((left % 3600000) / 60000);
+      const s = Math.floor((left % 60000) / 1000);
+      setTimer(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`);
+    };
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -551,18 +575,18 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
     setShowResult(false);
     setSpinResult(null);
     setIsSpinning(true);
-    setSpinsLeft(prev => prev - 1);
+    setSpinsLeft(prev => {
+      const newVal = prev - 1;
+      localStorage.setItem(LS_SPINS_LEFT, String(newVal));
+      return newVal;
+    });
 
-    // Pick a random segment index (all are 0-10 values)
-    const resultIndex = Math.floor(Math.random() * WHEEL_SEGMENTS.length);
-    const wonAmount = SEGMENT_VALUES[WHEEL_SEGMENTS[resultIndex].label] ?? 0;
+    // Weighted segment selection
+    const resultIndex = getWeightedSegmentIndex(totalAmount);
+    const wonAmount = WHEEL_SEGMENTS[resultIndex].value;
 
-    // Calculate rotation so pointer lands on chosen segment
-    // Pointer is at top (0 deg). Segment i starts at i*segAngle.
-    // We want segment center (i*segAngle + segAngle/2) to be at top (0).
-    // So wheel needs to rotate: -(i*segAngle + segAngle/2) mod 360
     const segCenter = resultIndex * segAngle + segAngle / 2;
-    const extraSpins = 5 + Math.floor(Math.random() * 4); // 5-8 full rotations
+    const extraSpins = 5 + Math.floor(Math.random() * 4);
     const newTarget = currentBaseRotation + extraSpins * 360 + (360 - segCenter % 360);
     setTargetRotation(newTarget);
 
@@ -576,8 +600,8 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
       localStorage.setItem(LS_TOTAL_AMOUNT, String(newTotal));
 
       const now = new Date();
-      const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-      const newRecord = { name: 'Member', amount: wonAmount, date: dateStr };
+      const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      const newRecord = { name: 'You', amount: wonAmount, date: dateStr };
       const updatedSpinRecords = [newRecord, ...spinRecords].slice(0, 20);
       setSpinRecords(updatedSpinRecords);
       localStorage.setItem(LS_SPIN_RECORDS, JSON.stringify(updatedSpinRecords));
@@ -589,32 +613,26 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
       }
 
       setTimeout(() => setShowResult(true), 300);
-    }, 4700);
+    }, 5200);
   }, [isSpinning, spinsLeft, currentBaseRotation, totalAmount, spinRecords]);
 
   const handleCashOut = useCallback(() => {
-    if (totalAmount < 500) return;
+    if (totalAmount < PRIZE_TARGET) return;
     setShowCashoutConfirm(true);
   }, [totalAmount]);
 
   const handleCashoutConfirm = useCallback(() => {
     const now = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-    
-    // Transfer to main wallet
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
     const currentWallet = parseFloat(localStorage.getItem(LS_WALLET) || '0');
     localStorage.setItem(LS_WALLET, String(currentWallet + totalAmount));
-    
-    // Save cashout record
     const cashoutRecord = { amount: totalAmount, date: dateStr };
     const updatedCashout = [cashoutRecord, ...cashoutRecords].slice(0, 20);
     setCashoutRecords(updatedCashout);
     localStorage.setItem(LS_CASHOUT_RECORDS, JSON.stringify(updatedCashout));
-    
     setCashedOutAmount(totalAmount);
     setTotalAmount(0);
     localStorage.setItem(LS_TOTAL_AMOUNT, '0');
-    
     setShowCashoutConfirm(false);
     setShowCashoutSuccess(true);
     setShowConfetti(true);
@@ -622,134 +640,120 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
     setTimeout(() => setShowConfetti(false), 5000);
   }, [totalAmount, cashoutRecords]);
 
-  const prizeTarget = 500;
-  const remaining = Math.max(0, prizeTarget - totalAmount).toFixed(2);
-  const progressPct = Math.min(100, (totalAmount / prizeTarget) * 100);
-  const canCashOut = totalAmount >= 500;
+  const handleInvite = () => {
+    const shareUrl = `${window.location.origin}/signup?ref=invite`;
+    if (navigator.share) {
+      navigator.share({ title: 'Join & Win ₹500!', text: 'Sign up and deposit ₹100+ to give me a free spin! 🎰', url: shareUrl }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(shareUrl);
+      alert('Referral link copied!');
+    }
+  };
+
+  const remaining = Math.max(0, PRIZE_TARGET - totalAmount).toFixed(2);
+  const progressPct = Math.min(100, (totalAmount / PRIZE_TARGET) * 100);
+  const canCashOut = totalAmount >= PRIZE_TARGET;
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-y-auto"
-      style={{ background: 'linear-gradient(180deg, #E83030 0%, #C8102E 30%, #B80020 60%, #8B0000 100%)' }}>
+      style={{ background: 'linear-gradient(180deg, #C8102E 0%, #8B0000 30%, #4A0000 70%, #1A0000 100%)' }}>
 
       <ConfettiCanvas active={showConfetti} />
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-10 pb-2 flex-shrink-0">
-        <button
-          onClick={() => navigate('/main-dashboard')}
+        <button onClick={() => navigate('/main-dashboard')}
           className="w-9 h-9 flex items-center justify-center rounded-full"
-          style={{ background: 'rgba(0,0,0,0.2)' }}
-        >
+          style={{ background: 'rgba(0,0,0,0.3)' }}>
           <ArrowLeft size={20} color="#fff" />
         </button>
-        <h1 style={{ color: '#FFFFFF', fontSize: '17px', fontWeight: 700 }}>Invite Wheel</h1>
+        <h1 style={{ color: '#FFD700', fontSize: '17px', fontWeight: 800, letterSpacing: '0.03em', textShadow: '0 0 12px rgba(255,215,0,0.4)' }}>
+          ✨ Cash Everyday ✨
+        </h1>
         <div className="flex items-center gap-2">
-          <button
-            className="w-8 h-8 flex items-center justify-center rounded-full"
-            style={{ background: 'rgba(255,255,255,0.2)' }}
-            onClick={() => setShowRules(true)}
-          >
-            <HelpCircle size={20} color="#fff" />
+          <button className="w-8 h-8 flex items-center justify-center rounded-full"
+            style={{ background: 'rgba(0,0,0,0.3)' }} onClick={() => setShowRules(true)}>
+            <HelpCircle size={18} color="#FFD700" />
           </button>
-          <button
-            onClick={() => setShowHistory(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl"
-            style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,215,0,0.4)' }}
-          >
-            <History size={14} color="#FFD700" />
-            <span style={{ color: '#FFD700', fontSize: '11px', fontWeight: 700 }}>History</span>
-            {cashoutRecords.length > 0 && (
-              <span className="w-4 h-4 rounded-full flex items-center justify-center" style={{ background: '#4CAF50', fontSize: '9px', color: '#fff', fontWeight: 700 }}>
-                {cashoutRecords.length > 9 ? '9+' : cashoutRecords.length}
-              </span>
-            )}
+          <button onClick={() => setShowHistory(true)}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl"
+            style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,215,0,0.3)' }}>
+            <History size={13} color="#FFD700" />
+            <span style={{ color: '#FFD700', fontSize: '10px', fontWeight: 700 }}>History</span>
           </button>
         </div>
       </div>
 
-      {/* My Amount + Timer */}
-      <div className="flex flex-col items-center pt-2 pb-1 flex-shrink-0">
-        <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', fontWeight: 400 }}>
-          my amount ({timer})
-        </p>
-        <motion.p
-          style={{ color: '#FFFFFF', fontSize: '2.4rem', fontWeight: 900, lineHeight: 1.1, textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}
-          animate={{ scale: [1, 1.02, 1] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          ₹{totalAmount.toFixed(2)}
-        </motion.p>
-        <div className="w-48 mt-2 mb-1">
-          <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.2)' }}>
-            <motion.div
-              className="h-full rounded-full"
-              style={{ background: 'linear-gradient(90deg, #FFD700, #FF8C00)', width: `${progressPct}%` }}
-              animate={{ width: `${progressPct}%` }}
-              transition={{ duration: 0.5 }}
-            />
+      {/* My Amount Card */}
+      <div className="mx-4 mt-2 rounded-2xl px-4 py-4 flex-shrink-0"
+        style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.5), rgba(139,0,0,0.3))', border: '1px solid rgba(255,215,0,0.2)', backdropFilter: 'blur(10px)' }}>
+        <div className="flex items-center justify-between">
+          <div>
+            <p style={{ color: 'rgba(255,215,0,0.7)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>My Amount</p>
+            <motion.p
+              style={{ color: '#FFD700', fontSize: '2rem', fontWeight: 900, lineHeight: 1.1, textShadow: '0 0 20px rgba(255,215,0,0.4)' }}
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              ₹{totalAmount.toFixed(2)}
+            </motion.p>
           </div>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '10px', textAlign: 'center', marginTop: '2px' }}>
-            ₹{remaining} more to ₹500 wallet transfer
-          </p>
+          <motion.button
+            whileTap={canCashOut ? { scale: 0.96 } : {}}
+            onClick={handleCashOut}
+            disabled={!canCashOut}
+            className="px-5 py-2.5 rounded-full font-black text-xs tracking-wider relative overflow-hidden"
+            style={{
+              background: canCashOut ? 'linear-gradient(135deg, #FFB800, #FF8C00)' : 'rgba(255,255,255,0.1)',
+              color: canCashOut ? '#000' : 'rgba(255,255,255,0.3)',
+              border: canCashOut ? '1px solid #FFD700' : '1px solid rgba(255,255,255,0.1)',
+              cursor: canCashOut ? 'pointer' : 'not-allowed',
+            }}
+          >
+            {canCashOut && (
+              <motion.div className="absolute inset-0"
+                style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)' }}
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }} />
+            )}
+            CASH OUT
+          </motion.button>
+        </div>
+        {/* Timer */}
+        <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.15)' }}>
+            <span style={{ color: '#FF4444', fontSize: '10px' }}>⏰</span>
+            <span style={{ color: '#FFD700', fontSize: '11px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{timer}</span>
+          </div>
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px' }}>Activity countdown</span>
         </div>
       </div>
 
-      {/* CASH OUT Button */}
-      <div className="flex flex-col items-center mt-1 mb-3 flex-shrink-0 gap-1">
-        <motion.button
-          whileTap={canCashOut ? { scale: 0.96 } : {}}
-          onClick={handleCashOut}
-          disabled={!canCashOut}
-          className="px-10 py-3 rounded-full font-black text-base tracking-widest relative overflow-hidden"
-          style={{
-            background: canCashOut ? 'linear-gradient(135deg, #FFB800 0%, #FF8C00 50%, #FFB800 100%)' : 'rgba(0,0,0,0.25)',
-            color: canCashOut ? '#fff' : 'rgba(255,255,255,0.35)',
-            boxShadow: canCashOut ? '0 4px 20px rgba(255,140,0,0.5)' : 'none',
-            border: 'none',
-            fontSize: '15px',
-            cursor: canCashOut ? 'pointer' : 'not-allowed',
-          }}
-        >
-          {canCashOut && (
-            <motion.div
-              className="absolute inset-0"
-              style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,215,0,0.15) 50%, transparent 65%)' }}
-              animate={{ x: ['-100%', '200%'] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-            />
-          )}
-          💰 CASH OUT
-        </motion.button>
-        {!canCashOut && (
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '10px' }}>
-            Need ₹500 to cash out (₹{remaining} more)
-          </p>
-        )}
-      </div>
-
-      {/* Wheel + Pedestal */}
-      <div className="flex flex-col items-center flex-shrink-0 relative">
-        <div className="absolute left-2 top-8 z-10">
+      {/* Wheel Section */}
+      <div className="flex flex-col items-center flex-shrink-0 mt-4 relative">
+        {/* Floating coins */}
+        <div className="absolute left-2 top-4 z-10">
           <motion.div animate={{ y: [0,-8,0], rotate: [0,15,0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
-            <svg width="40" height="40" viewBox="0 0 40 40">
+            <svg width="36" height="36" viewBox="0 0 40 40">
               <ellipse cx="20" cy="20" rx="18" ry="18" fill="#FFD700" />
               <ellipse cx="20" cy="20" rx="14" ry="14" fill="#FFE566" />
               <text x="20" y="25" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#C8860A">₹</text>
             </svg>
           </motion.div>
         </div>
-        <div className="absolute right-2 top-16 z-10">
+        <div className="absolute right-2 top-12 z-10">
           <motion.div animate={{ y: [0,-10,0], rotate: [0,-12,0] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}>
-            <svg width="32" height="32" viewBox="0 0 32 32">
+            <svg width="28" height="28" viewBox="0 0 32 32">
               <ellipse cx="16" cy="16" rx="14" ry="14" fill="#FFD700" />
               <ellipse cx="16" cy="16" rx="10" ry="10" fill="#FFE566" />
               <text x="16" y="20" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#C8860A">₹</text>
             </svg>
           </motion.div>
         </div>
+
         {/* Pointer */}
-        <div className="relative z-20 mb-[-14px]">
-          <svg width="32" height="40" viewBox="0 0 32 40">
+        <div className="relative z-20 mb-[-12px]">
+          <svg width="30" height="36" viewBox="0 0 32 40">
             <defs>
               <linearGradient id="ptr-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#FFE566" />
@@ -762,70 +766,96 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
           </svg>
         </div>
         {/* Wheel */}
-        <div className="relative z-10" style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))' }}>
+        <div className="relative z-10" style={{ filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.6))' }}>
           <SpinWheelSVG rotation={targetRotation} isSpinning={isSpinning} />
-        </div>
-        {/* Pedestal */}
-        <div className="relative z-10 mt-[-10px]">
-          <PedestalSVG />
         </div>
       </div>
 
-      {/* SPIN Button */}
-      <div className="flex flex-col items-center px-6 mb-3 flex-shrink-0 mt-2">
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          whileHover={{ scale: 1.02 }}
-          className="w-full max-w-xs py-4 rounded-full font-black text-sm tracking-widest relative overflow-hidden"
-          style={{
-            background: isSpinning || spinsLeft <= 0
-              ? 'rgba(255,255,255,0.15)'
-              : 'linear-gradient(135deg, #FFB800 0%, #FF8C00 50%, #FFB800 100%)',
-            color: isSpinning || spinsLeft <= 0 ? 'rgba(255,255,255,0.5)' : '#fff',
-            boxShadow: isSpinning || spinsLeft <= 0 ? 'none' : '0 6px 24px rgba(255,140,0,0.5)',
-            border: 'none',
-            fontSize: '14px',
-            letterSpacing: '0.1em',
-          }}
-          onClick={handleSpin}
-          disabled={isSpinning || spinsLeft <= 0}
-        >
-          {!isSpinning && spinsLeft > 0 && (
-            <motion.div
-              className="absolute inset-0"
-              style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)' }}
-              animate={{ x: ['-100%', '200%'] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-            />
-          )}
-          {isSpinning ? '🎰 SPINNING...' : spinsLeft <= 0 ? '✅ SPIN USED' : 'INVITE FRIENDS TO GET SPIN'}
-        </motion.button>
-        <p className="mt-2 text-center" style={{ color: 'rgba(255,255,255,0.85)', fontSize: '12px' }}>
-          {spinsLeft > 0 ? `🎁 ${spinsLeft} Free Spin Available` : `Only ₹${remaining} left to get ₹500 wallet transfer`}
-        </p>
+      {/* Spin / Invite Button */}
+      <div className="flex flex-col items-center px-6 mt-4 mb-2 flex-shrink-0 gap-2">
+        {spinsLeft > 0 ? (
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className="w-full max-w-xs py-3.5 rounded-full font-black text-sm tracking-wider relative overflow-hidden"
+            style={{
+              background: isSpinning ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg, #FFB800 0%, #FF8C00 50%, #FFB800 100%)',
+              color: isSpinning ? 'rgba(255,255,255,0.5)' : '#fff',
+              boxShadow: isSpinning ? 'none' : '0 6px 24px rgba(255,140,0,0.5)',
+              fontSize: '14px',
+            }}
+            onClick={handleSpin}
+            disabled={isSpinning}
+          >
+            {!isSpinning && (
+              <motion.div className="absolute inset-0"
+                style={{ background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.3) 50%, transparent 65%)' }}
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }} />
+            )}
+            {isSpinning ? '🎰 SPINNING...' : `X1 FREE SPIN (${spinsLeft} left)`}
+          </motion.button>
+        ) : (
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className="w-full max-w-xs py-3.5 rounded-full font-black text-sm tracking-wider relative overflow-hidden flex items-center justify-center gap-2"
+            style={{
+              background: 'linear-gradient(135deg, #C8102E, #FF4444)',
+              color: '#FFD700',
+              boxShadow: '0 6px 24px rgba(200,16,46,0.5)',
+              border: '1px solid rgba(255,215,0,0.3)',
+            }}
+            onClick={handleInvite}
+          >
+            <Users size={16} />
+            INVITE FRIENDS TO GET SPIN
+          </motion.button>
+        )}
+
+        {/* Progress text */}
+        <div className="w-full max-w-xs">
+          <div className="w-full h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.3)' }}>
+            <motion.div className="h-full rounded-full"
+              style={{ background: 'linear-gradient(90deg, #FFD700, #FF8C00)', width: `${progressPct}%` }}
+              animate={{ width: `${progressPct}%` }}
+              transition={{ duration: 0.5 }} />
+          </div>
+          <p className="text-center mt-1.5" style={{ color: 'rgba(255,255,255,0.8)', fontSize: '11px' }}>
+            Only <span style={{ color: '#FFD700', fontWeight: 700 }}>₹{remaining}</span> left to get prize <span style={{ color: '#FFD700', fontWeight: 700 }}>₹{PRIZE_TARGET}.00</span>
+          </p>
+        </div>
       </div>
 
       {/* Record Section */}
-      <div className="mx-4 mb-6 flex-shrink-0">
-        <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>Record</h3>
-        {spinRecords.length === 0 ? (
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>No spins yet. Spin to win!</p>
-        ) : (
-          spinRecords.slice(0, 5).map((rec, idx) => (
-            <div key={idx} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                  <span style={{ fontSize: '20px' }}>👤</span>
+      <div className="mx-4 mb-6 mt-2 flex-shrink-0 rounded-2xl overflow-hidden"
+        style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,215,0,0.15)' }}>
+        <div className="px-4 py-2.5 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,215,0,0.1)' }}>
+          <h3 style={{ color: '#FFD700', fontSize: '14px', fontWeight: 700 }}>🏆 Record</h3>
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px' }}>Recent Winners</span>
+        </div>
+        <div className="px-3 py-2">
+          {fakeWinners.slice(0, 6).map((rec, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="flex items-center justify-between py-2"
+              style={{ borderBottom: idx < 5 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)', border: '1px solid rgba(255,215,0,0.3)' }}>
+                  <span style={{ fontSize: '16px' }}>{rec.avatar}</span>
                 </div>
-                <span style={{ color: '#fff', fontSize: '14px', fontWeight: 600 }}>{rec.name}</span>
+                <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: 600 }}>{rec.name}</span>
               </div>
               <div className="text-right">
-                <p style={{ color: '#FF4444', fontSize: '14px', fontWeight: 700 }}>₹{rec.amount.toFixed(2)}</p>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px' }}>{rec.date}</p>
+                <p style={{ color: '#FFD700', fontSize: '13px', fontWeight: 700 }}>₹{rec.amount.toFixed(2)}</p>
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px' }}>{rec.time}</p>
               </div>
-            </div>
-          ))
-        )}
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Spin Result Popup */}
@@ -836,7 +866,7 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center px-6"
-            style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(10px)' }}
+            style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)' }}
           >
             <motion.div
               initial={{ scale: 0.5, y: 40, opacity: 0 }}
@@ -844,7 +874,7 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
               exit={{ scale: 0.5, y: 40, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 280, damping: 22 }}
               className="w-full max-w-xs rounded-[24px] flex flex-col items-center text-center relative overflow-hidden"
-              style={{ background: 'linear-gradient(160deg, #1A0303 0%, #2E0505 50%, #1A0303 100%)', border: '1.5px solid rgba(255,215,0,0.4)', boxShadow: '0 30px 80px rgba(0,0,0,0.7)' }}
+              style={{ background: 'linear-gradient(160deg, #1A0303 0%, #2E0505 50%, #1A0303 100%)', border: '1.5px solid rgba(255,215,0,0.4)' }}
             >
               <div className="w-full h-1" style={{ background: 'linear-gradient(90deg, #C8102E, #FFD700, #C8102E)' }} />
               <div className="px-8 pt-6 pb-6 flex flex-col items-center w-full">
@@ -857,11 +887,11 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
                 </p>
                 <motion.p
                   className="font-black leading-none mb-1"
-                  style={{ fontSize: '3.5rem', color: '#FFD700', textShadow: '0 0 20px rgba(255,215,0,0.5)' }}
+                  style={{ fontSize: '3rem', color: '#FFD700', textShadow: '0 0 20px rgba(255,215,0,0.5)' }}
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 0.4, repeat: 2 }}
                 >
-                  ₹{spinResult}
+                  ₹{spinResult.toFixed(2)}
                 </motion.p>
                 <p className="text-sm mb-2" style={{ color: 'rgba(255,200,150,0.6)' }}>added to your balance</p>
                 <div className="w-full rounded-xl px-4 py-2 mb-4 flex items-center justify-between"
@@ -873,9 +903,9 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setShowResult(false)}
                   className="w-full py-3.5 rounded-2xl font-black text-sm tracking-widest"
-                  style={{ background: 'linear-gradient(135deg, #FF8C00 0%, #FFD700 100%)', color: '#000', boxShadow: '0 6px 20px rgba(255,140,0,0.5)' }}
+                  style={{ background: 'linear-gradient(135deg, #FF8C00 0%, #FFD700 100%)', color: '#000' }}
                 >
-                  COLLECT ₹{spinResult}
+                  COLLECT ₹{spinResult.toFixed(2)}
                 </motion.button>
               </div>
             </motion.div>
@@ -883,42 +913,28 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
         )}
       </AnimatePresence>
 
-      {/* Cashout Confirm Popup */}
       <AnimatePresence>
         {showCashoutConfirm && (
-          <CashoutConfirmPopup
-            amount={totalAmount}
-            onConfirm={handleCashoutConfirm}
-            onCancel={() => setShowCashoutConfirm(false)}
-          />
+          <CashoutConfirmPopup amount={totalAmount} onConfirm={handleCashoutConfirm} onCancel={() => setShowCashoutConfirm(false)} />
         )}
       </AnimatePresence>
 
-      {/* Cashout Success Popup */}
       <AnimatePresence>
         {showCashoutSuccess && (
-          <CashoutSuccessPopup
-            amount={cashedOutAmount}
-            onClose={() => setShowCashoutSuccess(false)}
-          />
+          <CashoutSuccessPopup amount={cashedOutAmount} onClose={() => setShowCashoutSuccess(false)} />
         )}
       </AnimatePresence>
 
-      {/* History Panel */}
       <AnimatePresence>
         {showHistory && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 0.5 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[190] bg-black"
-              onClick={() => setShowHistory(false)}
-            />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.5 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[190] bg-black" onClick={() => setShowHistory(false)} />
             <HistoryPanel records={cashoutRecords} onClose={() => setShowHistory(false)} />
           </>
         )}
       </AnimatePresence>
 
-      {/* Rules Modal */}
       <AnimatePresence>
         {showRules && <RulesModal onClose={() => setShowRules(false)} />}
       </AnimatePresence>
@@ -926,12 +942,12 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
   );
 }
 
-// ─── Gift Box Step ─────────────────────────────────────────────────────────────
+// ─── Gift Box Step ────────────────────────────────────────────────────────────
 function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
   const navigate = useNavigate();
   const [opened, setOpened] = useState<number | null>(null);
   const [rewards] = useState<number[]>(() =>
-    Array.from({ length: 4 }, () => Math.floor(Math.random() * 6) + 490)
+    Array.from({ length: 4 }, () => +(490 + Math.random() * 8).toFixed(2))
   );
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; color: string }[]>([]);
 
@@ -950,13 +966,16 @@ function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
   };
 
   return (
-    <div className="fixed inset-0 z-30 flex flex-col overflow-hidden" style={{ background: '#000000' }}>
+    <div className="fixed inset-0 z-30 flex flex-col overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #1A0000 0%, #0A0000 50%, #000000 100%)' }}>
+
+      {/* Ambient glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full opacity-20 blur-3xl"
+        style={{ background: 'radial-gradient(circle, #C8102E, transparent)' }} />
+
       <div className="relative z-10 flex items-center px-4 pt-8 pb-2">
-        <button
-          onClick={() => navigate('/main-dashboard')}
-          className="w-9 h-9 flex items-center justify-center"
-          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-        >
+        <button onClick={() => navigate('/main-dashboard')}
+          className="w-9 h-9 flex items-center justify-center" style={{ background: 'none', border: 'none' }}>
           <ArrowLeft size={22} style={{ color: 'rgba(255,255,255,0.8)' }} />
         </button>
       </div>
@@ -965,11 +984,23 @@ function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex items-center justify-center px-6 mt-6 mb-8"
+        className="relative z-10 flex flex-col items-center justify-center px-6 mt-6 mb-8"
       >
-        <h1 style={{ fontSize: '1.55rem', fontWeight: 700, color: '#D4AF37', textShadow: '0 0 20px rgba(212,175,55,0.5)', letterSpacing: '0.02em', fontFamily: 'Georgia, serif' }}>
-          ✨ Cash everyday ✨
+        <motion.div
+          className="w-24 h-0.5 mb-3 rounded-full"
+          style={{ background: 'linear-gradient(90deg, transparent, #FFD700, transparent)' }}
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+        <h1 style={{ fontSize: '1.6rem', fontWeight: 800, background: 'linear-gradient(135deg, #FFD700, #FFE566, #D4AF37)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '0.02em' }}>
+          Cash everyday
         </h1>
+        <motion.div
+          className="w-24 h-0.5 mt-3 rounded-full"
+          style={{ background: 'linear-gradient(90deg, transparent, #FFD700, transparent)' }}
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
       </motion.div>
 
       <div className="relative z-10 flex-1 flex items-center justify-center px-8">
@@ -987,6 +1018,13 @@ function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
               className="flex items-center justify-center relative"
               style={{ background: 'none', border: 'none', padding: 0, cursor: opened !== null ? 'default' : 'pointer' }}
             >
+              {/* Glow under each box */}
+              {opened !== idx && (
+                <motion.div className="absolute bottom-0 w-20 h-4 rounded-full blur-lg"
+                  style={{ background: '#FFD700', opacity: 0.2 }}
+                  animate={{ opacity: [0.15, 0.3, 0.15] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 }} />
+              )}
               {opened === idx ? (
                 <motion.div
                   initial={{ scale: 0.3, opacity: 0 }}
@@ -1034,25 +1072,26 @@ function GiftBoxStep({ onSelect }: { onSelect: (amount: number) => void }) {
         transition={{ delay: 0.6 }}
         className="relative z-10 flex justify-center pb-16 pt-4"
       >
-        <p style={{ color: '#FFFFFF', fontSize: '1rem', fontWeight: 400 }}>Choose your reward</p>
+        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', fontWeight: 400 }}>Choose your reward</p>
       </motion.div>
     </div>
   );
 }
 
-// ─── Page Entry ────────────────────────────────────────────────────────────────
+// ─── Page Entry ───────────────────────────────────────────────────────────────
 export default function SpinWheelPage() {
   const [step, setStep] = useState<'gift' | 'spin'>(() => {
     const savedTimestamp = localStorage.getItem(LS_GIFT_TIMESTAMP);
     if (savedTimestamp) {
       const elapsed = Date.now() - Number(savedTimestamp);
       if (elapsed < GIFT_COOLDOWN_MS) {
-        return 'spin'; // Within 72 hours, skip gift boxes
+        return 'spin';
       } else {
-        // 72 hours passed, reset spin data
         localStorage.removeItem(LS_GIFT_TIMESTAMP);
         localStorage.removeItem(LS_TOTAL_AMOUNT);
         localStorage.removeItem(LS_SPIN_RECORDS);
+        localStorage.removeItem(LS_DAILY_SPIN_DATE);
+        localStorage.removeItem(LS_SPINS_LEFT);
         return 'gift';
       }
     }
