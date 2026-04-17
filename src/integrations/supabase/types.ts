@@ -14,13 +14,238 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agency_level_config: {
+        Row: {
+          level: number
+          required_betting: number
+          required_deposit: number
+          required_members: number
+        }
+        Insert: {
+          level: number
+          required_betting?: number
+          required_deposit?: number
+          required_members?: number
+        }
+        Update: {
+          level?: number
+          required_betting?: number
+          required_deposit?: number
+          required_members?: number
+        }
+        Relationships: []
+      }
+      commission_rates: {
+        Row: {
+          level: number
+          rate: number
+        }
+        Insert: {
+          level: number
+          rate: number
+        }
+        Update: {
+          level?: number
+          rate?: number
+        }
+        Relationships: []
+      }
+      commissions: {
+        Row: {
+          beneficiary_id: string
+          bet_amount: number
+          commission_amount: number
+          created_at: string
+          credited: boolean
+          id: string
+          level: number
+          rate: number
+          source_tx_id: string | null
+          source_user_id: string
+        }
+        Insert: {
+          beneficiary_id: string
+          bet_amount: number
+          commission_amount: number
+          created_at?: string
+          credited?: boolean
+          id?: string
+          level: number
+          rate: number
+          source_tx_id?: string | null
+          source_user_id: string
+        }
+        Update: {
+          beneficiary_id?: string
+          bet_amount?: number
+          commission_amount?: number
+          created_at?: string
+          credited?: boolean
+          id?: string
+          level?: number
+          rate?: number
+          source_tx_id?: string | null
+          source_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_source_tx_id_fkey"
+            columns: ["source_tx_id"]
+            isOneToOne: false
+            referencedRelation: "referral_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          agency_level: number
+          avatar_url: string | null
+          commission_wallet: number
+          created_at: string
+          direct_count: number
+          first_deposit_at: string | null
+          id: string
+          invitation_code: string | null
+          phone: string | null
+          referrer_id: string | null
+          team_betting: number
+          team_count: number
+          team_deposit: number
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          agency_level?: number
+          avatar_url?: string | null
+          commission_wallet?: number
+          created_at?: string
+          direct_count?: number
+          first_deposit_at?: string | null
+          id?: string
+          invitation_code?: string | null
+          phone?: string | null
+          referrer_id?: string | null
+          team_betting?: number
+          team_count?: number
+          team_deposit?: number
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          agency_level?: number
+          avatar_url?: string | null
+          commission_wallet?: number
+          created_at?: string
+          direct_count?: number
+          first_deposit_at?: string | null
+          id?: string
+          invitation_code?: string | null
+          phone?: string | null
+          referrer_id?: string | null
+          team_betting?: number
+          team_count?: number
+          team_deposit?: number
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      referral_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          reference_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          reference_id?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          reference_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      distribute_bet_commission: {
+        Args: { _bet_amount: number; _tx_id: string; _user_id: string }
+        Returns: undefined
+      }
+      generate_invitation_code: { Args: never; Returns: string }
+      run_daily_agency_job: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
