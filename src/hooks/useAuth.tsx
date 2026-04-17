@@ -121,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Try edge function first for real phone auth
     try {
       const { data, error } = await supabase.functions.invoke('register-user', {
-        body: { phone, password },
+        body: { phone, password, referral: metadata?.referral },
       });
       if (!error && data && !data.error) {
         const { error: signInError } = await supabase.auth.signInWithPassword({ phone, password });
