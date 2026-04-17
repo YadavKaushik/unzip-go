@@ -14,50 +14,95 @@ export type Database = {
   }
   public: {
     Tables: {
-      bank_accounts: {
+      agency_level_config: {
         Row: {
-          account_holder: string
-          account_number: string
-          bank_name: string
-          created_at: string | null
-          email: string | null
-          id: string
-          ifsc_code: string
-          phone: string | null
-          updated_at: string | null
-          user_id: string
+          level: number
+          required_betting: number
+          required_deposit: number
+          required_members: number
         }
         Insert: {
-          account_holder: string
-          account_number: string
-          bank_name: string
-          created_at?: string | null
-          email?: string | null
-          id?: string
-          ifsc_code: string
-          phone?: string | null
-          updated_at?: string | null
-          user_id: string
+          level: number
+          required_betting?: number
+          required_deposit?: number
+          required_members?: number
         }
         Update: {
-          account_holder?: string
-          account_number?: string
-          bank_name?: string
-          created_at?: string | null
-          email?: string | null
-          id?: string
-          ifsc_code?: string
-          phone?: string | null
-          updated_at?: string | null
-          user_id?: string
+          level?: number
+          required_betting?: number
+          required_deposit?: number
+          required_members?: number
         }
         Relationships: []
+      }
+      commission_rates: {
+        Row: {
+          level: number
+          rate: number
+        }
+        Insert: {
+          level: number
+          rate: number
+        }
+        Update: {
+          level?: number
+          rate?: number
+        }
+        Relationships: []
+      }
+      commissions: {
+        Row: {
+          beneficiary_id: string
+          bet_amount: number
+          commission_amount: number
+          created_at: string
+          credited: boolean
+          id: string
+          level: number
+          rate: number
+          source_tx_id: string | null
+          source_user_id: string
+        }
+        Insert: {
+          beneficiary_id: string
+          bet_amount: number
+          commission_amount: number
+          created_at?: string
+          credited?: boolean
+          id?: string
+          level: number
+          rate: number
+          source_tx_id?: string | null
+          source_user_id: string
+        }
+        Update: {
+          beneficiary_id?: string
+          bet_amount?: number
+          commission_amount?: number
+          created_at?: string
+          credited?: boolean
+          id?: string
+          level?: number
+          rate?: number
+          source_tx_id?: string | null
+          source_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_source_tx_id_fkey"
+            columns: ["source_tx_id"]
+            isOneToOne: false
+            referencedRelation: "referral_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
           created_at: string
           id: string
-          message: string | null
+          message: string
+          read: boolean
           title: string
           type: string
           user_id: string
@@ -65,15 +110,17 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          message?: string | null
-          title?: string
+          message: string
+          read?: boolean
+          title: string
           type?: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          message?: string | null
+          message?: string
+          read?: boolean
           title?: string
           type?: string
           user_id?: string
@@ -82,153 +129,108 @@ export type Database = {
       }
       profiles: {
         Row: {
+          agency_level: number
           avatar_url: string | null
-          created_at: string | null
-          email: string | null
+          commission_wallet: number
+          created_at: string
+          direct_count: number
+          first_deposit_at: string | null
           id: string
+          invitation_code: string | null
           phone: string | null
-          uid: number | null
-          updated_at: string | null
+          referrer_id: string | null
+          team_betting: number
+          team_count: number
+          team_deposit: number
+          updated_at: string
           user_id: string
           username: string | null
-          vip_level: number | null
         }
         Insert: {
+          agency_level?: number
           avatar_url?: string | null
-          created_at?: string | null
-          email?: string | null
+          commission_wallet?: number
+          created_at?: string
+          direct_count?: number
+          first_deposit_at?: string | null
           id?: string
+          invitation_code?: string | null
           phone?: string | null
-          uid?: number | null
-          updated_at?: string | null
+          referrer_id?: string | null
+          team_betting?: number
+          team_count?: number
+          team_deposit?: number
+          updated_at?: string
           user_id: string
           username?: string | null
-          vip_level?: number | null
         }
         Update: {
+          agency_level?: number
           avatar_url?: string | null
-          created_at?: string | null
-          email?: string | null
+          commission_wallet?: number
+          created_at?: string
+          direct_count?: number
+          first_deposit_at?: string | null
           id?: string
+          invitation_code?: string | null
           phone?: string | null
-          uid?: number | null
-          updated_at?: string | null
+          referrer_id?: string | null
+          team_betting?: number
+          team_count?: number
+          team_deposit?: number
+          updated_at?: string
           user_id?: string
           username?: string | null
-          vip_level?: number | null
         }
         Relationships: []
       }
-      transactions: {
+      referral_transactions: {
         Row: {
           amount: number
-          created_at: string | null
-          description: string | null
+          created_at: string
           id: string
-          status: string | null
+          reference_id: string | null
           type: string
           user_id: string
         }
         Insert: {
           amount: number
-          created_at?: string | null
-          description?: string | null
+          created_at?: string
           id?: string
-          status?: string | null
+          reference_id?: string | null
           type: string
           user_id: string
         }
         Update: {
           amount?: number
-          created_at?: string | null
-          description?: string | null
+          created_at?: string
           id?: string
-          status?: string | null
+          reference_id?: string | null
           type?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      upi_accounts: {
-        Row: {
-          created_at: string | null
-          id: string
-          phone: string | null
-          updated_at: string | null
-          upi_id: string
-          upi_name: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          phone?: string | null
-          updated_at?: string | null
-          upi_id: string
-          upi_name: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          phone?: string | null
-          updated_at?: string | null
-          upi_id?: string
-          upi_name?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      usdt_addresses: {
-        Row: {
-          address: string
-          alias: string | null
-          created_at: string | null
-          id: string
-          network: string
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          address: string
-          alias?: string | null
-          created_at?: string | null
-          id?: string
-          network?: string
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          address?: string
-          alias?: string | null
-          created_at?: string | null
-          id?: string
-          network?: string
-          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
       }
       wallets: {
         Row: {
-          balance: number | null
-          created_at: string | null
+          balance: number
+          created_at: string
           id: string
-          updated_at: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
-          balance?: number | null
-          created_at?: string | null
+          balance?: number
+          created_at?: string
           id?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
-          balance?: number | null
-          created_at?: string | null
+          balance?: number
+          created_at?: string
           id?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -238,7 +240,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      distribute_bet_commission: {
+        Args: { _bet_amount: number; _tx_id: string; _user_id: string }
+        Returns: undefined
+      }
+      generate_invitation_code: { Args: never; Returns: string }
+      run_daily_agency_job: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, Toaster } from 'sonner';
@@ -158,10 +158,19 @@ export default function SignUpLoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false);
 
+  // Capture ?ref= from URL
+  const refFromUrl = React.useMemo(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('ref') ?? '';
+  }, []);
+
   const loginForm = useForm<LoginForm>({ defaultValues: { email: '', password: '' } });
   const phoneLoginForm = useForm<PhoneLoginForm>({ defaultValues: { phone: '', password: '' } });
-  const registerForm = useForm<RegisterForm>({ defaultValues: { email: '', password: '', confirmPassword: '', referral: '', agree: true } });
-  const phoneRegisterForm = useForm<PhoneRegisterForm>({ defaultValues: { phone: '', password: '', confirmPassword: '', referral: '', agree: true } });
+  const registerForm = useForm<RegisterForm>({ defaultValues: { email: '', password: '', confirmPassword: '', referral: refFromUrl, agree: true } });
+  const phoneRegisterForm = useForm<PhoneRegisterForm>({ defaultValues: { phone: '', password: '', confirmPassword: '', referral: refFromUrl, agree: true } });
+
+  // If a ref code is in URL, switch to register tab automatically
+  useEffect(() => { if (refFromUrl) setTab('register'); }, [refFromUrl]);
 
   const onLogin = loginForm.handleSubmit(async (data) => {
     setIsSubmitting(true);
