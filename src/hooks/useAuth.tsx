@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Try edge function first (admin.createUser bypasses confirmation)
     try {
       const { data, error } = await supabase.functions.invoke('register-user', {
-        body: { email, password },
+        body: { email, password, referral: metadata?.referral },
       });
       if (!error && data && !data.error) {
         // Admin created user, now sign in
