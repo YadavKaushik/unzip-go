@@ -27,6 +27,25 @@ const LS_DAILY_SPIN_DATE = 'techie404-daily-spin-date';
 const LS_SPINS_LEFT      = 'techie404-spins-left';
 const GIFT_COOLDOWN_MS   = 72 * 60 * 60 * 1000;
 
+// ─── Global Reset (bump version to wipe all users' spin data) ─────────────────
+const LS_RESET_VERSION   = 'techie404-spin-reset-version';
+const CURRENT_RESET_VERSION = '2';
+(function performGlobalResetIfNeeded() {
+  try {
+    const v = localStorage.getItem(LS_RESET_VERSION);
+    if (v !== CURRENT_RESET_VERSION) {
+      localStorage.removeItem(LS_TOTAL_AMOUNT);
+      localStorage.removeItem(LS_SPIN_RECORDS);
+      localStorage.removeItem(LS_GIFT_TIMESTAMP);
+      localStorage.removeItem(LS_DAILY_SPIN_DATE);
+      localStorage.removeItem(LS_SPINS_LEFT);
+      localStorage.setItem(LS_RESET_VERSION, CURRENT_RESET_VERSION);
+    }
+  } catch (e) {
+    // ignore
+  }
+})();
+
 // ─── Weighted Spin Algorithm ──────────────────────────────────────────────────
 function getWeightedSegmentIndex(currentBalance: number): number {
   const remaining = PRIZE_TARGET - currentBalance;
