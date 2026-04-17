@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { toast, Toaster } from 'sonner';
 import { ChevronRight, Copy, Check, Search, ChevronDown, ArrowLeft, Users, DollarSign, ScrollText, Headphones, BadgePercent, Gift, QrCode, Download, MessageCircle, Shield, Clock, Star, AlertCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -6,6 +6,7 @@ import BottomNav from '@/components/BottomNav';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useI18n } from '@/hooks/useI18n';
+import { db } from '@/lib/db';
 
 /* ── Red/Cream Theme (matching game UI) ── */
 const pageBg = '#FAF5E9';
@@ -26,9 +27,6 @@ const orangeAccent = '#e89a1c';
 const textGold = '#D4AF37';
 const redSubtle = 'rgba(200,16,46,0.05)';
 
-const INVITATION_CODE = '552331597041';
-const REFERRAL_LINK = `https://app.example.com/register?code=${INVITATION_CODE}`;
-
 /* ── Sub-page header ── */
 function SubPageHeader({ title, onClose }: { title: string; onClose: () => void }) {
   return (
@@ -42,6 +40,64 @@ function SubPageHeader({ title, onClose }: { title: string; onClose: () => void 
   );
 }
 
+/* ─── Hook: load all referral / commission data for current user ─── */
+function useReferralData() {
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<any>(null);
+  const [directs, setDirects] = useState<any[]>([]);     // L1 profiles
+  const [team, setTeam] = useState<any[]>([]);            // L2..L6 user_ids
+  const [todayCommission, setTodayCommission] = useState(0);
+  const [yesterdayCommission, setYesterdayCommission] = useState(0);
+  const [totalCommission, setTotalCommission] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    if (!user) return;
+    setLoading(true);
+    // Profile
+    const { data: prof } = await db.from('profiles').select('*').eq('user_id', user.id).single();
+    setProfile(prof);
+
+    // Direct subordinates (L1)
+    const { data: l1 } = await db.from('profiles').select('user_id, username, invitation_code, first_deposit_at, created_at').eq('referrer_id', user.id);
+    const l1Arr = l1 ?? [];
+    setDirects(l1Arr);
+
+    // Walk down for L2..L6
+    let frontier: string[] = l1Arr.map((p: any) => p.user_id);
+    const all: any[] = [...l1Arr.map((p: any) => ({ ...p, level: 1 }))];
+    for (let lvl = 2; lvl <= 6 && frontier.length > 0; lvl++) {
+      const { data: next } = await db.from('profiles').select('user_id, username, invitation_code, first_deposit_at, created_at, referrer_id').in('referrer_id', frontier);
+      const arr = next ?? [];
+      arr.forEach((p: any) => all.push({ ...p, level: lvl }));
+      frontier = arr.map((p: any) => p.user_id);
+    }
+    setTeam(all);
+
+    // Commissions: today / yesterday / total
+    const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+    const startOfYesterday = new Date(startOfDay); startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+    const { data: comms } = await db.from('commissions').select('commission_amount, created_at').eq('beneficiary_id', user.id);
+    const cs = comms ?? [];
+    let today = 0, yest = 0, tot = 0;
+    cs.forEach((c: any) => {
+      const t = new Date(c.created_at).getTime();
+      tot += Number(c.commission_amount);
+      if (t >= startOfDay.getTime()) today += Number(c.commission_amount);
+      else if (t >= startOfYesterday.getTime()) yest += Number(c.commission_amount);
+    });
+    setTodayCommission(today);
+    setYesterdayCommission(yest);
+    setTotalCommission(tot);
+
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [user?.id]);
+
+  return { profile, directs, team, todayCommission, yesterdayCommission, totalCommission, loading, reload: load };
+}
+
 /* ═══════════════════════════════════════════ */
 /*  SUB-PAGES                                  */
 /* ═══════════════════════════════════════════ */
@@ -49,78 +105,74 @@ function SubPageHeader({ title, onClose }: { title: string; onClose: () => void 
 function SubordinateDataPage({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
   const { user } = useAuth();
+  const { directs, team } = useReferralData();
   const [searchUID, setSearchUID] = useState('');
-  const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
   const [filterLevel, setFilterLevel] = useState('all');
+  const [stats, setStats] = useState<Record<string, { dep: number; bet: number; comm: number; firstDep?: string }>>({});
 
-  // Calculate days from user's account creation date to today
-  const createdAt = user?.created_at ? new Date(user.created_at) : new Date();
-  const today = new Date();
-  const daysSinceCreation = Math.max(1, Math.ceil((today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+  const allMembers = useMemo(() => {
+    const map = new Map<string, any>();
+    directs.forEach((d: any) => map.set(d.user_id, { ...d, level: 1 }));
+    team.forEach((d: any) => { if (!map.has(d.user_id)) map.set(d.user_id, d); });
+    return Array.from(map.values());
+  }, [directs, team]);
 
-  const sampleSubordinates = [
-    { uid: '15034449', level: 2, depositAmount: 350, betAmount: 1265, commission: 2.28, time: '2026-04-10' },
-    { uid: '15302421', level: 2, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
-    { uid: '15704061', level: 2, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
-    { uid: '17284408', level: 2, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
-    { uid: '15717837', level: 3, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
-    { uid: '15738548', level: 3, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
-    { uid: '17660851', level: 3, depositAmount: 0, betAmount: 0, commission: 0, time: '2026-04-10' },
-  ];
+  useEffect(() => {
+    if (allMembers.length === 0 || !user) return;
+    const ids = allMembers.map(m => m.user_id);
+    (async () => {
+      const { data: txs } = await db.from('referral_transactions').select('user_id, type, amount, created_at').in('user_id', ids);
+      const { data: comms } = await db.from('commissions').select('source_user_id, commission_amount').eq('beneficiary_id', user.id).in('source_user_id', ids);
+      const m: Record<string, { dep: number; bet: number; comm: number; firstDep?: string }> = {};
+      ids.forEach(id => { m[id] = { dep: 0, bet: 0, comm: 0 }; });
+      (txs ?? []).forEach((tx: any) => {
+        const r = m[tx.user_id]; if (!r) return;
+        if (tx.type === 'deposit') {
+          r.dep += Number(tx.amount);
+          if (!r.firstDep || tx.created_at < r.firstDep) r.firstDep = tx.created_at;
+        } else if (tx.type === 'bet') r.bet += Number(tx.amount);
+      });
+      (comms ?? []).forEach((c: any) => { const r = m[c.source_user_id]; if (r) r.comm += Number(c.commission_amount); });
+      setStats(m);
+    })();
+  }, [allMembers, user]);
 
-  const filteredSubs = sampleSubordinates.filter(sub => {
-    if (searchUID && !sub.uid.includes(searchUID)) return false;
-    if (filterLevel !== 'all' && sub.level.toString() !== filterLevel) return false;
+  const filtered = allMembers.filter((m: any) => {
+    if (searchUID && !String(m.user_id).includes(searchUID) && !String(m.username || '').includes(searchUID)) return false;
+    if (filterLevel !== 'all' && String(m.level) !== filterLevel) return false;
     return true;
   });
 
-  const totalDeposit = sampleSubordinates.reduce((a, b) => a + b.depositAmount, 0);
-  const totalBet = sampleSubordinates.reduce((a, b) => a + b.betAmount, 0);
-  const depositCount = sampleSubordinates.filter(s => s.depositAmount > 0).length;
-  const bettorsCount = sampleSubordinates.filter(s => s.betAmount > 0).length;
-  const firstDepositPeople = sampleSubordinates.filter(s => s.depositAmount > 0).length;
+  const totalDeposit = allMembers.reduce((a, m) => a + (stats[m.user_id]?.dep ?? 0), 0);
+  const totalBet = allMembers.reduce((a, m) => a + (stats[m.user_id]?.bet ?? 0), 0);
+  const depositCount = allMembers.filter(m => (stats[m.user_id]?.dep ?? 0) > 0).length;
+  const bettorsCount = allMembers.filter(m => (stats[m.user_id]?.bet ?? 0) > 0).length;
+  const firstDepositPeople = allMembers.filter(m => stats[m.user_id]?.firstDep).length;
 
   return (
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
       <SubPageHeader title={t('subordinate_data')} onClose={onClose} />
       <div style={{ padding: '12px' }}>
-        {/* Search */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-          <input type="text" placeholder={t('search_subordinate_uid')} value={searchUID} onChange={e => setSearchUID(e.target.value)}
+          <input type="text" placeholder="Search UID / name" value={searchUID} onChange={e => setSearchUID(e.target.value)}
             style={{ flex: 1, padding: '10px 14px', borderRadius: 8, border: `1px solid ${cardBorder}`, background: cardBg, fontSize: 14, outline: 'none', color: textDark }} />
-          <button onClick={() => {}} style={{ width: 42, height: 42, borderRadius: 8, background: redGradient, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+          <button style={{ width: 42, height: 42, borderRadius: 8, background: redGradient, border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <Search size={18} color="#fff" />
           </button>
         </div>
 
-        {/* Filters */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
           <select value={filterLevel} onChange={e => setFilterLevel(e.target.value)}
-            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', appearance: 'auto', cursor: 'pointer' }}>
-            <option value="all">{t('all')}</option>
-            <option value="1">Level 1</option>
-            <option value="2">Level 2</option>
-            <option value="3">Level 3</option>
-            <option value="4">Level 4</option>
-            <option value="5">Level 5</option>
-            <option value="6">Level 6</option>
-          </select>
-          <select value={filterDate} onChange={e => setFilterDate(e.target.value)}
-            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', appearance: 'auto', cursor: 'pointer' }}>
-            {Array.from({ length: daysSinceCreation }, (_, i) => {
-              const d = new Date();
-              d.setDate(d.getDate() - i);
-              const val = d.toISOString().split('T')[0];
-              return <option key={val} value={val}>{val}</option>;
-            })}
+            style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: cardBg, border: `1px solid ${cardBorder}`, fontSize: 13, color: textDark, outline: 'none', cursor: 'pointer' }}>
+            <option value="all">All Levels</option>
+            {[1,2,3,4,5,6].map(l => <option key={l} value={String(l)}>Level {l}</option>)}
           </select>
         </div>
 
-        {/* Summary Stats */}
         <div style={{ background: cardBg, borderRadius: 12, overflow: 'hidden', marginBottom: 16, border: `1px solid ${cardBorder}`, boxShadow: '0 2px 10px rgba(200,16,46,0.08)' }}>
-          {[[{ label: t('deposit_number'), value: depositCount.toString() }, { label: t('deposit_amount'), value: totalDeposit.toString() }],
-            [{ label: t('number_of_bettors'), value: bettorsCount.toString() }, { label: t('total_bet'), value: totalBet.toString() }],
-            [{ label: t('first_deposit_people'), value: firstDepositPeople.toString() }, { label: t('first_deposit_amount'), value: '0' }]
+          {[[{ label: t('deposit_number'), value: depositCount.toString() }, { label: t('deposit_amount'), value: totalDeposit.toFixed(2) }],
+            [{ label: t('number_of_bettors'), value: bettorsCount.toString() }, { label: 'Total bet', value: totalBet.toFixed(2) }],
+            [{ label: t('first_deposit_people'), value: firstDepositPeople.toString() }, { label: 'Team size', value: allMembers.length.toString() }],
           ].map((row, ri) => (
             <div key={ri} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
               {row.map((s, ci) => (
@@ -138,36 +190,37 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
           ))}
         </div>
 
-        {/* Subordinate Cards */}
-        {filteredSubs.map((sub, i) => (
-          <div key={i} style={{
-            background: cardBg, borderRadius: 10, padding: '14px 16px', marginBottom: 10,
-            border: `1px solid ${cardBorder}`, boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, paddingBottom: 10, borderBottom: `1px solid ${cardBorder}` }}>
-              <span style={{ fontSize: 15, fontWeight: 700, color: textDark }}>UID:{sub.uid}</span>
-              <button onClick={() => { navigator.clipboard.writeText(sub.uid); toast.success('UID copied'); }}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
-                <Copy size={14} color={redPrimary} />
-              </button>
-            </div>
-            {[
-              { label: 'Level', value: sub.level.toString(), color: textDark },
-              { label: t('deposit_amount'), value: sub.depositAmount.toString(), color: sub.depositAmount > 0 ? redPrimary : redPrimary },
-              { label: 'Bet amount', value: sub.betAmount.toString(), color: sub.betAmount > 0 ? redPrimary : redPrimary },
-              { label: 'Commission', value: sub.commission.toFixed(2), color: sub.commission > 0 ? redPrimary : redPrimary },
-              { label: 'Time', value: sub.time, color: textMuted },
-            ].map((row, ri) => (
-              <div key={ri} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 13 }}>
-                <span style={{ color: textMuted }}>{row.label}</span>
-                <span style={{ color: row.color, fontWeight: 600 }}>{row.value}</span>
-              </div>
-            ))}
+        {filtered.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '40px 0' }}>
+            <p style={{ fontSize: 13, color: textMuted }}>No subordinates yet — invite friends to grow your team!</p>
           </div>
-        ))}
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <p style={{ fontSize: 13, color: textMuted }}>No more</p>
-        </div>
+        )}
+        {filtered.map((sub: any, i: number) => {
+          const s = stats[sub.user_id] ?? { dep: 0, bet: 0, comm: 0 };
+          return (
+            <div key={i} style={{ background: cardBg, borderRadius: 10, padding: '14px 16px', marginBottom: 10, border: `1px solid ${cardBorder}`, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, paddingBottom: 10, borderBottom: `1px solid ${cardBorder}` }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: textDark }}>{sub.username || `UID:${String(sub.user_id).slice(0, 8)}`}</span>
+                <button onClick={() => { navigator.clipboard.writeText(sub.user_id); toast.success('UID copied'); }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+                  <Copy size={14} color={redPrimary} />
+                </button>
+              </div>
+              {[
+                { label: 'Level', value: `L${sub.level}`, color: textDark },
+                { label: 'Deposit', value: s.dep.toFixed(2), color: redPrimary },
+                { label: 'Bet', value: s.bet.toFixed(2), color: redPrimary },
+                { label: 'My commission', value: s.comm.toFixed(4), color: redPrimary },
+                { label: 'Joined', value: new Date(sub.created_at).toLocaleDateString(), color: textMuted },
+              ].map((row, ri) => (
+                <div key={ri} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 13 }}>
+                  <span style={{ color: textMuted }}>{row.label}</span>
+                  <span style={{ color: row.color, fontWeight: 600 }}>{row.value}</span>
+                </div>
+              ))}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -175,58 +228,52 @@ function SubordinateDataPage({ onClose }: { onClose: () => void }) {
 
 function CommissionDetailPage({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
+  const { user } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [rows, setRows] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    const start = new Date(date + 'T00:00:00');
+    const end = new Date(date + 'T23:59:59');
+    (async () => {
+      const { data } = await db.from('commissions').select('*').eq('beneficiary_id', user.id)
+        .gte('created_at', start.toISOString()).lte('created_at', end.toISOString())
+        .order('created_at', { ascending: false });
+      setRows(data ?? []);
+    })();
+  }, [user, date]);
+
+  const total = rows.reduce((a, r) => a + Number(r.commission_amount), 0);
+
   return (
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
       <SubPageHeader title={t('commission_detail')} onClose={onClose} />
       <div style={{ padding: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: cardBg, borderRadius: 8, border: `1px solid ${cardBorder}`, marginBottom: 16 }}>
-          <span style={{ fontSize: 14, color: textDark }}>{date}</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: cardBg, borderRadius: 8, border: `1px solid ${cardBorder}`, marginBottom: 12 }}>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)} style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 14, color: textDark, flex: 1 }} />
           <ChevronDown size={16} color={textMuted} />
         </div>
-        <div style={{ textAlign: 'center', padding: '80px 0' }}>
-          <p style={{ fontSize: 13, color: textMuted }}>{t('no_data')}</p>
+        <div style={{ background: redGradient, borderRadius: 12, padding: '16px', marginBottom: 14, color: '#fff', textAlign: 'center' }}>
+          <div style={{ fontSize: 12, opacity: 0.9 }}>Total commission on {date}</div>
+          <div style={{ fontSize: 28, fontWeight: 800, marginTop: 4 }}>₹{total.toFixed(4)}</div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function InvitePage({ onClose }: { onClose: () => void }) {
-  const { t } = useI18n();
-  const [linkCopied, setLinkCopied] = useState(false);
-  const copyLink = () => {
-    navigator.clipboard.writeText(REFERRAL_LINK).then(() => {
-      setLinkCopied(true);
-      toast.success(t('invitation_link_copied'));
-      setTimeout(() => setLinkCopied(false), 2000);
-    });
-  };
-  return (
-    <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
-      <SubPageHeader title={t('invite')} onClose={onClose} />
-      <div style={{ padding: '12px 16px' }}>
-        <p style={{ fontSize: 12, color: redPrimary, textAlign: 'center', marginBottom: 16 }}>{t('swipe_poster')}</p>
-        <div style={{ background: cardBg, borderRadius: 16, padding: '24px 20px', textAlign: 'center', marginBottom: 20, border: `2px solid rgba(200,16,46,0.3)`, boxShadow: '0 4px 15px rgba(200,16,46,0.1)' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('fair_justice')}</span>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>{t('open_transparent')}</span>
+        {rows.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px 0' }}>
+            <p style={{ fontSize: 13, color: textMuted }}>No commission for this date</p>
           </div>
-          <h3 style={{ fontSize: 18, fontWeight: 800, color: textDark, marginBottom: 12 }}>{t('full_odds_bonus')}</h3>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 16 }}>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>💰 {t('financial_security')}</span>
-            <span style={{ background: 'rgba(200,16,46,0.08)', color: redPrimary, fontSize: 11, padding: '4px 10px', borderRadius: 20, fontWeight: 600 }}>⚡ {t('quick_withdrawal')}</span>
+        ) : rows.map((r) => (
+          <div key={r.id} style={{ background: cardBg, borderRadius: 10, padding: '12px 14px', marginBottom: 8, border: `1px solid ${cardBorder}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: textDark }}>L{r.level} commission</span>
+              <span style={{ fontSize: 14, fontWeight: 800, color: redPrimary }}>+₹{Number(r.commission_amount).toFixed(4)}</span>
+            </div>
+            <div style={{ fontSize: 11, color: textMuted, display: 'flex', justifyContent: 'space-between' }}>
+              <span>Bet ₹{Number(r.bet_amount).toFixed(2)} × {(Number(r.rate) * 100).toFixed(2)}%</span>
+              <span>{new Date(r.created_at).toLocaleTimeString()}</span>
+            </div>
           </div>
-          <p style={{ fontSize: 14, color: redPrimary, fontWeight: 700, marginBottom: 16 }}>
-            {t('permanent_commission')} <span style={{ fontSize: 20 }}>85%</span>
-          </p>
-          <div style={{ width: 100, height: 100, background: cardBg, border: `2px solid rgba(200,16,46,0.3)`, borderRadius: 8, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <QrCode size={40} color={textGold} />
-          </div>
-        </div>
-        <button onClick={copyLink} style={{ width: '100%', padding: '14px 0', borderRadius: 50, cursor: 'pointer', background: redGradient, border: 'none', color: '#fff', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-          {linkCopied ? <><Check size={16} /> {t('copied')}</> : t('copy_invitation_link')}
-        </button>
+        ))}
       </div>
     </div>
   );
@@ -235,7 +282,6 @@ function InvitePage({ onClose }: { onClose: () => void }) {
 function AgentCustomerServicePage({ onClose }: { onClose: () => void }) {
   const TELEGRAM_ID = '@techie_404';
   const TELEGRAM_LINK = 'https://t.me/techie_404';
-
   const conditions = [
     { icon: <Shield size={18} color={redPrimary} />, title: 'Official Channel Only', desc: 'Only contact through our official Telegram channel. We will never DM you first.' },
     { icon: <AlertCircle size={18} color={redPrimary} />, title: 'Never Share Password', desc: 'Our support team will never ask for your password, OTP, or bank details.' },
@@ -243,12 +289,10 @@ function AgentCustomerServicePage({ onClose }: { onClose: () => void }) {
     { icon: <Star size={18} color={redPrimary} />, title: 'Agent Level Required', desc: 'You must be a registered agent to access agent-level support services.' },
     { icon: <MessageCircle size={18} color={redPrimary} />, title: 'Be Respectful', desc: 'Please communicate politely. Abusive language may result in support being denied.' },
   ];
-
   return (
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
       <SubPageHeader title="Agent Customer Service" onClose={onClose} />
       <div style={{ padding: '16px' }}>
-        {/* Telegram ID Card */}
         <div style={{ background: cardBg, borderRadius: 14, padding: '20px', marginBottom: 20, border: `1px solid ${cardBorder}`, boxShadow: '0 2px 12px rgba(200,16,46,0.08)', textAlign: 'center' }}>
           <div style={{ width: 60, height: 60, borderRadius: '50%', background: redGradient, margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Headphones size={28} color="#fff" />
@@ -257,15 +301,11 @@ function AgentCustomerServicePage({ onClose }: { onClose: () => void }) {
           <p style={{ fontSize: 14, color: redPrimary, fontWeight: 700, margin: '0 0 4px' }}>{TELEGRAM_ID}</p>
           <p style={{ fontSize: 12, color: textMuted, margin: 0 }}>Available 24/7 on Telegram</p>
         </div>
-
-        {/* Conditions */}
         <h4 style={{ fontSize: 14, fontWeight: 700, color: textDark, marginBottom: 12, paddingLeft: 4 }}>📋 Terms & Conditions</h4>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
           {conditions.map((c, i) => (
             <div key={i} style={{ background: cardBg, borderRadius: 12, padding: '14px 16px', border: `1px solid ${cardBorder}`, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(200,16,46,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                {c.icon}
-              </div>
+              <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(200,16,46,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{c.icon}</div>
               <div>
                 <p style={{ fontSize: 13, fontWeight: 700, color: textDark, margin: '0 0 3px' }}>{c.title}</p>
                 <p style={{ fontSize: 12, color: textMuted, margin: 0, lineHeight: 1.5 }}>{c.desc}</p>
@@ -273,16 +313,12 @@ function AgentCustomerServicePage({ onClose }: { onClose: () => void }) {
             </div>
           ))}
         </div>
-
-        {/* Chat on Telegram Button */}
         <a href={TELEGRAM_LINK} target="_blank" rel="noopener noreferrer" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
           width: '100%', padding: '15px 0', borderRadius: 50, textDecoration: 'none',
-          background: redGradient, color: '#fff',
-          fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(200,16,46,0.3)',
+          background: redGradient, color: '#fff', fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(200,16,46,0.3)',
         }}>
-          <MessageCircle size={20} />
-          Chat on Telegram
+          <MessageCircle size={20} /> Chat on Telegram
         </a>
       </div>
     </div>
@@ -290,30 +326,59 @@ function AgentCustomerServicePage({ onClose }: { onClose: () => void }) {
 }
 
 function NewSubordinatesPage({ onClose }: { onClose: () => void }) {
-  const { t } = useI18n();
-  const [activeTab, setActiveTab] = useState('today');
+  const { user } = useAuth();
+  const { directs, team } = useReferralData();
+  const [activeTab, setActiveTab] = useState<'today' | 'yesterday' | 'this_month'>('today');
   const tabs = [
-    { key: 'today', label: t('today') },
-    { key: 'yesterday', label: t('yesterday') },
-    { key: 'this_month', label: t('this_month') },
+    { key: 'today' as const, label: 'Today' },
+    { key: 'yesterday' as const, label: 'Yesterday' },
+    { key: 'this_month' as const, label: 'This month' },
   ];
+
+  const all = useMemo(() => {
+    const map = new Map<string, any>();
+    directs.forEach((d: any) => map.set(d.user_id, { ...d, level: 1 }));
+    team.forEach((d: any) => { if (!map.has(d.user_id)) map.set(d.user_id, d); });
+    return Array.from(map.values());
+  }, [directs, team]);
+
+  const now = new Date();
+  const startToday = new Date(now); startToday.setHours(0, 0, 0, 0);
+  const startYest = new Date(startToday); startYest.setDate(startYest.getDate() - 1);
+  const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const filtered = all.filter((m: any) => {
+    const c = new Date(m.created_at);
+    if (activeTab === 'today') return c >= startToday;
+    if (activeTab === 'yesterday') return c >= startYest && c < startToday;
+    return c >= startMonth;
+  });
+
   return (
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
-      <SubPageHeader title={t('new_subordinates')} onClose={onClose} />
+      <SubPageHeader title="New subordinates" onClose={onClose} />
       <div style={{ display: 'flex', gap: 8, padding: '12px 12px 0' }}>
         {tabs.map(tab => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
             padding: '8px 16px', borderRadius: 20, border: 'none', cursor: 'pointer',
             background: activeTab === tab.key ? redGradient : cardBg,
-            color: activeTab === tab.key ? '#000' : textMuted,
+            color: activeTab === tab.key ? '#fff' : textMuted,
             fontSize: 13, fontWeight: 600,
-          }}>
-            {tab.label}
-          </button>
+          }}>{tab.label}</button>
         ))}
       </div>
-      <div style={{ textAlign: 'center', padding: '60px 0' }}>
-        <p style={{ fontSize: 13, color: textMuted }}>{t('no_data')}</p>
+      <div style={{ padding: 12 }}>
+        {filtered.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px 0' }}><p style={{ fontSize: 13, color: textMuted }}>No new subordinates</p></div>
+        ) : filtered.map((m: any) => (
+          <div key={m.user_id} style={{ background: cardBg, borderRadius: 10, padding: '12px 14px', marginBottom: 8, border: `1px solid ${cardBorder}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: textDark }}>{m.username || String(m.user_id).slice(0, 8)}</div>
+              <div style={{ fontSize: 11, color: textMuted, marginTop: 2 }}>L{m.level} • {new Date(m.created_at).toLocaleString()}</div>
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary, background: 'rgba(200,16,46,0.08)', padding: '4px 10px', borderRadius: 12 }}>L{m.level}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -321,19 +386,10 @@ function NewSubordinatesPage({ onClose }: { onClose: () => void }) {
 
 function InvitationRulesPage({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
-  const rebateLevels = [
-    { level: 0, team: '0', betting: '0', deposit: '0' },
-    { level: 1, team: '5', betting: '500K', deposit: '100K' },
-    { level: 2, team: '10', betting: '1,000K', deposit: '200K' },
-    { level: 3, team: '15', betting: '2.50M', deposit: '500K' },
-    { level: 4, team: '20', betting: '3.50M', deposit: '700K' },
-    { level: 5, team: '25', betting: '5M', deposit: '1,000K' },
-    { level: 6, team: '30', betting: '10M', deposit: '2M' },
-    { level: 7, team: '100', betting: '100M', deposit: '20M' },
-    { level: 8, team: '500', betting: '500M', deposit: '100M' },
-    { level: 9, team: '1000', betting: '1,000M', deposit: '200M' },
-    { level: 10, team: '5000', betting: '1,500M', deposit: '300M' },
-  ];
+  const [config, setConfig] = useState<any[]>([]);
+  useEffect(() => { db.from('agency_level_config').select('*').order('level').then(({ data }: any) => setConfig(data ?? [])); }, []);
+  const fmt = (n: number) => n >= 1_000_000 ? (n / 1_000_000).toFixed(1) + 'M' : n >= 1_000 ? (n / 1_000).toFixed(0) + 'K' : String(n);
+
   const rules = [
     { num: '01', text: t('rule_1') },
     { num: '02', text: t('rule_2') },
@@ -360,22 +416,22 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
             </div>
             <div style={{ padding: '0 16px 16px' }}>
               <p style={{ fontSize: 13, color: textDark, lineHeight: 1.7, margin: 0 }}>{rule.text}</p>
-              {i === 4 && (
+              {i === 4 && config.length > 0 && (
                 <div style={{ marginTop: 16, borderRadius: 10, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', background: redGradient, padding: '10px 0' }}>
                     {['Rebate level', 'Team Number', 'Team Betting', 'Team Deposit'].map(h => (
                       <div key={h} style={{ textAlign: 'center', fontSize: 10, fontWeight: 700, color: '#fff' }}>{h}</div>
                     ))}
                   </div>
-                  {rebateLevels.map((row, ri) => (
-                    <div key={ri} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '8px 0', background: ri % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)', borderTop: `1px solid ${cardBorder}` }}>
+                  {config.map((row: any, ri: number) => (
+                    <div key={ri} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '8px 0', background: ri % 2 === 0 ? 'rgba(0,0,0,0.02)' : 'transparent', borderTop: `1px solid ${cardBorder}` }}>
                       <div style={{ textAlign: 'center', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
                         <span style={{ fontSize: 14 }}>👑</span>
                         <span style={{ color: redPrimary, fontWeight: 600, fontSize: 11 }}>L{row.level}</span>
                       </div>
-                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.team}</div>
-                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.betting}</div>
-                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.deposit}</div>
+                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{row.required_members}</div>
+                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{fmt(Number(row.required_betting))}</div>
+                      <div style={{ textAlign: 'center', fontSize: 11, color: textDark }}>{fmt(Number(row.required_deposit))}</div>
                     </div>
                   ))}
                 </div>
@@ -390,64 +446,27 @@ function InvitationRulesPage({ onClose }: { onClose: () => void }) {
 
 function RebateRatioPage({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
-  const [activeCategory, setActiveCategory] = useState('lottery');
-  const categories = [
-    { key: 'lottery', label: 'Lottery', icon: '🎯' },
-    { key: 'casino', label: 'Casino', icon: '🎰' },
-    { key: 'sports', label: 'Sports', icon: '⚽' },
-  ];
-  const rebateData = [
-    { level: 'L0', rates: [0.6, 0.18, 0.054, 0.0162, 0.00486, 0.001458] },
-    { level: 'L1', rates: [0.7, 0.245, 0.08575, 0.030012, 0.010504, 0.003677] },
-    { level: 'L2', rates: [0.75, 0.28125, 0.105469, 0.039551, 0.014832, 0.005562] },
-    { level: 'L3', rates: [0.8, 0.32, 0.128, 0.0512, 0.02048, 0.008192] },
-    { level: 'L4', rates: [0.85, 0.3612, 0.153512, 0.065243, 0.027728, 0.011784] },
-    { level: 'L5', rates: [0.9, 0.405, 0.18225, 0.082012, 0.036906, 0.016607] },
-    { level: 'L6', rates: [0.95, 0.45125, 0.214344, 0.101813, 0.048361, 0.022972] },
-    { level: 'L7', rates: [1.0, 0.5, 0.25, 0.125, 0.0625, 0.03125] },
-    { level: 'L8', rates: [1.05, 0.55125, 0.289406, 0.151938, 0.079768, 0.041878] },
-    { level: 'L9', rates: [1.1, 0.605, 0.3327, 0.18299, 0.100645, 0.055355] },
-    { level: 'L10', rates: [1.15, 0.66125, 0.380469, 0.218770, 0.125793, 0.072331] },
-  ];
+  const [rates, setRates] = useState<any[]>([]);
+  useEffect(() => { db.from('commission_rates').select('*').order('level').then(({ data }: any) => setRates(data ?? [])); }, []);
 
   return (
     <div className="fixed inset-0 z-50 max-w-[480px] mx-auto overflow-y-auto" style={{ background: pageBg }}>
       <SubPageHeader title={t('rebate_ratio')} onClose={onClose} />
       <div style={{ padding: '12px' }}>
-        <div style={{ display: 'flex', gap: 0, marginBottom: 16, borderRadius: 10, overflow: 'hidden', border: `1px solid ${cardBorder}` }}>
-          {categories.map((cat) => (
-            <button key={cat.key} onClick={() => setActiveCategory(cat.key)} style={{
-              flex: 1, padding: '12px 0', border: 'none', cursor: 'pointer',
-              background: activeCategory === cat.key ? redGradient : cardBg,
-              color: activeCategory === cat.key ? '#000' : textWhite,
-              fontSize: 13, fontWeight: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-            }}>
-              <span style={{ fontSize: 20 }}>{cat.icon}</span>
-              {cat.label}
-            </button>
-          ))}
+        <div style={{ background: redGradient, borderRadius: 12, padding: 16, color: '#fff', textAlign: 'center', marginBottom: 14 }}>
+          <div style={{ fontSize: 13, opacity: 0.9 }}>Commission distributed across</div>
+          <div style={{ fontSize: 24, fontWeight: 800, marginTop: 4 }}>6 Referral Levels</div>
+          <div style={{ fontSize: 11, opacity: 0.85, marginTop: 4 }}>On every bet placed by your team</div>
         </div>
-        {rebateData.map((level, li) => (
-          <div key={li} style={{ background: cardBg, borderRadius: 10, marginBottom: 12, border: `1px solid ${cardBorder}`, overflow: 'hidden' }}>
-            <div style={{ padding: '12px 16px', borderBottom: `1px solid ${cardBorder}` }}>
-              <span style={{ fontSize: 15, fontWeight: 700, color: textDark }}>
-                Rebate level <span style={{ color: redPrimary, fontStyle: 'italic', fontWeight: 800 }}>{level.level}</span>
-              </span>
-            </div>
-            {level.rates.map((rate, ri) => (
-              <div key={ri} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '10px 16px',
-                borderBottom: ri < level.rates.length - 1 ? `1px solid ${cardBorder}` : 'none',
-                background: ri % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: goldPrimary, opacity: 0.6 }} />
-                  <span style={{ fontSize: 12, color: textMuted }}>{ri + 1} level lower level commission rebate</span>
-                </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: redPrimary }}>{rate}%</span>
+        {rates.map((r: any) => (
+          <div key={r.level} style={{ background: cardBg, borderRadius: 10, padding: '14px 16px', marginBottom: 10, border: `1px solid ${cardBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(200,16,46,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: 13, fontWeight: 800, color: redPrimary }}>L{r.level}</span>
               </div>
-            ))}
+              <span style={{ fontSize: 14, color: textDark }}>Level {r.level} commission</span>
+            </div>
+            <span style={{ fontSize: 16, fontWeight: 800, color: redPrimary }}>{(Number(r.rate) * 100).toFixed(2)}%</span>
           </div>
         ))}
       </div>
@@ -464,23 +483,32 @@ export default function PromotionsDetail() {
   const { user } = useAuth();
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
-  
   const [activePage, setActivePage] = useState<string | null>(null);
+  const { profile, directs, team, todayCommission, yesterdayCommission, totalCommission, loading } = useReferralData();
+
+  const invitationCode = profile?.invitation_code ?? '------------';
+  const referralLink = `${window.location.origin}/signup-login?ref=${invitationCode}`;
 
   const copyCode = () => {
-    navigator.clipboard.writeText(INVITATION_CODE).then(() => {
+    navigator.clipboard.writeText(invitationCode).then(() => {
       setCopied(true);
-      toast.success(t('invitation_code_copied'));
+      toast.success('Invitation code copied!');
       setTimeout(() => setCopied(false), 2000);
     });
   };
 
-  const stats = { register: 0, depositNumber: 0, depositAmount: 0, firstDeposit: 0 };
-  const teamStats = { register: 0, depositNumber: 1, depositAmount: 350, firstDeposit: 0 };
-  
+  const copyLink = () => {
+    navigator.clipboard.writeText(referralLink).then(() => toast.success('Referral link copied!'));
+  };
+
+  // Stats: count direct vs team for register / first deposit
+  const directRegister = directs.length;
+  const teamRegister = team.filter((m: any) => m.level >= 2 && m.level <= 6).length;
+  const directFirstDep = directs.filter((d: any) => d.first_deposit_at).length;
+  const teamFirstDep = team.filter((m: any) => m.first_deposit_at && m.level >= 2).length;
 
   const menuItems = [
-    { icon: <Copy size={18} color={redPrimary} />, label: t('copy_invitation_code'), value: INVITATION_CODE, isCode: true },
+    { icon: <Copy size={18} color={redPrimary} />, label: 'Copy invitation code', value: invitationCode, isCode: true },
     { icon: <Users size={18} color={redPrimary} />, label: t('subordinate_data'), page: 'subordinate' },
     { icon: <DollarSign size={18} color={redPrimary} />, label: t('commission_detail'), page: 'commission' },
     { icon: <ScrollText size={18} color={redPrimary} />, label: t('invitation_rules'), page: 'rules' },
@@ -492,46 +520,46 @@ export default function PromotionsDetail() {
     <div className="min-h-screen w-full max-w-[480px] mx-auto pb-24" style={{ background: pageBg }}>
       <Toaster position="top-center" richColors />
 
-      {/* ── Header with commission ── */}
       <div style={{ background: headerGradient, paddingBottom: 24, position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)', width: 300, height: 180, background: 'radial-gradient(ellipse, rgba(200,16,46,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
           <div style={{ width: 32 }} />
           <span style={{ fontWeight: 700, fontSize: 17, color: '#fff' }}>{t('agency')}</span>
           <button onClick={() => setActivePage('newSub')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(200,16,46,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(200,16,46,0.25)' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.25)' }}>
               <Users size={16} color="#fff" />
             </div>
           </button>
         </div>
         <div style={{ textAlign: 'center', paddingTop: 8, position: 'relative' }}>
-          <div style={{ fontSize: 44, fontWeight: 800, color: '#fff', textShadow: '0 0 40px rgba(255,255,255,0.3)', letterSpacing: '-1px' }}>0.68</div>
-          <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#fff', fontWeight: 700, marginTop: 6, boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-            {t('yesterday_total_commission')}
+          <div style={{ fontSize: 44, fontWeight: 800, color: '#fff', textShadow: '0 0 40px rgba(255,255,255,0.3)', letterSpacing: '-1px' }}>{yesterdayCommission.toFixed(2)}</div>
+          <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', padding: '8px 24px', borderRadius: 25, fontSize: 12, color: '#fff', fontWeight: 700, marginTop: 6 }}>
+            Yesterday's total commission
           </div>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 10 }}>{t('upgrade_level')}</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 10 }}>
+            Agency level: <span style={{ color: '#FFD700', fontWeight: 800 }}>L{profile?.agency_level ?? 0}</span> · Wallet: ₹{Number(profile?.commission_wallet ?? 0).toFixed(2)}
+          </p>
         </div>
       </div>
 
-      {/* ── Side-by-side Stats (Direct | Team) ── */}
       <div style={{ margin: '-10px 14px 0', position: 'relative', zIndex: 10 }}>
         <div style={{ background: '#fff', borderRadius: 14, overflow: 'hidden', border: `1px solid ${cardBorder}`, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, borderRight: `1px solid ${cardBorder}`, background: 'rgba(200,16,46,0.05)' }}>
               <Users size={15} color={redPrimary} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary }}>{t('direct_subordinates')}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary }}>Direct (L1)</span>
             </div>
             <div style={{ padding: '14px 8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'rgba(200,16,46,0.05)' }}>
               <Users size={15} color={redPrimary} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary }}>{t('team_subordinates')}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: redPrimary }}>Team (L2-L6)</span>
             </div>
           </div>
           {[
-            { label: t('number_of_register'), direct: stats.register, team: teamStats.register },
-            { label: t('deposit_number'), direct: stats.depositNumber, team: teamStats.depositNumber, highlight: true },
-            { label: t('deposit_amount'), direct: stats.depositAmount, team: teamStats.depositAmount, highlight: true },
-            { label: t('first_deposit_people'), direct: stats.firstDeposit, team: teamStats.firstDeposit },
-          ].map((row, i) => (
+            { label: 'Number of register', direct: directRegister, team: teamRegister },
+            { label: 'Team betting', direct: '—', team: Number(profile?.team_betting ?? 0).toFixed(0), highlight: true },
+            { label: 'Team deposit', direct: '—', team: Number(profile?.team_deposit ?? 0).toFixed(0), highlight: true },
+            { label: 'First deposit people', direct: directFirstDep, team: teamFirstDep },
+          ].map((row: any, i: number) => (
             <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: `1px solid ${cardBorder}` }}>
               <div style={{ textAlign: 'center', padding: '14px 8px', borderRight: `1px solid ${cardBorder}` }}>
                 <div style={{ fontSize: 20, fontWeight: 800, color: row.highlight ? redPrimary : textDark }}>{row.direct}</div>
@@ -546,24 +574,17 @@ export default function PromotionsDetail() {
         </div>
       </div>
 
-      {/* ── Copy Referral Link Button ── */}
       <div style={{ padding: '18px 14px 0' }}>
-        <button onClick={() => {
-          navigator.clipboard.writeText(REFERRAL_LINK).then(() => {
-            toast.success('Referral link copied!');
-          });
-        }} style={{
+        <button onClick={copyLink} style={{
           width: '100%', padding: '15px 0', borderRadius: 50, border: 'none', cursor: 'pointer',
           background: redGradient, color: '#fff',
           fontWeight: 800, fontSize: 15, boxShadow: '0 4px 20px rgba(200,16,46,0.3)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
         }}>
-          <Copy size={18} />
-          Copy Referral Link
+          <Copy size={18} /> Copy Referral Link
         </button>
       </div>
 
-      {/* ── Menu Items ── */}
       <div style={{ margin: '18px 14px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {menuItems.map((item, i) => (
           <button key={i} onClick={() => {
@@ -581,31 +602,24 @@ export default function PromotionsDetail() {
               <span style={{ fontSize: 14, fontWeight: 600, color: textDark }}>{item.label}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              {item.value && (
-                <span style={{ fontSize: 12, color: textMuted, fontFamily: 'monospace' }}>{item.value}</span>
-              )}
-              {item.isCode ? (
-                copied ? <Check size={16} color={greenAccent} /> : <Copy size={16} color={textMuted} />
-              ) : (
-                <ChevronRight size={16} color={textMuted} />
-              )}
+              {item.value && <span style={{ fontSize: 12, color: textMuted, fontFamily: 'monospace' }}>{item.value}</span>}
+              {item.isCode ? (copied ? <Check size={16} color={greenAccent} /> : <Copy size={16} color={textMuted} />) : <ChevronRight size={16} color={textMuted} />}
             </div>
           </button>
         ))}
       </div>
 
-      {/* ── Promotion Data ── */}
       <div style={{ margin: '18px 14px 0', borderRadius: 14, overflow: 'hidden', background: cardBg, border: `1px solid ${cardBorder}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', borderBottom: `1px solid ${cardBorder}` }}>
-          <span style={{ fontSize: 18 }}>🎮</span>
-          <span style={{ fontWeight: 700, fontSize: 14, color: textDark }}>{t('promotion_data')}</span>
+          <span style={{ fontSize: 18 }}>📊</span>
+          <span style={{ fontWeight: 700, fontSize: 14, color: textDark }}>Promotion data</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
           {[
-            { label: t('this_week'), value: '0.68' },
-            { label: t('total_commission'), value: '2369.7' },
-            { label: t('direct_subordinate'), value: '6' },
-            { label: t('total_subordinates_team'), value: '31' },
+            { label: 'Today commission', value: todayCommission.toFixed(2) },
+            { label: 'Total commission', value: totalCommission.toFixed(2) },
+            { label: 'Direct subordinates', value: String(directRegister) },
+            { label: 'Total team', value: String(directRegister + teamRegister) },
           ].map((s, i) => (
             <div key={i} style={{
               textAlign: 'center', padding: '18px 8px',
@@ -621,7 +635,6 @@ export default function PromotionsDetail() {
 
       <BottomNav />
 
-      {/* ── Sub Pages ── */}
       <AnimatePresence>
         {activePage === 'subordinate' && (
           <motion.div key="sub" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 280 }}>
