@@ -274,14 +274,14 @@ export default function WinGo() {
   const durationLabel = duration === 30 ? '30S' : duration === 60 ? '1MIN' : duration === 180 ? '3MIN' : '5MIN';
 
   return (
-    <div className="min-h-screen w-full text-white flex flex-col" style={{ background: 'linear-gradient(180deg,#1a0306 0%,#2a0509 40%,#1a0306 100%)' }}>
+    <div className="min-h-screen w-full text-foreground flex flex-col" style={{ background: '#f5f5f5' }}>
       {/* ─── Premium Header ─── */}
       <div
         className="relative px-3 pt-3 pb-4 flex items-center justify-between border-b-2 border-[#f5d060]/60"
         style={{
           background:
-            'radial-gradient(circle at 20% 0%, rgba(245,208,96,0.18) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(245,208,96,0.15) 0%, transparent 55%), linear-gradient(135deg,#7a0a14 0%,#4a0509 50%,#7a0a14 100%)',
-          boxShadow: '0 4px 18px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(245,208,96,0.4)',
+            'radial-gradient(circle at 20% 0%, rgba(245,208,96,0.18) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(245,208,96,0.15) 0%, transparent 55%), linear-gradient(180deg, #8B0000 0%, #C8102E 100%)',
+          boxShadow: '0 4px 18px rgba(0,0,0,0.25), inset 0 -1px 0 rgba(245,208,96,0.4)',
         }}
       >
         {/* gold geometric pattern overlay */}
@@ -294,7 +294,7 @@ export default function WinGo() {
         />
         <button
           onClick={() => navigate(-1)}
-          className="relative w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/30 text-[#f5d060]"
+          className="relative w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/20 text-[#f5d060]"
         >
           <ArrowLeft size={18} />
         </button>
@@ -312,38 +312,38 @@ export default function WinGo() {
           >
             Techie<sup className="text-[12px]">404</sup>
           </h1>
-          <span className="text-[10px] font-semibold text-[#f5d060]/80 tracking-widest border-l border-[#f5d060]/40 pl-2 ml-1">
+          <span className="text-[10px] font-semibold text-[#f5d060]/90 tracking-widest border-l border-[#f5d060]/40 pl-2 ml-1">
             {durationLabel}
           </span>
         </div>
 
         <div className="relative flex items-center gap-2">
-          <button className="w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/30 text-[#f5d060]">
+          <button className="w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/20 text-[#f5d060]">
             <Headphones size={16} />
           </button>
-          <button className="w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/30 text-[#f5d060]">
+          <button className="w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/20 text-[#f5d060]">
             <Volume2 size={16} />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pb-28">
+      <div className="flex-1 overflow-y-auto pb-8">
       {/* ─── Wallet ─── */}
-      <div className="mx-3 mt-2 rounded-2xl p-4 shadow-lg border border-[#f5d060]/30" style={{ background: 'linear-gradient(135deg,#4a0509 0%,#2a0509 100%)' }}>
-        <div className="flex items-center justify-center gap-2 text-2xl font-extrabold text-[#f5d060]">
+      <div className="mx-3 mt-3 rounded-2xl p-4 shadow-md border border-red-100 bg-white">
+        <div className="flex items-center justify-center gap-2 text-2xl font-extrabold" style={{ color: '#8B0000' }}>
           ₹{balance.toFixed(2)}
-          <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
-            <RefreshCw size={13} className="text-white/70" />
+          <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center">
+            <RefreshCw size={13} className="text-red-700" />
           </button>
         </div>
-        <div className="text-center text-xs text-white/70 mt-1 flex items-center justify-center gap-1">
+        <div className="text-center text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
           <span>💳</span> wallet balance
         </div>
         <div className="grid grid-cols-2 gap-3 mt-3">
-          <button onClick={() => navigate('/withdraw')} className="py-2.5 rounded-full font-bold text-[#1a0a1f]" style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)' }}>
+          <button onClick={() => navigate('/withdraw')} className="py-2.5 rounded-full font-bold text-white" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
             Withdraw
           </button>
-          <button onClick={() => navigate('/deposit')} className="py-2.5 rounded-full font-bold text-white" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>
+          <button onClick={() => navigate('/deposit')} className="py-2.5 rounded-full font-bold text-[#8B0000]" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>
             Deposit
           </button>
         </div>
@@ -357,12 +357,13 @@ export default function WinGo() {
             <button
               key={d}
               onClick={() => setDuration(d)}
-              className={`rounded-xl py-3 flex flex-col items-center justify-center transition ${active ? 'bg-gradient-to-br from-[#dc2626] to-[#7f1d1d] shadow-lg shadow-red-900/40' : 'bg-white/5'}`}
+              className={`rounded-xl py-3 flex flex-col items-center justify-center transition border ${active ? 'shadow-lg border-transparent' : 'bg-white border-red-100'}`}
+              style={active ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}
             >
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1 ${active ? 'bg-[#1a0a1f]' : 'bg-white/10'}`}>
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1 ${active ? 'bg-white/15' : 'bg-red-50'}`}>
                 <span className="text-lg">⏱️</span>
               </div>
-              <div className={`text-[10px] font-semibold leading-tight text-center ${active ? 'text-[#f5d060]' : 'text-white/70'}`}>
+              <div className={`text-[10px] font-semibold leading-tight text-center ${active ? 'text-[#f5d060]' : 'text-gray-700'}`}>
                 {label.split(' ').map((w, i) => <div key={i}>{w}</div>)}
               </div>
             </button>
@@ -371,13 +372,13 @@ export default function WinGo() {
       </div>
 
       {/* ─── Period + Timer ─── */}
-      <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#4b1a5a] to-[#2a0e36] p-3">
+      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100" style={{ background: 'linear-gradient(135deg, #fff 0%, #fff5f5 100%)' }}>
         <div className="flex items-start justify-between">
           <div>
-            <button className="px-3 py-1 rounded-full bg-white/10 text-xs flex items-center gap-1">
+            <button className="px-3 py-1 rounded-full text-xs flex items-center gap-1 text-[#8B0000] bg-red-50 border border-red-100">
               <HelpCircle size={12} /> How to play
             </button>
-            <div className="text-xs text-white/80 mt-2">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
+            <div className="text-xs text-gray-600 mt-2 font-semibold">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
             <div className="flex gap-1 mt-1.5">
               {history.slice(0, 5).map((h) => (
                 <div key={h.id} className="w-6 h-6 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shadow" style={{ background: BALL_BG(h.number) }}>
@@ -387,29 +388,29 @@ export default function WinGo() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-white/70 mb-1">time of purchase</div>
+            <div className="text-xs text-gray-500 mb-1">time of purchase</div>
             <div className="flex gap-1 justify-end">
               {[mm[0], mm[1], ':', ss[0], ss[1]].map((c, i) => (
-                <div key={i} className={`${c === ':' ? 'w-2' : 'w-7'} h-9 rounded-md ${c === ':' ? '' : 'bg-white'} flex items-center justify-center text-[#1a0a1f] font-extrabold text-lg ${isClosing ? 'animate-pulse' : ''}`}>
+                <div key={i} className={`${c === ':' ? 'w-2 text-[#8B0000]' : 'w-7 shadow-sm'} h-9 rounded-md ${c === ':' ? '' : 'text-white'} flex items-center justify-center font-extrabold text-lg ${isClosing ? 'animate-pulse' : ''}`} style={c === ':' ? undefined : { background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
                   {c}
                 </div>
               ))}
             </div>
-            <div className="text-[#f5d060] font-extrabold text-sm mt-1">{periodId}</div>
+            <div className="font-extrabold text-sm mt-1" style={{ color: '#8B0000' }}>{periodId}</div>
           </div>
         </div>
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#2a0e36] to-[#1a0a1f] p-3 border border-white/5">
+      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
         {/* Colors */}
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
-            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
+            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
           <button onClick={() => openBet({ type: 'color', value: 'violet', label: 'Violet', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
+            className="py-3 rounded-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
           <button onClick={() => openBet({ type: 'color', value: 'red', label: 'Red', bg: 'linear-gradient(135deg,#ef4444,#b91c1c)' })}
-            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
+            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
         </div>
 
         {/* Numbers */}
@@ -427,10 +428,11 @@ export default function WinGo() {
         {/* Multipliers */}
         <div className="flex items-center gap-1.5 mt-3 overflow-x-auto scrollbar-hide">
           <button onClick={() => { setBase(1); setMult(1); toast.message('Random bet ready — pick a color/number'); }}
-            className="px-3 py-1.5 text-xs rounded-full border border-white/20 whitespace-nowrap">random bet</button>
+            className="px-3 py-1.5 text-xs rounded-full border border-red-200 text-[#8B0000] bg-red-50 whitespace-nowrap font-semibold">random bet</button>
           {MULTIPLIERS.map((m) => (
             <button key={m} onClick={() => setMult(m)}
-              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] text-[#1a0a1f]' : 'bg-white/5 text-white/70'}`}>
+              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'text-white shadow' : 'bg-gray-100 text-gray-600'}`}
+              style={mult === m ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
               X{m}
             </button>
           ))}
@@ -439,9 +441,9 @@ export default function WinGo() {
         {/* Big / Small */}
         <div className="grid grid-cols-2 gap-2 mt-3">
           <button onClick={() => openBet({ type: 'size', value: 'big', label: 'Big', bg: 'linear-gradient(135deg,#fbbf24,#f59e0b)' })}
-            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#1a0a1f]" style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)' }}>Big</button>
+            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#8B0000] shadow" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>Big</button>
           <button onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-r-full rounded-tl-full font-bold text-white" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
+            className="py-3 rounded-r-full rounded-tl-full font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
         </div>
       </div>
 
@@ -450,25 +452,26 @@ export default function WinGo() {
         <div className="flex gap-1 mb-2">
           {([['record','Game Record'],['chart','Chart Trends'],['mine','My Game Record']] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)}
-              className={`px-3 py-2 text-xs font-bold rounded-t-lg ${tab === k ? 'bg-gradient-to-b from-[#4b1a5a] to-[#2a0e36] text-[#f5d060] border-t border-x border-[#f5d060]/30' : 'text-white/50'}`}>
+              className={`px-3 py-2 text-xs font-bold rounded-t-lg ${tab === k ? 'text-white shadow' : 'text-gray-500 bg-white/60'}`}
+              style={tab === k ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
               {label}
             </button>
           ))}
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-[#2a0e36] to-[#1a0a1f] p-2 border border-white/5">
+        <div className="rounded-xl p-2 shadow-md border border-red-100 bg-white">
           {tab === 'record' && (
             <table className="w-full text-xs">
-              <thead><tr className="text-[#f5d060]">
+              <thead><tr style={{ color: '#8B0000' }}>
                 <th className="py-2 text-left pl-2">Period</th><th>Number</th><th>Size</th><th className="pr-2">Color</th>
               </tr></thead>
               <tbody>
-                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-white/40">No data yet</td></tr>}
+                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No data yet</td></tr>}
                 {history.map((h) => (
-                  <tr key={h.id} className="border-t border-white/5">
-                    <td className="py-2.5 pl-2 text-white/80 text-[11px]">{h.period_id}</td>
+                  <tr key={h.id} className="border-t border-red-50">
+                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{h.period_id}</td>
                     <td className="text-center font-extrabold text-xl" style={{ color: h.number % 2 === 0 ? '#ef4444' : '#22c55e' }}>{h.number}</td>
-                    <td className="text-center text-white/70 capitalize">{h.size}</td>
+                    <td className="text-center text-gray-600 capitalize">{h.size}</td>
                     <td className="pr-2">
                       <div className="flex justify-center gap-0.5">
                         {numberMeta(h.number).colors.map((c) => (
@@ -482,21 +485,21 @@ export default function WinGo() {
             </table>
           )}
           {tab === 'chart' && (
-            <div className="p-4 text-center text-white/50 text-sm">Chart trends coming soon</div>
+            <div className="p-4 text-center text-gray-400 text-sm">Chart trends coming soon</div>
           )}
           {tab === 'mine' && (
             <table className="w-full text-xs">
-              <thead><tr className="text-[#f5d060]">
+              <thead><tr style={{ color: '#8B0000' }}>
                 <th className="py-2 text-left pl-2">Period</th><th>Pick</th><th>Amount</th><th className="pr-2">Result</th>
               </tr></thead>
               <tbody>
-                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-white/40">No bets yet</td></tr>}
+                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No bets yet</td></tr>}
                 {myBets.map((b) => (
-                  <tr key={b.id} className="border-t border-white/5">
-                    <td className="py-2.5 pl-2 text-white/80 text-[11px]">{b.period_id}</td>
-                    <td className="text-center capitalize">{b.selection_value}</td>
-                    <td className="text-center">₹{Number(b.amount).toFixed(2)}</td>
-                    <td className="pr-2 text-center font-bold" style={{ color: b.status === 'won' ? '#22c55e' : b.status === 'lost' ? '#ef4444' : '#fbbf24' }}>
+                  <tr key={b.id} className="border-t border-red-50">
+                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{b.period_id}</td>
+                    <td className="text-center capitalize text-gray-700">{b.selection_value}</td>
+                    <td className="text-center text-gray-700">₹{Number(b.amount).toFixed(2)}</td>
+                    <td className="pr-2 text-center font-bold" style={{ color: b.status === 'won' ? '#22c55e' : b.status === 'lost' ? '#ef4444' : '#f59e0b' }}>
                       {b.status === 'pending' ? '—' : b.status === 'won' ? `+₹${Number(b.payout).toFixed(2)}` : 'Lost'}
                     </td>
                   </tr>
