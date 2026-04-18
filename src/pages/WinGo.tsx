@@ -372,13 +372,13 @@ export default function WinGo() {
       </div>
 
       {/* ─── Period + Timer ─── */}
-      <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#4b1a5a] to-[#2a0e36] p-3">
+      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100" style={{ background: 'linear-gradient(135deg, #fff 0%, #fff5f5 100%)' }}>
         <div className="flex items-start justify-between">
           <div>
-            <button className="px-3 py-1 rounded-full bg-white/10 text-xs flex items-center gap-1">
+            <button className="px-3 py-1 rounded-full text-xs flex items-center gap-1 text-[#8B0000] bg-red-50 border border-red-100">
               <HelpCircle size={12} /> How to play
             </button>
-            <div className="text-xs text-white/80 mt-2">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
+            <div className="text-xs text-gray-600 mt-2 font-semibold">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
             <div className="flex gap-1 mt-1.5">
               {history.slice(0, 5).map((h) => (
                 <div key={h.id} className="w-6 h-6 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shadow" style={{ background: BALL_BG(h.number) }}>
@@ -388,15 +388,15 @@ export default function WinGo() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-white/70 mb-1">time of purchase</div>
+            <div className="text-xs text-gray-500 mb-1">time of purchase</div>
             <div className="flex gap-1 justify-end">
               {[mm[0], mm[1], ':', ss[0], ss[1]].map((c, i) => (
-                <div key={i} className={`${c === ':' ? 'w-2' : 'w-7'} h-9 rounded-md ${c === ':' ? '' : 'bg-white'} flex items-center justify-center text-[#1a0a1f] font-extrabold text-lg ${isClosing ? 'animate-pulse' : ''}`}>
+                <div key={i} className={`${c === ':' ? 'w-2 text-[#8B0000]' : 'w-7 shadow-sm'} h-9 rounded-md ${c === ':' ? '' : 'text-white'} flex items-center justify-center font-extrabold text-lg ${isClosing ? 'animate-pulse' : ''}`} style={c === ':' ? undefined : { background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
                   {c}
                 </div>
               ))}
             </div>
-            <div className="text-[#f5d060] font-extrabold text-sm mt-1">{periodId}</div>
+            <div className="font-extrabold text-sm mt-1" style={{ color: '#8B0000' }}>{periodId}</div>
           </div>
         </div>
       </div>
