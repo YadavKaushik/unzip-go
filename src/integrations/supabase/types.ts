@@ -235,6 +235,78 @@ export type Database = {
         }
         Relationships: []
       }
+      wingo_bets: {
+        Row: {
+          amount: number
+          created_at: string
+          duration_seconds: number
+          id: string
+          multiplier: number
+          payout: number
+          period_id: string
+          selection_type: string
+          selection_value: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          duration_seconds: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id: string
+          selection_type: string
+          selection_value: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id?: string
+          selection_type?: string
+          selection_value?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wingo_rounds: {
+        Row: {
+          color: string
+          created_at: string
+          duration_seconds: number
+          id: string
+          number: number
+          period_id: string
+          size: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          duration_seconds: number
+          id?: string
+          number: number
+          period_id: string
+          size: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          number?: number
+          period_id?: string
+          size?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
