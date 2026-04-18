@@ -452,25 +452,26 @@ export default function WinGo() {
         <div className="flex gap-1 mb-2">
           {([['record','Game Record'],['chart','Chart Trends'],['mine','My Game Record']] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)}
-              className={`px-3 py-2 text-xs font-bold rounded-t-lg ${tab === k ? 'bg-gradient-to-b from-[#4b1a5a] to-[#2a0e36] text-[#f5d060] border-t border-x border-[#f5d060]/30' : 'text-white/50'}`}>
+              className={`px-3 py-2 text-xs font-bold rounded-t-lg ${tab === k ? 'text-white shadow' : 'text-gray-500 bg-white/60'}`}
+              style={tab === k ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
               {label}
             </button>
           ))}
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-[#2a0e36] to-[#1a0a1f] p-2 border border-white/5">
+        <div className="rounded-xl p-2 shadow-md border border-red-100 bg-white">
           {tab === 'record' && (
             <table className="w-full text-xs">
-              <thead><tr className="text-[#f5d060]">
+              <thead><tr style={{ color: '#8B0000' }}>
                 <th className="py-2 text-left pl-2">Period</th><th>Number</th><th>Size</th><th className="pr-2">Color</th>
               </tr></thead>
               <tbody>
-                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-white/40">No data yet</td></tr>}
+                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No data yet</td></tr>}
                 {history.map((h) => (
-                  <tr key={h.id} className="border-t border-white/5">
-                    <td className="py-2.5 pl-2 text-white/80 text-[11px]">{h.period_id}</td>
+                  <tr key={h.id} className="border-t border-red-50">
+                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{h.period_id}</td>
                     <td className="text-center font-extrabold text-xl" style={{ color: h.number % 2 === 0 ? '#ef4444' : '#22c55e' }}>{h.number}</td>
-                    <td className="text-center text-white/70 capitalize">{h.size}</td>
+                    <td className="text-center text-gray-600 capitalize">{h.size}</td>
                     <td className="pr-2">
                       <div className="flex justify-center gap-0.5">
                         {numberMeta(h.number).colors.map((c) => (
@@ -484,21 +485,21 @@ export default function WinGo() {
             </table>
           )}
           {tab === 'chart' && (
-            <div className="p-4 text-center text-white/50 text-sm">Chart trends coming soon</div>
+            <div className="p-4 text-center text-gray-400 text-sm">Chart trends coming soon</div>
           )}
           {tab === 'mine' && (
             <table className="w-full text-xs">
-              <thead><tr className="text-[#f5d060]">
+              <thead><tr style={{ color: '#8B0000' }}>
                 <th className="py-2 text-left pl-2">Period</th><th>Pick</th><th>Amount</th><th className="pr-2">Result</th>
               </tr></thead>
               <tbody>
-                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-white/40">No bets yet</td></tr>}
+                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No bets yet</td></tr>}
                 {myBets.map((b) => (
-                  <tr key={b.id} className="border-t border-white/5">
-                    <td className="py-2.5 pl-2 text-white/80 text-[11px]">{b.period_id}</td>
-                    <td className="text-center capitalize">{b.selection_value}</td>
-                    <td className="text-center">₹{Number(b.amount).toFixed(2)}</td>
-                    <td className="pr-2 text-center font-bold" style={{ color: b.status === 'won' ? '#22c55e' : b.status === 'lost' ? '#ef4444' : '#fbbf24' }}>
+                  <tr key={b.id} className="border-t border-red-50">
+                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{b.period_id}</td>
+                    <td className="text-center capitalize text-gray-700">{b.selection_value}</td>
+                    <td className="text-center text-gray-700">₹{Number(b.amount).toFixed(2)}</td>
+                    <td className="pr-2 text-center font-bold" style={{ color: b.status === 'won' ? '#22c55e' : b.status === 'lost' ? '#ef4444' : '#f59e0b' }}>
                       {b.status === 'pending' ? '—' : b.status === 'won' ? `+₹${Number(b.payout).toFixed(2)}` : 'Lost'}
                     </td>
                   </tr>
