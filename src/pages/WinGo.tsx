@@ -366,8 +366,9 @@ export default function WinGo() {
         </div>
       </div>
 
+      <div className="flex-1 overflow-y-auto pb-28">
       {/* ─── Wallet ─── */}
-      <div className="mx-3 mt-2 rounded-2xl bg-gradient-to-br from-[#4b1a5a] to-[#2a0e36] p-4 shadow-lg">
+      <div className="mx-3 mt-2 rounded-2xl p-4 shadow-lg border border-[#f5d060]/30" style={{ background: 'linear-gradient(135deg,#4a0509 0%,#2a0509 100%)' }}>
         <div className="flex items-center justify-center gap-2 text-2xl font-extrabold text-[#f5d060]">
           ₹{balance.toFixed(2)}
           <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
