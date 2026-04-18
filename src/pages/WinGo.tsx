@@ -271,24 +271,104 @@ export default function WinGo() {
   const ss = pad(remaining % 60, 2);
   const isClosing = remaining <= 5;
 
+  // Status bar clock
+  const [clock, setClock] = useState(() => {
+    const d = new Date();
+    return `${pad(d.getHours(), 2)}:${pad(d.getMinutes(), 2)}`;
+  });
+  useEffect(() => {
+    const t = setInterval(() => {
+      const d = new Date();
+      setClock(`${pad(d.getHours(), 2)}:${pad(d.getMinutes(), 2)}`);
+    }, 15_000);
+    return () => clearInterval(t);
+  }, []);
+
+  const durationLabel = duration === 30 ? '30S' : duration === 60 ? '1MIN' : duration === 180 ? '3MIN' : '5MIN';
+
   return (
-    <div className="min-h-screen bg-[#1a0a1f] pb-24 text-white">
-      {/* ─── Header ─── */}
-      <div className="bg-gradient-to-b from-[#3a1244] to-[#1a0a1f] px-3 pt-3 pb-2 flex items-center justify-between">
-        <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center">
-          <ArrowLeft size={18} />
-        </button>
-        <div className="flex items-center gap-1.5 text-[#f5d060] font-extrabold text-lg">
-          <span>👑</span><span>RAJALUCK</span>
+    <div className="min-h-screen w-full text-white flex flex-col" style={{ background: 'linear-gradient(180deg,#1a0306 0%,#2a0509 40%,#1a0306 100%)' }}>
+      {/* ─── Status Bar ─── */}
+      <div className="w-full px-5 pt-2 pb-1 flex items-center justify-between text-[12px] font-semibold text-[#fde68a] bg-[#3d0a10]">
+        <span className="tabular-nums">{clock}</span>
+        <div className="flex-1 mx-3 h-5 flex items-center justify-center">
+          <div className="w-20 h-5 rounded-full bg-black/70" />
         </div>
-        <div className="flex items-center gap-2">
-          <button className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center"><Headphones size={16} /></button>
-          <button className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center"><Volume2 size={16} /></button>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px]">5G</span>
+          <div className="flex items-end gap-[1.5px] h-3">
+            <div className="w-[2px] h-1 bg-current rounded-sm" />
+            <div className="w-[2px] h-1.5 bg-current rounded-sm" />
+            <div className="w-[2px] h-2 bg-current rounded-sm" />
+            <div className="w-[2px] h-2.5 bg-current rounded-sm" />
+          </div>
+          <div className="ml-1 w-6 h-3 border border-current rounded-sm relative">
+            <div className="absolute inset-[1px] right-1 bg-current rounded-[1px]" />
+            <div className="absolute -right-[3px] top-[3px] w-[2px] h-[6px] bg-current rounded-r-sm" />
+          </div>
         </div>
       </div>
 
+      {/* ─── Premium Header ─── */}
+      <div
+        className="relative px-3 pt-3 pb-4 flex items-center justify-between border-b-2 border-[#f5d060]/60"
+        style={{
+          background:
+            'radial-gradient(circle at 20% 0%, rgba(245,208,96,0.18) 0%, transparent 55%), radial-gradient(circle at 80% 100%, rgba(245,208,96,0.15) 0%, transparent 55%), linear-gradient(135deg,#7a0a14 0%,#4a0509 50%,#7a0a14 100%)',
+          boxShadow: '0 4px 18px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(245,208,96,0.4)',
+        }}
+      >
+        {/* gold geometric pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.07] pointer-events-none"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(45deg, #f5d060 0 1px, transparent 1px 12px), repeating-linear-gradient(-45deg, #f5d060 0 1px, transparent 1px 12px)',
+          }}
+        />
+        <button
+          onClick={() => navigate(-1)}
+          className="relative w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/30 text-[#f5d060]"
+        >
+          <ArrowLeft size={18} />
+        </button>
+
+        <div className="relative flex items-center gap-2 px-2">
+          {/* left wing */}
+          <svg width="22" height="14" viewBox="0 0 22 14" fill="none" className="text-[#f5d060]">
+            <path d="M1 7 Q 6 1 12 4 Q 8 6 12 7 Q 8 8 12 10 Q 6 13 1 7 Z" stroke="currentColor" strokeWidth="1" fill="currentColor" fillOpacity="0.3" />
+          </svg>
+          <h1
+            className="font-serif font-black tracking-[0.18em] text-[20px] leading-none"
+            style={{
+              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 45%,#a87814 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              textShadow: '0 1px 0 rgba(0,0,0,0.4)',
+              filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5))',
+            }}
+          >
+            WINGO {durationLabel}
+          </h1>
+          {/* right wing (mirrored) */}
+          <svg width="22" height="14" viewBox="0 0 22 14" fill="none" className="text-[#f5d060] -scale-x-100">
+            <path d="M1 7 Q 6 1 12 4 Q 8 6 12 7 Q 8 8 12 10 Q 6 13 1 7 Z" stroke="currentColor" strokeWidth="1" fill="currentColor" fillOpacity="0.3" />
+          </svg>
+        </div>
+
+        <div className="relative flex items-center gap-2">
+          <button className="w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/30 text-[#f5d060]">
+            <Headphones size={16} />
+          </button>
+          <button className="w-9 h-9 rounded-full flex items-center justify-center border border-[#f5d060]/50 bg-black/30 text-[#f5d060]">
+            <Volume2 size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pb-28">
       {/* ─── Wallet ─── */}
-      <div className="mx-3 mt-2 rounded-2xl bg-gradient-to-br from-[#4b1a5a] to-[#2a0e36] p-4 shadow-lg">
+      <div className="mx-3 mt-2 rounded-2xl p-4 shadow-lg border border-[#f5d060]/30" style={{ background: 'linear-gradient(135deg,#4a0509 0%,#2a0509 100%)' }}>
         <div className="flex items-center justify-center gap-2 text-2xl font-extrabold text-[#f5d060]">
           ₹{balance.toFixed(2)}
           <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
@@ -465,8 +545,15 @@ export default function WinGo() {
           )}
         </div>
       </div>
+      {/* close scroll wrapper */}
+      </div>
 
       <BottomNav />
+
+      {/* ─── Home Gesture Indicator ─── */}
+      <div className="fixed bottom-0 left-0 right-0 flex justify-center pb-1.5 pt-2 pointer-events-none z-40">
+        <div className="w-32 h-1 rounded-full bg-[#f5d060]/80" />
+      </div>
 
       {/* ─── Bet modal ─── */}
       {draft && (
