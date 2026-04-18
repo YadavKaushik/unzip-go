@@ -509,12 +509,8 @@ export default function WinGo() {
       {/* close scroll wrapper */}
       </div>
 
-      <BottomNav />
 
-      {/* ─── Home Gesture Indicator ─── */}
-      <div className="fixed bottom-0 left-0 right-0 flex justify-center pb-1.5 pt-2 pointer-events-none z-40">
-        <div className="w-32 h-1 rounded-full bg-[#f5d060]/80" />
-      </div>
+
 
       {/* ─── Bet modal ─── */}
       {draft && (
