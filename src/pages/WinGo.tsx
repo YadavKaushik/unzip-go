@@ -357,12 +357,13 @@ export default function WinGo() {
             <button
               key={d}
               onClick={() => setDuration(d)}
-              className={`rounded-xl py-3 flex flex-col items-center justify-center transition ${active ? 'bg-gradient-to-br from-[#dc2626] to-[#7f1d1d] shadow-lg shadow-red-900/40' : 'bg-white/5'}`}
+              className={`rounded-xl py-3 flex flex-col items-center justify-center transition border ${active ? 'shadow-lg border-transparent' : 'bg-white border-red-100'}`}
+              style={active ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}
             >
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1 ${active ? 'bg-[#1a0a1f]' : 'bg-white/10'}`}>
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1 ${active ? 'bg-white/15' : 'bg-red-50'}`}>
                 <span className="text-lg">⏱️</span>
               </div>
-              <div className={`text-[10px] font-semibold leading-tight text-center ${active ? 'text-[#f5d060]' : 'text-white/70'}`}>
+              <div className={`text-[10px] font-semibold leading-tight text-center ${active ? 'text-[#f5d060]' : 'text-gray-700'}`}>
                 {label.split(' ').map((w, i) => <div key={i}>{w}</div>)}
               </div>
             </button>
