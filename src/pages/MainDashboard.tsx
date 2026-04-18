@@ -364,6 +364,10 @@ export default function MainDashboard() {
         navigate('/sign-up-login-screen');
         return;
       }
+      if (gameName === 'Win Go') {
+        navigate('/win-go');
+        return;
+      }
       navigate(`/game-screen?game=${encodeURIComponent(gameName)}`);
       return;
     }

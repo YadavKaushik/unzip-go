@@ -30,6 +30,7 @@ const Notifications = lazy(() => import("./pages/Notifications"));
 const GiftPage = lazy(() => import("./pages/GiftPage"));
 const GameStatistics = lazy(() => import("./pages/GameStatistics"));
 const LanguagePage = lazy(() => import("./pages/LanguagePage"));
+const WinGo = lazy(() => import("./pages/WinGo"));
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,7 @@ const App = () => {
                   <Route path="/language" element={<AuthGuard><LanguagePage /></AuthGuard>} />
                   <Route path="/activity-history" element={<AuthGuard><ActivityHistory /></AuthGuard>} />
                   <Route path="/promotions-detail" element={<AuthGuard><PromotionsDetail /></AuthGuard>} />
+                  <Route path="/win-go" element={<WinGo />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/reset-password" element={<ForgotPassword />} />
                   <Route path="*" element={<NotFound />} />
