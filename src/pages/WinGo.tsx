@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Headphones, Volume2, HelpCircle, X } from 'lucide-react';
 import { toast } from 'sonner';
-import BottomNav from '@/components/BottomNav';
+
 import { useAuth } from '@/hooks/useAuth';
 import { db as supabase } from '@/lib/db';
 
