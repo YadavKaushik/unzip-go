@@ -402,15 +402,15 @@ export default function WinGo() {
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="mx-3 mt-3 rounded-2xl bg-gradient-to-br from-[#2a0e36] to-[#1a0a1f] p-3 border border-white/5">
+      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
         {/* Colors */}
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
-            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
+            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
           <button onClick={() => openBet({ type: 'color', value: 'violet', label: 'Violet', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
+            className="py-3 rounded-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
           <button onClick={() => openBet({ type: 'color', value: 'red', label: 'Red', bg: 'linear-gradient(135deg,#ef4444,#b91c1c)' })}
-            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
+            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
         </div>
 
         {/* Numbers */}
@@ -428,10 +428,11 @@ export default function WinGo() {
         {/* Multipliers */}
         <div className="flex items-center gap-1.5 mt-3 overflow-x-auto scrollbar-hide">
           <button onClick={() => { setBase(1); setMult(1); toast.message('Random bet ready — pick a color/number'); }}
-            className="px-3 py-1.5 text-xs rounded-full border border-white/20 whitespace-nowrap">random bet</button>
+            className="px-3 py-1.5 text-xs rounded-full border border-red-200 text-[#8B0000] bg-red-50 whitespace-nowrap font-semibold">random bet</button>
           {MULTIPLIERS.map((m) => (
             <button key={m} onClick={() => setMult(m)}
-              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'bg-gradient-to-r from-[#fbbf24] to-[#f59e0b] text-[#1a0a1f]' : 'bg-white/5 text-white/70'}`}>
+              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'text-white shadow' : 'bg-gray-100 text-gray-600'}`}
+              style={mult === m ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
               X{m}
             </button>
           ))}
@@ -440,9 +441,9 @@ export default function WinGo() {
         {/* Big / Small */}
         <div className="grid grid-cols-2 gap-2 mt-3">
           <button onClick={() => openBet({ type: 'size', value: 'big', label: 'Big', bg: 'linear-gradient(135deg,#fbbf24,#f59e0b)' })}
-            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#1a0a1f]" style={{ background: 'linear-gradient(135deg,#fbbf24,#f59e0b)' }}>Big</button>
+            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#8B0000] shadow" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>Big</button>
           <button onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-r-full rounded-tl-full font-bold text-white" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
+            className="py-3 rounded-r-full rounded-tl-full font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
         </div>
       </div>
 
