@@ -271,44 +271,10 @@ export default function WinGo() {
   const ss = pad(remaining % 60, 2);
   const isClosing = remaining <= 5;
 
-  // Status bar clock
-  const [clock, setClock] = useState(() => {
-    const d = new Date();
-    return `${pad(d.getHours(), 2)}:${pad(d.getMinutes(), 2)}`;
-  });
-  useEffect(() => {
-    const t = setInterval(() => {
-      const d = new Date();
-      setClock(`${pad(d.getHours(), 2)}:${pad(d.getMinutes(), 2)}`);
-    }, 15_000);
-    return () => clearInterval(t);
-  }, []);
-
   const durationLabel = duration === 30 ? '30S' : duration === 60 ? '1MIN' : duration === 180 ? '3MIN' : '5MIN';
 
   return (
     <div className="min-h-screen w-full text-white flex flex-col" style={{ background: 'linear-gradient(180deg,#1a0306 0%,#2a0509 40%,#1a0306 100%)' }}>
-      {/* ─── Status Bar ─── */}
-      <div className="w-full px-5 pt-2 pb-1 flex items-center justify-between text-[12px] font-semibold text-[#fde68a] bg-[#3d0a10]">
-        <span className="tabular-nums">{clock}</span>
-        <div className="flex-1 mx-3 h-5 flex items-center justify-center">
-          <div className="w-20 h-5 rounded-full bg-black/70" />
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px]">5G</span>
-          <div className="flex items-end gap-[1.5px] h-3">
-            <div className="w-[2px] h-1 bg-current rounded-sm" />
-            <div className="w-[2px] h-1.5 bg-current rounded-sm" />
-            <div className="w-[2px] h-2 bg-current rounded-sm" />
-            <div className="w-[2px] h-2.5 bg-current rounded-sm" />
-          </div>
-          <div className="ml-1 w-6 h-3 border border-current rounded-sm relative">
-            <div className="absolute inset-[1px] right-1 bg-current rounded-[1px]" />
-            <div className="absolute -right-[3px] top-[3px] w-[2px] h-[6px] bg-current rounded-r-sm" />
-          </div>
-        </div>
-      </div>
-
       {/* ─── Premium Header ─── */}
       <div
         className="relative px-3 pt-3 pb-4 flex items-center justify-between border-b-2 border-[#f5d060]/60"
