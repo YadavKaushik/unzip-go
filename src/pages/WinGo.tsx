@@ -284,8 +284,25 @@ export default function WinGo() {
 
   const durationLabel = duration === 30 ? '30S' : duration === 60 ? '1MIN' : duration === 180 ? '3MIN' : '5MIN';
 
+  // ── Premium Cream + Gold theme tokens ──
+  const CREAM_BG =
+    'radial-gradient(circle at 12% 8%, rgba(245,208,96,0.18) 0%, transparent 45%),' +
+    'radial-gradient(circle at 88% 92%, rgba(168,120,20,0.12) 0%, transparent 50%),' +
+    'repeating-linear-gradient(45deg, rgba(168,120,20,0.05) 0 1px, transparent 1px 14px),' +
+    'repeating-linear-gradient(-45deg, rgba(168,120,20,0.05) 0 1px, transparent 1px 14px),' +
+    'linear-gradient(160deg, #fbf3df 0%, #f5e7c1 50%, #ecd9a3 100%)';
+  const GOLD_TEXT: React.CSSProperties = {
+    background: 'linear-gradient(180deg,#fff4c2 0%,#e7c25c 45%,#8a6612 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 1px 1px rgba(120,80,10,0.35))',
+  };
+  const CARD_BORDER = '1px solid rgba(168,120,20,0.45)';
+  const CARD_SHADOW =
+    '0 6px 18px rgba(120,80,10,0.18), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(168,120,20,0.25)';
+
   return (
-    <div className="min-h-screen w-full text-foreground flex flex-col" style={{ background: '#f5f5f5' }}>
+    <div className="min-h-screen w-full text-foreground flex flex-col" style={{ background: 'linear-gradient(180deg,#1a0606 0%,#2a0a0a 100%)' }}>
       {/* ─── Premium Header ─── */}
       <div
         className="relative px-3 pt-3 pb-4 flex items-center justify-between border-b-2 border-[#f5d060]/60"
