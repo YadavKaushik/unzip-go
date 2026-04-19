@@ -96,6 +96,7 @@ export default function WinGo() {
   const [showHowTo, setShowHowTo] = useState(false);
 
   const lastSettledPeriod = useRef<string>('');
+  const [resultBanner, setResultBanner] = useState<null | { won: boolean; amount: number; number: number; color: string }>(null);
 
   // Tick every 250ms for smooth countdown
   useEffect(() => {
@@ -197,7 +198,9 @@ export default function WinGo() {
           if (totalPayout > 0) {
             const newBal = balance + totalPayout;
             await supabase.from('wallets').update({ balance: newBal }).eq('user_id', user.id);
-            toast.success(`🎉 You won ₹${totalPayout.toFixed(2)}!`);
+            setResultBanner({ won: true, amount: totalPayout, number: r.number, color: r.color });
+          } else {
+            setResultBanner({ won: false, amount: 0, number: r.number, color: r.color });
           }
         }
       }
@@ -205,6 +208,13 @@ export default function WinGo() {
       setTimeout(() => { loadHistory(); loadMyBets(); loadBalance(); }, 2000);
     })();
   }, [remaining, duration, user, balance, loadHistory, loadMyBets, loadBalance]);
+
+  // Auto-dismiss result banner after 4s
+  useEffect(() => {
+    if (!resultBanner) return;
+    const t = setTimeout(() => setResultBanner(null), 4000);
+    return () => clearTimeout(t);
+  }, [resultBanner]);
 
   // Open bet modal
   const openBet = (d: BetDraft) => {
@@ -389,15 +399,31 @@ export default function WinGo() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 mb-1">time of purchase</div>
-            <div className="flex gap-1 justify-end">
-              {[mm[0], mm[1], ':', ss[0], ss[1]].map((c, i) => (
-                <div key={i} className={`${c === ':' ? 'w-2 text-[#8B0000]' : 'w-7 shadow-sm'} h-9 rounded-md ${c === ':' ? '' : 'text-white'} flex items-center justify-center font-extrabold text-lg ${isClosing ? 'animate-pulse' : ''}`} style={c === ':' ? undefined : { background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
-                  {c}
-                </div>
-              ))}
+            <div className="text-[10px] text-gray-500 mb-1 tracking-widest">TIME OF PURCHASE</div>
+            <div
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md"
+              style={{
+                background: 'linear-gradient(180deg, #1a0000 0%, #2a0505 100%)',
+                border: '1.5px solid #f5d060',
+                boxShadow: isClosing
+                  ? '0 0 14px rgba(245,208,96,0.65), inset 0 0 8px rgba(200,16,46,0.5)'
+                  : '0 2px 8px rgba(0,0,0,0.35), inset 0 0 6px rgba(245,208,96,0.18)',
+              }}
+            >
+              <span
+                className={`font-mono font-black text-2xl leading-none tracking-[0.08em] ${isClosing ? 'animate-pulse' : ''}`}
+                style={{
+                  fontFamily: '"DS-Digital","Share Tech Mono","Orbitron",ui-monospace,monospace',
+                  color: isClosing ? '#ff6b6b' : '#f5d060',
+                  textShadow: isClosing
+                    ? '0 0 8px rgba(255,80,80,0.9), 0 0 14px rgba(200,16,46,0.7)'
+                    : '0 0 6px rgba(245,208,96,0.85), 0 0 12px rgba(245,208,96,0.4)',
+                }}
+              >
+                {mm}:{ss}
+              </span>
             </div>
-            <div className="font-extrabold text-sm mt-1" style={{ color: '#8B0000' }}>{periodId}</div>
+            <div className="font-extrabold text-sm mt-1.5" style={{ color: '#8B0000' }}>{periodId}</div>
           </div>
         </div>
       </div>
@@ -631,6 +657,146 @@ export default function WinGo() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ─── 5-Second Freeze Overlay ─── */}
+      {isClosing && remaining > 0 && (
+        <div
+          className="fixed inset-0 z-[70] flex flex-col items-center justify-center pointer-events-auto"
+          style={{
+            background: 'rgba(15,0,0,0.55)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+          }}
+        >
+          <div
+            key={remaining}
+            className="font-black leading-none animate-[ping_1s_ease-out]"
+            style={{
+              fontSize: '160px',
+              fontFamily: '"DS-Digital","Orbitron",ui-monospace,monospace',
+              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 45%,#a87814 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 0 24px rgba(245,208,96,0.85)) drop-shadow(0 0 40px rgba(200,16,46,0.6))',
+            }}
+          >
+            {remaining}
+          </div>
+          <div
+            className="mt-4 text-lg font-bold tracking-[0.25em] uppercase"
+            style={{
+              color: '#f5d060',
+              textShadow: '0 0 12px rgba(245,208,96,0.7)',
+            }}
+          >
+            Wait for the draw...
+          </div>
+        </div>
+      )}
+
+      {/* ─── Win / Loss Result Banner ─── */}
+      {resultBanner && (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center p-6"
+          style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)' }}
+          onClick={() => setResultBanner(null)}
+        >
+          {resultBanner.won ? (
+            <div
+              className="relative w-full max-w-sm rounded-3xl overflow-hidden text-center px-6 py-8 border-2 border-[#f5d060]"
+              style={{
+                background: 'linear-gradient(180deg,#8B0000 0%,#C8102E 60%,#8B0000 100%)',
+                boxShadow: '0 0 40px rgba(245,208,96,0.45), 0 20px 60px rgba(0,0,0,0.5)',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Confetti dots */}
+              {Array.from({ length: 18 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-sm animate-bounce"
+                  style={{
+                    left: `${(i * 53) % 100}%`,
+                    top: `${(i * 37) % 80}%`,
+                    background: i % 3 === 0 ? '#f5d060' : i % 3 === 1 ? '#fff4c2' : '#ffeb99',
+                    animationDelay: `${(i % 6) * 0.15}s`,
+                    animationDuration: `${1 + (i % 4) * 0.3}s`,
+                  }}
+                />
+              ))}
+              <div
+                className="text-3xl font-black tracking-wide mb-2"
+                style={{
+                  background: 'linear-gradient(180deg,#fff4c2,#f5d060,#a87814)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))',
+                }}
+              >
+                🎉 Congratulations!
+              </div>
+              <div className="text-white/90 text-sm mb-4">You won this round</div>
+              <div
+                className="text-5xl font-black mb-4"
+                style={{
+                  color: '#f5d060',
+                  textShadow: '0 0 16px rgba(245,208,96,0.8)',
+                }}
+              >
+                +₹{resultBanner.amount.toFixed(2)}
+              </div>
+              <div className="flex items-center justify-center gap-2 text-white/80 text-xs">
+                <span>Result:</span>
+                <div
+                  className="w-7 h-7 rounded-full text-white font-extrabold flex items-center justify-center"
+                  style={{ background: BALL_BG(resultBanner.number) }}
+                >
+                  {resultBanner.number}
+                </div>
+                <span className="capitalize">{resultBanner.color}</span>
+              </div>
+              <button
+                onClick={() => setResultBanner(null)}
+                className="mt-5 w-full py-3 rounded-xl font-extrabold text-[#8B0000]"
+                style={{ background: 'linear-gradient(180deg,#fff4c2,#f5d060,#e0b840)' }}
+              >
+                Collect
+              </button>
+            </div>
+          ) : (
+            <div
+              className="w-full max-w-sm rounded-3xl overflow-hidden text-center px-6 py-7 bg-white border border-red-100"
+              style={{ boxShadow: '0 20px 60px rgba(139,0,0,0.3)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-2xl font-black mb-2" style={{ color: '#8B0000' }}>
+                Better Luck Next Time
+              </div>
+              <div className="text-gray-500 text-sm mb-5">The result for this round is</div>
+              <div className="flex flex-col items-center gap-3 mb-5">
+                <div
+                  className="w-20 h-20 rounded-full text-white text-4xl font-black flex items-center justify-center shadow-lg"
+                  style={{ background: BALL_BG(resultBanner.number) }}
+                >
+                  {resultBanner.number}
+                </div>
+                <div className="text-sm capitalize text-gray-700">
+                  <span className="font-bold" style={{ color: '#C8102E' }}>{resultBanner.color}</span>
+                  {' • '}
+                  {resultBanner.number >= 5 ? 'Big' : 'Small'}
+                </div>
+              </div>
+              <button
+                onClick={() => setResultBanner(null)}
+                className="w-full py-3 rounded-xl font-extrabold text-white"
+                style={{ background: 'linear-gradient(180deg,#C8102E,#8B0000)', border: '1px solid #f5d060' }}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
