@@ -284,25 +284,8 @@ export default function WinGo() {
 
   const durationLabel = duration === 30 ? '30S' : duration === 60 ? '1MIN' : duration === 180 ? '3MIN' : '5MIN';
 
-  // ── Premium Cream + Gold theme tokens ──
-  const CREAM_BG =
-    'radial-gradient(circle at 12% 8%, rgba(245,208,96,0.18) 0%, transparent 45%),' +
-    'radial-gradient(circle at 88% 92%, rgba(168,120,20,0.12) 0%, transparent 50%),' +
-    'repeating-linear-gradient(45deg, rgba(168,120,20,0.05) 0 1px, transparent 1px 14px),' +
-    'repeating-linear-gradient(-45deg, rgba(168,120,20,0.05) 0 1px, transparent 1px 14px),' +
-    'linear-gradient(160deg, #fbf3df 0%, #f5e7c1 50%, #ecd9a3 100%)';
-  const GOLD_TEXT: React.CSSProperties = {
-    background: 'linear-gradient(180deg,#fff4c2 0%,#e7c25c 45%,#8a6612 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 1px 1px rgba(120,80,10,0.35))',
-  };
-  const CARD_BORDER = '1px solid rgba(168,120,20,0.45)';
-  const CARD_SHADOW =
-    '0 6px 18px rgba(120,80,10,0.18), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(168,120,20,0.25)';
-
   return (
-    <div className="min-h-screen w-full text-foreground flex flex-col" style={{ background: 'linear-gradient(180deg,#1a0606 0%,#2a0a0a 100%)' }}>
+    <div className="min-h-screen w-full text-foreground flex flex-col" style={{ background: '#f5f5f5' }}>
       {/* ─── Premium Header ─── */}
       <div
         className="relative px-3 pt-3 pb-4 flex items-center justify-between border-b-2 border-[#f5d060]/60"
@@ -357,21 +340,21 @@ export default function WinGo() {
 
       <div className="flex-1 overflow-y-auto pb-8">
       {/* ─── Wallet ─── */}
-      <div className="mx-3 mt-3 rounded-2xl p-4" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
-        <div className="flex items-center justify-center gap-2 text-2xl font-serif font-extrabold" style={GOLD_TEXT}>
+      <div className="mx-3 mt-3 rounded-2xl p-4 shadow-md border border-red-100 bg-white">
+        <div className="flex items-center justify-center gap-2 text-2xl font-extrabold" style={{ color: '#8B0000' }}>
           ₹{balance.toFixed(2)}
-          <button onClick={loadBalance} className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(168,120,20,0.12)', border: '1px solid rgba(168,120,20,0.4)' }}>
-            <RefreshCw size={13} style={{ color: '#a87814' }} />
+          <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center">
+            <RefreshCw size={13} className="text-red-700" />
           </button>
         </div>
-        <div className="text-center text-[11px] mt-1 flex items-center justify-center gap-1 font-serif tracking-wide" style={{ color: '#8a6612' }}>
+        <div className="text-center text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
           <span>💳</span> wallet balance
         </div>
         <div className="grid grid-cols-2 gap-3 mt-3">
-          <button onClick={() => navigate('/withdraw')} className="py-2.5 rounded-full font-bold text-white" style={{ background: 'linear-gradient(135deg, #C8102E, #6b0808)', border: '1px solid #f5d060', boxShadow: '0 2px 8px rgba(120,10,10,0.4), inset 0 1px 0 rgba(255,255,255,0.25)' }}>
+          <button onClick={() => navigate('/withdraw')} className="py-2.5 rounded-full font-bold text-white" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
             Withdraw
           </button>
-          <button onClick={() => navigate('/deposit')} className="py-2.5 rounded-full font-bold" style={{ background: 'linear-gradient(180deg,#fff4c2 0%,#e7c25c 50%,#a87814 100%)', color: '#5b3a06', border: '1px solid #8a6612', boxShadow: '0 2px 8px rgba(168,120,20,0.4), inset 0 1px 0 rgba(255,255,255,0.6)' }}>
+          <button onClick={() => navigate('/deposit')} className="py-2.5 rounded-full font-bold text-[#8B0000]" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>
             Deposit
           </button>
         </div>
@@ -385,16 +368,13 @@ export default function WinGo() {
             <button
               key={d}
               onClick={() => setDuration(d)}
-              className="rounded-xl py-3 flex flex-col items-center justify-center transition"
-              style={active
-                ? { background: 'linear-gradient(135deg, #C8102E, #6b0808)', border: '1px solid #f5d060', boxShadow: '0 4px 12px rgba(120,10,10,0.45), inset 0 1px 0 rgba(255,255,255,0.2)' }
-                : { background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }
-              }
+              className={`rounded-xl py-3 flex flex-col items-center justify-center transition border ${active ? 'shadow-lg border-transparent' : 'bg-white border-red-100'}`}
+              style={active ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}
             >
-              <div className="w-9 h-9 rounded-full flex items-center justify-center mb-1" style={active ? { background: 'rgba(245,208,96,0.2)', border: '1px solid rgba(245,208,96,0.5)' } : { background: 'rgba(168,120,20,0.1)', border: '1px solid rgba(168,120,20,0.3)' }}>
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1 ${active ? 'bg-white/15' : 'bg-red-50'}`}>
                 <span className="text-lg">⏱️</span>
               </div>
-              <div className={`text-[10px] font-bold font-serif leading-tight text-center`} style={active ? { color: '#f5d060', textShadow: '0 1px 2px rgba(0,0,0,0.4)' } : { ...GOLD_TEXT }}>
+              <div className={`text-[10px] font-semibold leading-tight text-center ${active ? 'text-[#f5d060]' : 'text-gray-700'}`}>
                 {label.split(' ').map((w, i) => <div key={i}>{w}</div>)}
               </div>
             </button>
@@ -403,35 +383,31 @@ export default function WinGo() {
       </div>
 
       {/* ─── Period + Timer ─── */}
-      <div className="mx-3 mt-3 rounded-2xl p-3" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
+      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100" style={{ background: 'linear-gradient(135deg, #fff 0%, #fff5f5 100%)' }}>
         <div className="flex items-start justify-between">
           <div>
-            <button
-              onClick={() => setShowHowTo(true)}
-              className="px-3 py-1 rounded-full text-xs flex items-center gap-1 font-serif font-bold"
-              style={{ background: 'linear-gradient(180deg,rgba(255,244,194,0.7),rgba(231,194,92,0.4))', border: '1px solid rgba(168,120,20,0.5)', ...GOLD_TEXT }}
-            >
-              <HelpCircle size={12} style={{ color: '#a87814' }} /> How to play
+            <button onClick={() => setShowHowTo(true)} className="px-3 py-1 rounded-full text-xs flex items-center gap-1 text-[#8B0000] bg-red-50 border border-red-100">
+              <HelpCircle size={12} /> How to play
             </button>
-            <div className="text-xs mt-2 font-serif font-bold" style={GOLD_TEXT}>Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
+            <div className="text-xs text-gray-600 mt-2 font-semibold">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
             <div className="flex gap-1 mt-1.5">
               {history.slice(0, 5).map((h) => (
-                <div key={h.id} className="w-6 h-6 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center" style={{ background: BALL_BG(h.number), boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(168,120,20,0.6)' }}>
+                <div key={h.id} className="w-6 h-6 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shadow" style={{ background: BALL_BG(h.number) }}>
                   {h.number}
                 </div>
               ))}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-[10px] mb-1 tracking-[0.2em] font-serif font-bold" style={GOLD_TEXT}>TIME OF PURCHASE</div>
+            <div className="text-[10px] text-gray-500 mb-1 tracking-widest">TIME OF PURCHASE</div>
             <div
               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md"
               style={{
-                background: 'linear-gradient(180deg, #2a0606 0%, #4a0a0a 50%, #2a0606 100%)',
-                border: '1.5px solid #c89a3a',
+                background: 'linear-gradient(180deg, #1a0000 0%, #2a0505 100%)',
+                border: '1.5px solid #f5d060',
                 boxShadow: isClosing
-                  ? '0 0 14px rgba(245,208,96,0.65), inset 0 0 8px rgba(200,16,46,0.5), inset 0 0 0 1px rgba(255,244,194,0.2)'
-                  : '0 2px 8px rgba(0,0,0,0.4), inset 0 0 8px rgba(245,208,96,0.25), inset 0 0 0 1px rgba(255,244,194,0.2)',
+                  ? '0 0 14px rgba(245,208,96,0.65), inset 0 0 8px rgba(200,16,46,0.5)'
+                  : '0 2px 8px rgba(0,0,0,0.35), inset 0 0 6px rgba(245,208,96,0.18)',
               }}
             >
               <span
@@ -447,21 +423,21 @@ export default function WinGo() {
                 {mm}:{ss}
               </span>
             </div>
-            <div className="font-serif font-extrabold text-sm mt-1.5" style={GOLD_TEXT}>{periodId}</div>
+            <div className="font-extrabold text-sm mt-1.5" style={{ color: '#8B0000' }}>{periodId}</div>
           </div>
         </div>
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="relative mx-3 mt-3 rounded-2xl p-3" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
+      <div className="relative mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
         {/* Colors */}
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
-            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#34d57a,#0e7a36)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(15,80,30,0.45)' }}>Green</button>
+            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
           <button onClick={() => openBet({ type: 'color', value: 'violet', label: 'Violet', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#b97cff,#5e1ab5)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(70,20,130,0.45)' }}>Violet</button>
+            className="py-3 rounded-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
           <button onClick={() => openBet({ type: 'color', value: 'red', label: 'Red', bg: 'linear-gradient(135deg,#ef4444,#b91c1c)' })}
-            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#ff5e5e,#7a0d0d)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(120,10,10,0.45)' }}>Red</button>
+            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
         </div>
 
         {/* Numbers */}
@@ -469,14 +445,8 @@ export default function WinGo() {
           {Array.from({ length: 10 }).map((_, n) => (
             <button key={n}
               onClick={() => openBet({ type: 'number', value: String(n), label: String(n), bg: BALL_BG(n) })}
-              className="aspect-square rounded-full text-xl font-black flex items-center justify-center"
-              style={{
-                background: `radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55) 0%, transparent 35%), ${BALL_BG(n)}`,
-                border: '1.5px solid #c89a3a',
-                boxShadow: 'inset 0 -3px 6px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.3), 0 3px 8px rgba(0,0,0,0.35), 0 0 0 2px rgba(255,244,194,0.25)',
-                color: '#fff4c2',
-                textShadow: '0 1px 2px rgba(0,0,0,0.6)',
-              }}>
+              className="aspect-square rounded-full text-white text-xl font-extrabold shadow-md flex items-center justify-center"
+              style={{ background: BALL_BG(n) }}>
               {n}
             </button>
           ))}
@@ -485,14 +455,11 @@ export default function WinGo() {
         {/* Multipliers */}
         <div className="flex items-center gap-1.5 mt-3 overflow-x-auto scrollbar-hide">
           <button onClick={() => { setBase(1); setMult(1); toast.message('Random bet ready — pick a color/number'); }}
-            className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap font-serif font-bold"
-            style={{ background: 'linear-gradient(180deg,#fbf3df,#ecd9a3)', border: '1px solid rgba(168,120,20,0.55)', ...GOLD_TEXT }}>random bet</button>
+            className="px-3 py-1.5 text-xs rounded-full border border-red-200 text-[#8B0000] bg-red-50 whitespace-nowrap font-semibold">random bet</button>
           {MULTIPLIERS.map((m) => (
             <button key={m} onClick={() => setMult(m)}
-              className="px-3 py-1.5 text-xs rounded-md font-bold font-serif whitespace-nowrap"
-              style={mult === m
-                ? { background: 'linear-gradient(135deg, #C8102E, #6b0808)', color: '#f5d060', border: '1px solid #f5d060', boxShadow: '0 2px 6px rgba(120,10,10,0.4)' }
-                : { background: 'linear-gradient(180deg,#fbf3df,#ecd9a3)', border: '1px solid rgba(168,120,20,0.45)', ...GOLD_TEXT }}>
+              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'text-white shadow' : 'bg-gray-100 text-gray-600'}`}
+              style={mult === m ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
               X{m}
             </button>
           ))}
@@ -501,11 +468,9 @@ export default function WinGo() {
         {/* Big / Small */}
         <div className="grid grid-cols-2 gap-2 mt-3">
           <button onClick={() => openBet({ type: 'size', value: 'big', label: 'Big', bg: 'linear-gradient(135deg,#fbbf24,#f59e0b)' })}
-            className="py-3 rounded-l-full rounded-tr-full font-bold font-serif"
-            style={{ background: 'linear-gradient(180deg,#fff4c2 0%,#e7c25c 50%,#a87814 100%)', color: '#5b3a06', border: '1.5px solid #8a6612', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.5), 0 3px 8px rgba(168,120,20,0.4)' }}>Big</button>
+            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#8B0000] shadow" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>Big</button>
           <button onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-r-full rounded-tl-full font-bold font-serif text-white"
-            style={{ background: 'linear-gradient(135deg,#b97cff,#5e1ab5)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(70,20,130,0.45)' }}>Small</button>
+            className="py-3 rounded-r-full rounded-tl-full font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
         </div>
 
         {/* ─── Local Freeze Overlay (covers betting panel only) ─── */}
@@ -547,35 +512,30 @@ export default function WinGo() {
         <div className="flex gap-1 mb-2">
           {([['record','Game Record'],['chart','Chart Trends'],['mine','My Game Record']] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)}
-              className="px-3 py-2 text-xs font-bold font-serif rounded-t-lg"
-              style={tab === k
-                ? { background: 'linear-gradient(180deg, #6b0808 0%, #C8102E 100%)', color: '#f5d060', border: '1px solid #f5d060', borderBottom: 'none', boxShadow: '0 -2px 6px rgba(120,10,10,0.35), inset 0 1px 0 rgba(255,244,194,0.3)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }
-                : { background: 'linear-gradient(180deg,#fbf3df,#ecd9a3)', border: '1px solid rgba(168,120,20,0.45)', borderBottom: 'none', ...GOLD_TEXT }}>
+              className={`px-3 py-2 text-xs font-bold rounded-t-lg ${tab === k ? 'text-white shadow' : 'text-gray-500 bg-white/60'}`}
+              style={tab === k ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
               {label}
             </button>
           ))}
         </div>
 
-        <div className="rounded-xl p-2" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
+        <div className="rounded-xl p-2 shadow-md border border-red-100 bg-white">
           {tab === 'record' && (
             <table className="w-full text-xs">
-              <thead><tr className="font-serif">
-                <th className="py-2 text-left pl-2" style={GOLD_TEXT}>Period</th>
-                <th style={GOLD_TEXT}>Number</th>
-                <th style={GOLD_TEXT}>Size</th>
-                <th className="pr-2" style={GOLD_TEXT}>Color</th>
+              <thead><tr style={{ color: '#8B0000' }}>
+                <th className="py-2 text-left pl-2">Period</th><th>Number</th><th>Size</th><th className="pr-2">Color</th>
               </tr></thead>
               <tbody>
-                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center font-serif italic" style={GOLD_TEXT}>No data yet</td></tr>}
+                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No data yet</td></tr>}
                 {history.map((h) => (
-                  <tr key={h.id} style={{ borderTop: '1px solid rgba(168,120,20,0.25)' }}>
-                    <td className="py-2.5 pl-2 text-[11px] font-serif" style={{ color: '#7a5a14' }}>{h.period_id}</td>
-                    <td className="text-center font-extrabold text-xl" style={{ color: h.number % 2 === 0 ? '#b91c1c' : '#0e7a36', textShadow: '0 1px 0 rgba(255,255,255,0.6)' }}>{h.number}</td>
-                    <td className="text-center capitalize font-serif" style={{ color: '#7a5a14' }}>{h.size}</td>
+                  <tr key={h.id} className="border-t border-red-50">
+                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{h.period_id}</td>
+                    <td className="text-center font-extrabold text-xl" style={{ color: h.number % 2 === 0 ? '#ef4444' : '#22c55e' }}>{h.number}</td>
+                    <td className="text-center text-gray-600 capitalize">{h.size}</td>
                     <td className="pr-2">
                       <div className="flex justify-center gap-0.5">
                         {numberMeta(h.number).colors.map((c) => (
-                          <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c === 'red' ? '#ef4444' : c === 'green' ? '#22c55e' : '#a855f7', boxShadow: '0 0 0 1px rgba(168,120,20,0.5)' }} />
+                          <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c === 'red' ? '#ef4444' : c === 'green' ? '#22c55e' : '#a855f7' }} />
                         ))}
                       </div>
                     </td>
@@ -585,24 +545,21 @@ export default function WinGo() {
             </table>
           )}
           {tab === 'chart' && (
-            <div className="p-4 text-center font-serif italic" style={GOLD_TEXT}>Chart trends coming soon</div>
+            <div className="p-4 text-center text-gray-400 text-sm">Chart trends coming soon</div>
           )}
           {tab === 'mine' && (
             <table className="w-full text-xs">
-              <thead><tr className="font-serif">
-                <th className="py-2 text-left pl-2" style={GOLD_TEXT}>Period</th>
-                <th style={GOLD_TEXT}>Pick</th>
-                <th style={GOLD_TEXT}>Amount</th>
-                <th className="pr-2" style={GOLD_TEXT}>Result</th>
+              <thead><tr style={{ color: '#8B0000' }}>
+                <th className="py-2 text-left pl-2">Period</th><th>Pick</th><th>Amount</th><th className="pr-2">Result</th>
               </tr></thead>
               <tbody>
-                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center font-serif italic" style={GOLD_TEXT}>No bets yet</td></tr>}
+                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No bets yet</td></tr>}
                 {myBets.map((b) => (
-                  <tr key={b.id} style={{ borderTop: '1px solid rgba(168,120,20,0.25)' }}>
-                    <td className="py-2.5 pl-2 text-[11px] font-serif" style={{ color: '#7a5a14' }}>{b.period_id}</td>
-                    <td className="text-center capitalize font-serif" style={{ color: '#7a5a14' }}>{b.selection_value}</td>
-                    <td className="text-center font-serif" style={{ color: '#7a5a14' }}>₹{Number(b.amount).toFixed(2)}</td>
-                    <td className="pr-2 text-center font-bold font-serif" style={{ color: b.status === 'won' ? '#0e7a36' : b.status === 'lost' ? '#b91c1c' : '#a87814' }}>
+                  <tr key={b.id} className="border-t border-red-50">
+                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{b.period_id}</td>
+                    <td className="text-center capitalize text-gray-700">{b.selection_value}</td>
+                    <td className="text-center text-gray-700">₹{Number(b.amount).toFixed(2)}</td>
+                    <td className="pr-2 text-center font-bold" style={{ color: b.status === 'won' ? '#22c55e' : b.status === 'lost' ? '#ef4444' : '#f59e0b' }}>
                       {b.status === 'pending' ? '—' : b.status === 'won' ? `+₹${Number(b.payout).toFixed(2)}` : 'Lost'}
                     </td>
                   </tr>
