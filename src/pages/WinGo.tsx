@@ -198,7 +198,9 @@ export default function WinGo() {
           if (totalPayout > 0) {
             const newBal = balance + totalPayout;
             await supabase.from('wallets').update({ balance: newBal }).eq('user_id', user.id);
-            toast.success(`🎉 You won ₹${totalPayout.toFixed(2)}!`);
+            setResultBanner({ won: true, amount: totalPayout, number: r.number, color: r.color });
+          } else {
+            setResultBanner({ won: false, amount: 0, number: r.number, color: r.color });
           }
         }
       }
@@ -206,6 +208,13 @@ export default function WinGo() {
       setTimeout(() => { loadHistory(); loadMyBets(); loadBalance(); }, 2000);
     })();
   }, [remaining, duration, user, balance, loadHistory, loadMyBets, loadBalance]);
+
+  // Auto-dismiss result banner after 4s
+  useEffect(() => {
+    if (!resultBanner) return;
+    const t = setTimeout(() => setResultBanner(null), 4000);
+    return () => clearTimeout(t);
+  }, [resultBanner]);
 
   // Open bet modal
   const openBet = (d: BetDraft) => {
