@@ -573,22 +573,25 @@ export default function WinGo() {
         </div>
       )}
 
-      {/* ─── How to Play Modal ─── */}
+      {/* ─── How to Play Modal (Light Red Theme) ─── */}
       {showHowTo && (
         <div
           className="fixed inset-0 z-[60] flex items-center justify-center p-5"
-          style={{ background: 'rgba(20,5,30,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
+          style={{ background: 'rgba(60,0,0,0.35)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
           onClick={() => setShowHowTo(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl border border-[#f5d060]/30"
-            style={{ background: 'linear-gradient(180deg,#3d1a5b 0%,#2a1140 100%)' }}
+            className="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl border border-[#e5b85a]/50"
+            style={{ background: '#ffffff', boxShadow: '0 20px 50px rgba(139,0,0,0.25)' }}
           >
             {/* Header */}
             <div
-              className="px-5 py-3 text-center"
-              style={{ background: 'linear-gradient(180deg,#1f0c33 0%,#2a1140 100%)', borderBottom: '1px solid rgba(245,208,96,0.25)' }}
+              className="px-5 py-3 text-center relative"
+              style={{
+                background: 'linear-gradient(180deg,#8B0000 0%,#C8102E 100%)',
+                borderBottom: '2px solid #f5d060',
+              }}
             >
               <h2
                 className="font-extrabold text-lg tracking-wide"
@@ -603,22 +606,26 @@ export default function WinGo() {
             </div>
 
             {/* Content */}
-            <div className="px-5 py-4 text-white text-[12.5px] leading-relaxed space-y-2.5 max-h-[60vh] overflow-y-auto">
-              <p>30 seconds per issue, 25 seconds to place an order, 5 seconds to draw a prize. Open all day, total <span className="text-[#f5d060] font-semibold">2880</span> issues.</p>
-              <p>Contract calculation: If you spend <span className="text-[#f5d060] font-semibold">100</span>, after a 2% service fee, the contract amount is <span className="text-[#f5d060] font-semibold">98</span>.</p>
-              <p><span className="text-green-400 font-semibold">Green:</span> Win (98×2)=<span className="text-[#f5d060] font-semibold">196</span> on numbers 1, 3, 7, 9. Win (98×1.5)=<span className="text-[#f5d060] font-semibold">147</span> on number 5.</p>
-              <p><span className="text-red-400 font-semibold">Red:</span> Win (98×2)=<span className="text-[#f5d060] font-semibold">196</span> on numbers 2, 4, 6, 8. Win (98×1.5)=<span className="text-[#f5d060] font-semibold">147</span> on number 0.</p>
-              <p><span className="text-purple-300 font-semibold">Violet:</span> Win (98×4.5)=<span className="text-[#f5d060] font-semibold">441</span> on number 0 or 5.</p>
-              <p><span className="font-semibold">Numbers:</span> Win (98×9)=<span className="text-[#f5d060] font-semibold">882</span> if you hit the specific number.</p>
-              <p><span className="font-semibold">Big/Small:</span> Win (98×2)=<span className="text-[#f5d060] font-semibold">196</span> on correct prediction (Big: 5–9, Small: 0–4).</p>
+            <div className="px-5 py-4 text-[#3a0a0a] text-[12.5px] leading-relaxed space-y-2.5 max-h-[60vh] overflow-y-auto bg-[#fff8f8]">
+              <p>30 seconds per issue, 25 seconds to place an order, 5 seconds to draw a prize. Open all day, total <span className="text-[#C8102E] font-bold">2880</span> issues.</p>
+              <p>Contract calculation: If you spend <span className="text-[#C8102E] font-bold">100</span>, after a 2% service fee, the contract amount is <span className="text-[#C8102E] font-bold">98</span>.</p>
+              <p><span className="text-green-600 font-bold">Green:</span> Win (98×2)=<span className="text-[#C8102E] font-bold">196</span> on numbers 1, 3, 7, 9. Win (98×1.5)=<span className="text-[#C8102E] font-bold">147</span> on number 5.</p>
+              <p><span className="text-[#C8102E] font-bold">Red:</span> Win (98×2)=<span className="text-[#C8102E] font-bold">196</span> on numbers 2, 4, 6, 8. Win (98×1.5)=<span className="text-[#C8102E] font-bold">147</span> on number 0.</p>
+              <p><span className="text-purple-600 font-bold">Violet:</span> Win (98×4.5)=<span className="text-[#C8102E] font-bold">441</span> on number 0 or 5.</p>
+              <p><span className="font-bold text-[#8B0000]">Numbers:</span> Win (98×9)=<span className="text-[#C8102E] font-bold">882</span> if you hit the specific number.</p>
+              <p><span className="font-bold text-[#8B0000]">Big/Small:</span> Win (98×2)=<span className="text-[#C8102E] font-bold">196</span> on correct prediction (Big: 5–9, Small: 0–4).</p>
             </div>
 
             {/* Close Button */}
-            <div className="px-5 pb-5 pt-2">
+            <div className="px-5 pb-5 pt-3 bg-[#fff8f8]">
               <button
                 onClick={() => setShowHowTo(false)}
-                className="w-full py-3 rounded-xl font-extrabold text-black text-base tracking-wide shadow-lg"
-                style={{ background: 'linear-gradient(180deg,#ffd95a 0%,#f5b400 100%)', boxShadow: '0 4px 14px rgba(245,180,0,0.4)' }}
+                className="w-full py-3 rounded-xl font-extrabold text-white text-base tracking-wide shadow-lg"
+                style={{
+                  background: 'linear-gradient(180deg,#C8102E 0%,#8B0000 100%)',
+                  boxShadow: '0 4px 14px rgba(139,0,0,0.35)',
+                  border: '1px solid #f5d060',
+                }}
               >
                 closure
               </button>
