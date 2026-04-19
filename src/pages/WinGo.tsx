@@ -403,31 +403,35 @@ export default function WinGo() {
       </div>
 
       {/* ─── Period + Timer ─── */}
-      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100" style={{ background: 'linear-gradient(135deg, #fff 0%, #fff5f5 100%)' }}>
+      <div className="mx-3 mt-3 rounded-2xl p-3" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
         <div className="flex items-start justify-between">
           <div>
-            <button onClick={() => setShowHowTo(true)} className="px-3 py-1 rounded-full text-xs flex items-center gap-1 text-[#8B0000] bg-red-50 border border-red-100">
-              <HelpCircle size={12} /> How to play
+            <button
+              onClick={() => setShowHowTo(true)}
+              className="px-3 py-1 rounded-full text-xs flex items-center gap-1 font-serif font-bold"
+              style={{ background: 'linear-gradient(180deg,rgba(255,244,194,0.7),rgba(231,194,92,0.4))', border: '1px solid rgba(168,120,20,0.5)', ...GOLD_TEXT }}
+            >
+              <HelpCircle size={12} style={{ color: '#a87814' }} /> How to play
             </button>
-            <div className="text-xs text-gray-600 mt-2 font-semibold">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
+            <div className="text-xs mt-2 font-serif font-bold" style={GOLD_TEXT}>Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
             <div className="flex gap-1 mt-1.5">
               {history.slice(0, 5).map((h) => (
-                <div key={h.id} className="w-6 h-6 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shadow" style={{ background: BALL_BG(h.number) }}>
+                <div key={h.id} className="w-6 h-6 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center" style={{ background: BALL_BG(h.number), boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(168,120,20,0.6)' }}>
                   {h.number}
                 </div>
               ))}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-[10px] text-gray-500 mb-1 tracking-widest">TIME OF PURCHASE</div>
+            <div className="text-[10px] mb-1 tracking-[0.2em] font-serif font-bold" style={GOLD_TEXT}>TIME OF PURCHASE</div>
             <div
               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md"
               style={{
-                background: 'linear-gradient(180deg, #1a0000 0%, #2a0505 100%)',
-                border: '1.5px solid #f5d060',
+                background: 'linear-gradient(180deg, #2a0606 0%, #4a0a0a 50%, #2a0606 100%)',
+                border: '1.5px solid #c89a3a',
                 boxShadow: isClosing
-                  ? '0 0 14px rgba(245,208,96,0.65), inset 0 0 8px rgba(200,16,46,0.5)'
-                  : '0 2px 8px rgba(0,0,0,0.35), inset 0 0 6px rgba(245,208,96,0.18)',
+                  ? '0 0 14px rgba(245,208,96,0.65), inset 0 0 8px rgba(200,16,46,0.5), inset 0 0 0 1px rgba(255,244,194,0.2)'
+                  : '0 2px 8px rgba(0,0,0,0.4), inset 0 0 8px rgba(245,208,96,0.25), inset 0 0 0 1px rgba(255,244,194,0.2)',
               }}
             >
               <span
@@ -443,21 +447,21 @@ export default function WinGo() {
                 {mm}:{ss}
               </span>
             </div>
-            <div className="font-extrabold text-sm mt-1.5" style={{ color: '#8B0000' }}>{periodId}</div>
+            <div className="font-serif font-extrabold text-sm mt-1.5" style={GOLD_TEXT}>{periodId}</div>
           </div>
         </div>
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="relative mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
+      <div className="relative mx-3 mt-3 rounded-2xl p-3" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
         {/* Colors */}
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
-            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
+            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#34d57a,#0e7a36)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(15,80,30,0.45)' }}>Green</button>
           <button onClick={() => openBet({ type: 'color', value: 'violet', label: 'Violet', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
+            className="py-3 rounded-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#b97cff,#5e1ab5)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(70,20,130,0.45)' }}>Violet</button>
           <button onClick={() => openBet({ type: 'color', value: 'red', label: 'Red', bg: 'linear-gradient(135deg,#ef4444,#b91c1c)' })}
-            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
+            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white" style={{ background: 'linear-gradient(135deg,#ff5e5e,#7a0d0d)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(120,10,10,0.45)' }}>Red</button>
         </div>
 
         {/* Numbers */}
@@ -465,8 +469,14 @@ export default function WinGo() {
           {Array.from({ length: 10 }).map((_, n) => (
             <button key={n}
               onClick={() => openBet({ type: 'number', value: String(n), label: String(n), bg: BALL_BG(n) })}
-              className="aspect-square rounded-full text-white text-xl font-extrabold shadow-md flex items-center justify-center"
-              style={{ background: BALL_BG(n) }}>
+              className="aspect-square rounded-full text-xl font-black flex items-center justify-center"
+              style={{
+                background: `radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55) 0%, transparent 35%), ${BALL_BG(n)}`,
+                border: '1.5px solid #c89a3a',
+                boxShadow: 'inset 0 -3px 6px rgba(0,0,0,0.35), inset 0 2px 4px rgba(255,255,255,0.3), 0 3px 8px rgba(0,0,0,0.35), 0 0 0 2px rgba(255,244,194,0.25)',
+                color: '#fff4c2',
+                textShadow: '0 1px 2px rgba(0,0,0,0.6)',
+              }}>
               {n}
             </button>
           ))}
@@ -475,11 +485,14 @@ export default function WinGo() {
         {/* Multipliers */}
         <div className="flex items-center gap-1.5 mt-3 overflow-x-auto scrollbar-hide">
           <button onClick={() => { setBase(1); setMult(1); toast.message('Random bet ready — pick a color/number'); }}
-            className="px-3 py-1.5 text-xs rounded-full border border-red-200 text-[#8B0000] bg-red-50 whitespace-nowrap font-semibold">random bet</button>
+            className="px-3 py-1.5 text-xs rounded-full whitespace-nowrap font-serif font-bold"
+            style={{ background: 'linear-gradient(180deg,#fbf3df,#ecd9a3)', border: '1px solid rgba(168,120,20,0.55)', ...GOLD_TEXT }}>random bet</button>
           {MULTIPLIERS.map((m) => (
             <button key={m} onClick={() => setMult(m)}
-              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'text-white shadow' : 'bg-gray-100 text-gray-600'}`}
-              style={mult === m ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
+              className="px-3 py-1.5 text-xs rounded-md font-bold font-serif whitespace-nowrap"
+              style={mult === m
+                ? { background: 'linear-gradient(135deg, #C8102E, #6b0808)', color: '#f5d060', border: '1px solid #f5d060', boxShadow: '0 2px 6px rgba(120,10,10,0.4)' }
+                : { background: 'linear-gradient(180deg,#fbf3df,#ecd9a3)', border: '1px solid rgba(168,120,20,0.45)', ...GOLD_TEXT }}>
               X{m}
             </button>
           ))}
@@ -488,9 +501,11 @@ export default function WinGo() {
         {/* Big / Small */}
         <div className="grid grid-cols-2 gap-2 mt-3">
           <button onClick={() => openBet({ type: 'size', value: 'big', label: 'Big', bg: 'linear-gradient(135deg,#fbbf24,#f59e0b)' })}
-            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#8B0000] shadow" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>Big</button>
+            className="py-3 rounded-l-full rounded-tr-full font-bold font-serif"
+            style={{ background: 'linear-gradient(180deg,#fff4c2 0%,#e7c25c 50%,#a87814 100%)', color: '#5b3a06', border: '1.5px solid #8a6612', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.5), 0 3px 8px rgba(168,120,20,0.4)' }}>Big</button>
           <button onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-r-full rounded-tl-full font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
+            className="py-3 rounded-r-full rounded-tl-full font-bold font-serif text-white"
+            style={{ background: 'linear-gradient(135deg,#b97cff,#5e1ab5)', border: '1.5px solid #f5d060', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), 0 3px 8px rgba(70,20,130,0.45)' }}>Small</button>
         </div>
 
         {/* ─── Local Freeze Overlay (covers betting panel only) ─── */}
