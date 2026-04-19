@@ -96,6 +96,7 @@ export default function WinGo() {
   const [showHowTo, setShowHowTo] = useState(false);
 
   const lastSettledPeriod = useRef<string>('');
+  const [resultBanner, setResultBanner] = useState<null | { won: boolean; amount: number; number: number; color: string }>(null);
 
   // Tick every 250ms for smooth countdown
   useEffect(() => {
