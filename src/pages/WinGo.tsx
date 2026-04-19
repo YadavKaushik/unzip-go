@@ -429,7 +429,7 @@ export default function WinGo() {
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
+      <div className="relative mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
         {/* Colors */}
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
