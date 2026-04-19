@@ -547,30 +547,35 @@ export default function WinGo() {
         <div className="flex gap-1 mb-2">
           {([['record','Game Record'],['chart','Chart Trends'],['mine','My Game Record']] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)}
-              className={`px-3 py-2 text-xs font-bold rounded-t-lg ${tab === k ? 'text-white shadow' : 'text-gray-500 bg-white/60'}`}
-              style={tab === k ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
+              className="px-3 py-2 text-xs font-bold font-serif rounded-t-lg"
+              style={tab === k
+                ? { background: 'linear-gradient(180deg, #6b0808 0%, #C8102E 100%)', color: '#f5d060', border: '1px solid #f5d060', borderBottom: 'none', boxShadow: '0 -2px 6px rgba(120,10,10,0.35), inset 0 1px 0 rgba(255,244,194,0.3)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }
+                : { background: 'linear-gradient(180deg,#fbf3df,#ecd9a3)', border: '1px solid rgba(168,120,20,0.45)', borderBottom: 'none', ...GOLD_TEXT }}>
               {label}
             </button>
           ))}
         </div>
 
-        <div className="rounded-xl p-2 shadow-md border border-red-100 bg-white">
+        <div className="rounded-xl p-2" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
           {tab === 'record' && (
             <table className="w-full text-xs">
-              <thead><tr style={{ color: '#8B0000' }}>
-                <th className="py-2 text-left pl-2">Period</th><th>Number</th><th>Size</th><th className="pr-2">Color</th>
+              <thead><tr className="font-serif">
+                <th className="py-2 text-left pl-2" style={GOLD_TEXT}>Period</th>
+                <th style={GOLD_TEXT}>Number</th>
+                <th style={GOLD_TEXT}>Size</th>
+                <th className="pr-2" style={GOLD_TEXT}>Color</th>
               </tr></thead>
               <tbody>
-                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No data yet</td></tr>}
+                {history.length === 0 && <tr><td colSpan={4} className="py-6 text-center font-serif italic" style={GOLD_TEXT}>No data yet</td></tr>}
                 {history.map((h) => (
-                  <tr key={h.id} className="border-t border-red-50">
-                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{h.period_id}</td>
-                    <td className="text-center font-extrabold text-xl" style={{ color: h.number % 2 === 0 ? '#ef4444' : '#22c55e' }}>{h.number}</td>
-                    <td className="text-center text-gray-600 capitalize">{h.size}</td>
+                  <tr key={h.id} style={{ borderTop: '1px solid rgba(168,120,20,0.25)' }}>
+                    <td className="py-2.5 pl-2 text-[11px] font-serif" style={{ color: '#7a5a14' }}>{h.period_id}</td>
+                    <td className="text-center font-extrabold text-xl" style={{ color: h.number % 2 === 0 ? '#b91c1c' : '#0e7a36', textShadow: '0 1px 0 rgba(255,255,255,0.6)' }}>{h.number}</td>
+                    <td className="text-center capitalize font-serif" style={{ color: '#7a5a14' }}>{h.size}</td>
                     <td className="pr-2">
                       <div className="flex justify-center gap-0.5">
                         {numberMeta(h.number).colors.map((c) => (
-                          <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c === 'red' ? '#ef4444' : c === 'green' ? '#22c55e' : '#a855f7' }} />
+                          <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c === 'red' ? '#ef4444' : c === 'green' ? '#22c55e' : '#a855f7', boxShadow: '0 0 0 1px rgba(168,120,20,0.5)' }} />
                         ))}
                       </div>
                     </td>
@@ -580,21 +585,24 @@ export default function WinGo() {
             </table>
           )}
           {tab === 'chart' && (
-            <div className="p-4 text-center text-gray-400 text-sm">Chart trends coming soon</div>
+            <div className="p-4 text-center font-serif italic" style={GOLD_TEXT}>Chart trends coming soon</div>
           )}
           {tab === 'mine' && (
             <table className="w-full text-xs">
-              <thead><tr style={{ color: '#8B0000' }}>
-                <th className="py-2 text-left pl-2">Period</th><th>Pick</th><th>Amount</th><th className="pr-2">Result</th>
+              <thead><tr className="font-serif">
+                <th className="py-2 text-left pl-2" style={GOLD_TEXT}>Period</th>
+                <th style={GOLD_TEXT}>Pick</th>
+                <th style={GOLD_TEXT}>Amount</th>
+                <th className="pr-2" style={GOLD_TEXT}>Result</th>
               </tr></thead>
               <tbody>
-                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center text-gray-400">No bets yet</td></tr>}
+                {myBets.length === 0 && <tr><td colSpan={4} className="py-6 text-center font-serif italic" style={GOLD_TEXT}>No bets yet</td></tr>}
                 {myBets.map((b) => (
-                  <tr key={b.id} className="border-t border-red-50">
-                    <td className="py-2.5 pl-2 text-gray-600 text-[11px]">{b.period_id}</td>
-                    <td className="text-center capitalize text-gray-700">{b.selection_value}</td>
-                    <td className="text-center text-gray-700">₹{Number(b.amount).toFixed(2)}</td>
-                    <td className="pr-2 text-center font-bold" style={{ color: b.status === 'won' ? '#22c55e' : b.status === 'lost' ? '#ef4444' : '#f59e0b' }}>
+                  <tr key={b.id} style={{ borderTop: '1px solid rgba(168,120,20,0.25)' }}>
+                    <td className="py-2.5 pl-2 text-[11px] font-serif" style={{ color: '#7a5a14' }}>{b.period_id}</td>
+                    <td className="text-center capitalize font-serif" style={{ color: '#7a5a14' }}>{b.selection_value}</td>
+                    <td className="text-center font-serif" style={{ color: '#7a5a14' }}>₹{Number(b.amount).toFixed(2)}</td>
+                    <td className="pr-2 text-center font-bold font-serif" style={{ color: b.status === 'won' ? '#0e7a36' : b.status === 'lost' ? '#b91c1c' : '#a87814' }}>
                       {b.status === 'pending' ? '—' : b.status === 'won' ? `+₹${Number(b.payout).toFixed(2)}` : 'Lost'}
                     </td>
                   </tr>
