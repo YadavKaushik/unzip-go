@@ -429,7 +429,7 @@ export default function WinGo() {
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
+      <div className="relative mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
         {/* Colors */}
         <div className="grid grid-cols-3 gap-2">
           <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
@@ -472,6 +472,39 @@ export default function WinGo() {
           <button onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
             className="py-3 rounded-r-full rounded-tl-full font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
         </div>
+
+        {/* ─── Local Freeze Overlay (covers betting panel only) ─── */}
+        {isClosing && remaining > 0 && (
+          <div
+            className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center z-20"
+            style={{
+              background: 'rgba(15,0,0,0.55)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
+            }}
+          >
+            <div
+              key={remaining}
+              className="font-black leading-none"
+              style={{
+                fontSize: '110px',
+                fontFamily: '"DS-Digital","Orbitron",ui-monospace,monospace',
+                background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 45%,#a87814 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 0 18px rgba(245,208,96,0.85)) drop-shadow(0 0 28px rgba(200,16,46,0.6))',
+              }}
+            >
+              {remaining}
+            </div>
+            <div
+              className="mt-2 text-xs font-bold tracking-[0.25em] uppercase"
+              style={{ color: '#f5d060', textShadow: '0 0 10px rgba(245,208,96,0.7)' }}
+            >
+              Wait for the draw...
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ─── History tabs ─── */}
@@ -660,41 +693,7 @@ export default function WinGo() {
         </div>
       )}
 
-      {/* ─── 5-Second Freeze Overlay ─── */}
-      {isClosing && remaining > 0 && (
-        <div
-          className="fixed inset-0 z-[70] flex flex-col items-center justify-center pointer-events-auto"
-          style={{
-            background: 'rgba(15,0,0,0.55)',
-            backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)',
-          }}
-        >
-          <div
-            key={remaining}
-            className="font-black leading-none animate-[ping_1s_ease-out]"
-            style={{
-              fontSize: '160px',
-              fontFamily: '"DS-Digital","Orbitron",ui-monospace,monospace',
-              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 45%,#a87814 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 0 24px rgba(245,208,96,0.85)) drop-shadow(0 0 40px rgba(200,16,46,0.6))',
-            }}
-          >
-            {remaining}
-          </div>
-          <div
-            className="mt-4 text-lg font-bold tracking-[0.25em] uppercase"
-            style={{
-              color: '#f5d060',
-              textShadow: '0 0 12px rgba(245,208,96,0.7)',
-            }}
-          >
-            Wait for the draw...
-          </div>
-        </div>
-      )}
+      {/* (full-screen freeze removed — local overlay covers betting panel only) */}
 
       {/* ─── Win / Loss Result Banner ─── */}
       {resultBanner && (
