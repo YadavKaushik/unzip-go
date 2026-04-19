@@ -93,6 +93,7 @@ export default function WinGo() {
   const [base, setBase] = useState(1);
   const [agree, setAgree] = useState(true);
   const [placing, setPlacing] = useState(false);
+  const [showHowTo, setShowHowTo] = useState(false);
 
   const lastSettledPeriod = useRef<string>('');
 
