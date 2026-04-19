@@ -659,6 +659,146 @@ export default function WinGo() {
           </div>
         </div>
       )}
+
+      {/* ─── 5-Second Freeze Overlay ─── */}
+      {isClosing && remaining > 0 && (
+        <div
+          className="fixed inset-0 z-[70] flex flex-col items-center justify-center pointer-events-auto"
+          style={{
+            background: 'rgba(15,0,0,0.55)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+          }}
+        >
+          <div
+            key={remaining}
+            className="font-black leading-none animate-[ping_1s_ease-out]"
+            style={{
+              fontSize: '160px',
+              fontFamily: '"DS-Digital","Orbitron",ui-monospace,monospace',
+              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 45%,#a87814 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 0 24px rgba(245,208,96,0.85)) drop-shadow(0 0 40px rgba(200,16,46,0.6))',
+            }}
+          >
+            {remaining}
+          </div>
+          <div
+            className="mt-4 text-lg font-bold tracking-[0.25em] uppercase"
+            style={{
+              color: '#f5d060',
+              textShadow: '0 0 12px rgba(245,208,96,0.7)',
+            }}
+          >
+            Wait for the draw...
+          </div>
+        </div>
+      )}
+
+      {/* ─── Win / Loss Result Banner ─── */}
+      {resultBanner && (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center p-6"
+          style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)' }}
+          onClick={() => setResultBanner(null)}
+        >
+          {resultBanner.won ? (
+            <div
+              className="relative w-full max-w-sm rounded-3xl overflow-hidden text-center px-6 py-8 border-2 border-[#f5d060]"
+              style={{
+                background: 'linear-gradient(180deg,#8B0000 0%,#C8102E 60%,#8B0000 100%)',
+                boxShadow: '0 0 40px rgba(245,208,96,0.45), 0 20px 60px rgba(0,0,0,0.5)',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Confetti dots */}
+              {Array.from({ length: 18 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-sm animate-bounce"
+                  style={{
+                    left: `${(i * 53) % 100}%`,
+                    top: `${(i * 37) % 80}%`,
+                    background: i % 3 === 0 ? '#f5d060' : i % 3 === 1 ? '#fff4c2' : '#ffeb99',
+                    animationDelay: `${(i % 6) * 0.15}s`,
+                    animationDuration: `${1 + (i % 4) * 0.3}s`,
+                  }}
+                />
+              ))}
+              <div
+                className="text-3xl font-black tracking-wide mb-2"
+                style={{
+                  background: 'linear-gradient(180deg,#fff4c2,#f5d060,#a87814)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))',
+                }}
+              >
+                🎉 Congratulations!
+              </div>
+              <div className="text-white/90 text-sm mb-4">You won this round</div>
+              <div
+                className="text-5xl font-black mb-4"
+                style={{
+                  color: '#f5d060',
+                  textShadow: '0 0 16px rgba(245,208,96,0.8)',
+                }}
+              >
+                +₹{resultBanner.amount.toFixed(2)}
+              </div>
+              <div className="flex items-center justify-center gap-2 text-white/80 text-xs">
+                <span>Result:</span>
+                <div
+                  className="w-7 h-7 rounded-full text-white font-extrabold flex items-center justify-center"
+                  style={{ background: BALL_BG(resultBanner.number) }}
+                >
+                  {resultBanner.number}
+                </div>
+                <span className="capitalize">{resultBanner.color}</span>
+              </div>
+              <button
+                onClick={() => setResultBanner(null)}
+                className="mt-5 w-full py-3 rounded-xl font-extrabold text-[#8B0000]"
+                style={{ background: 'linear-gradient(180deg,#fff4c2,#f5d060,#e0b840)' }}
+              >
+                Collect
+              </button>
+            </div>
+          ) : (
+            <div
+              className="w-full max-w-sm rounded-3xl overflow-hidden text-center px-6 py-7 bg-white border border-red-100"
+              style={{ boxShadow: '0 20px 60px rgba(139,0,0,0.3)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-2xl font-black mb-2" style={{ color: '#8B0000' }}>
+                Better Luck Next Time
+              </div>
+              <div className="text-gray-500 text-sm mb-5">The result for this round is</div>
+              <div className="flex flex-col items-center gap-3 mb-5">
+                <div
+                  className="w-20 h-20 rounded-full text-white text-4xl font-black flex items-center justify-center shadow-lg"
+                  style={{ background: BALL_BG(resultBanner.number) }}
+                >
+                  {resultBanner.number}
+                </div>
+                <div className="text-sm capitalize text-gray-700">
+                  <span className="font-bold" style={{ color: '#C8102E' }}>{resultBanner.color}</span>
+                  {' • '}
+                  {resultBanner.number >= 5 ? 'Big' : 'Small'}
+                </div>
+              </div>
+              <button
+                onClick={() => setResultBanner(null)}
+                className="w-full py-3 rounded-xl font-extrabold text-white"
+                style={{ background: 'linear-gradient(180deg,#C8102E,#8B0000)', border: '1px solid #f5d060' }}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
