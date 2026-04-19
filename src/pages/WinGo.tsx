@@ -399,15 +399,31 @@ export default function WinGo() {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 mb-1">time of purchase</div>
-            <div className="flex gap-1 justify-end">
-              {[mm[0], mm[1], ':', ss[0], ss[1]].map((c, i) => (
-                <div key={i} className={`${c === ':' ? 'w-2 text-[#8B0000]' : 'w-7 shadow-sm'} h-9 rounded-md ${c === ':' ? '' : 'text-white'} flex items-center justify-center font-extrabold text-lg ${isClosing ? 'animate-pulse' : ''}`} style={c === ':' ? undefined : { background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
-                  {c}
-                </div>
-              ))}
+            <div className="text-[10px] text-gray-500 mb-1 tracking-widest">TIME OF PURCHASE</div>
+            <div
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md"
+              style={{
+                background: 'linear-gradient(180deg, #1a0000 0%, #2a0505 100%)',
+                border: '1.5px solid #f5d060',
+                boxShadow: isClosing
+                  ? '0 0 14px rgba(245,208,96,0.65), inset 0 0 8px rgba(200,16,46,0.5)'
+                  : '0 2px 8px rgba(0,0,0,0.35), inset 0 0 6px rgba(245,208,96,0.18)',
+              }}
+            >
+              <span
+                className={`font-mono font-black text-2xl leading-none tracking-[0.08em] ${isClosing ? 'animate-pulse' : ''}`}
+                style={{
+                  fontFamily: '"DS-Digital","Share Tech Mono","Orbitron",ui-monospace,monospace',
+                  color: isClosing ? '#ff6b6b' : '#f5d060',
+                  textShadow: isClosing
+                    ? '0 0 8px rgba(255,80,80,0.9), 0 0 14px rgba(200,16,46,0.7)'
+                    : '0 0 6px rgba(245,208,96,0.85), 0 0 12px rgba(245,208,96,0.4)',
+                }}
+              >
+                {mm}:{ss}
+              </span>
             </div>
-            <div className="font-extrabold text-sm mt-1" style={{ color: '#8B0000' }}>{periodId}</div>
+            <div className="font-extrabold text-sm mt-1.5" style={{ color: '#8B0000' }}>{periodId}</div>
           </div>
         </div>
       </div>
