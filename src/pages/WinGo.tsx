@@ -376,7 +376,7 @@ export default function WinGo() {
       <div className="mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100" style={{ background: 'linear-gradient(135deg, #fff 0%, #fff5f5 100%)' }}>
         <div className="flex items-start justify-between">
           <div>
-            <button className="px-3 py-1 rounded-full text-xs flex items-center gap-1 text-[#8B0000] bg-red-50 border border-red-100">
+            <button onClick={() => setShowHowTo(true)} className="px-3 py-1 rounded-full text-xs flex items-center gap-1 text-[#8B0000] bg-red-50 border border-red-100">
               <HelpCircle size={12} /> How to play
             </button>
             <div className="text-xs text-gray-600 mt-2 font-semibold">Win Go {duration === 30 ? '30s' : duration === 60 ? '1Min' : duration === 180 ? '3Min' : '5Min'}</div>
