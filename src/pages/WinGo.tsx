@@ -693,41 +693,7 @@ export default function WinGo() {
         </div>
       )}
 
-      {/* ─── 5-Second Freeze Overlay ─── */}
-      {isClosing && remaining > 0 && (
-        <div
-          className="fixed inset-0 z-[70] flex flex-col items-center justify-center pointer-events-auto"
-          style={{
-            background: 'rgba(15,0,0,0.55)',
-            backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)',
-          }}
-        >
-          <div
-            key={remaining}
-            className="font-black leading-none animate-[ping_1s_ease-out]"
-            style={{
-              fontSize: '160px',
-              fontFamily: '"DS-Digital","Orbitron",ui-monospace,monospace',
-              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 45%,#a87814 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 0 24px rgba(245,208,96,0.85)) drop-shadow(0 0 40px rgba(200,16,46,0.6))',
-            }}
-          >
-            {remaining}
-          </div>
-          <div
-            className="mt-4 text-lg font-bold tracking-[0.25em] uppercase"
-            style={{
-              color: '#f5d060',
-              textShadow: '0 0 12px rgba(245,208,96,0.7)',
-            }}
-          >
-            Wait for the draw...
-          </div>
-        </div>
-      )}
+      {/* (full-screen freeze removed — local overlay covers betting panel only) */}
 
       {/* ─── Win / Loss Result Banner ─── */}
       {resultBanner && (
