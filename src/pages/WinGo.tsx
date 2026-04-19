@@ -357,21 +357,21 @@ export default function WinGo() {
 
       <div className="flex-1 overflow-y-auto pb-8">
       {/* ─── Wallet ─── */}
-      <div className="mx-3 mt-3 rounded-2xl p-4 shadow-md border border-red-100 bg-white">
-        <div className="flex items-center justify-center gap-2 text-2xl font-extrabold" style={{ color: '#8B0000' }}>
+      <div className="mx-3 mt-3 rounded-2xl p-4" style={{ background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }}>
+        <div className="flex items-center justify-center gap-2 text-2xl font-serif font-extrabold" style={GOLD_TEXT}>
           ₹{balance.toFixed(2)}
-          <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center">
-            <RefreshCw size={13} className="text-red-700" />
+          <button onClick={loadBalance} className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(168,120,20,0.12)', border: '1px solid rgba(168,120,20,0.4)' }}>
+            <RefreshCw size={13} style={{ color: '#a87814' }} />
           </button>
         </div>
-        <div className="text-center text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
+        <div className="text-center text-[11px] mt-1 flex items-center justify-center gap-1 font-serif tracking-wide" style={{ color: '#8a6612' }}>
           <span>💳</span> wallet balance
         </div>
         <div className="grid grid-cols-2 gap-3 mt-3">
-          <button onClick={() => navigate('/withdraw')} className="py-2.5 rounded-full font-bold text-white" style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+          <button onClick={() => navigate('/withdraw')} className="py-2.5 rounded-full font-bold text-white" style={{ background: 'linear-gradient(135deg, #C8102E, #6b0808)', border: '1px solid #f5d060', boxShadow: '0 2px 8px rgba(120,10,10,0.4), inset 0 1px 0 rgba(255,255,255,0.25)' }}>
             Withdraw
           </button>
-          <button onClick={() => navigate('/deposit')} className="py-2.5 rounded-full font-bold text-[#8B0000]" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>
+          <button onClick={() => navigate('/deposit')} className="py-2.5 rounded-full font-bold" style={{ background: 'linear-gradient(180deg,#fff4c2 0%,#e7c25c 50%,#a87814 100%)', color: '#5b3a06', border: '1px solid #8a6612', boxShadow: '0 2px 8px rgba(168,120,20,0.4), inset 0 1px 0 rgba(255,255,255,0.6)' }}>
             Deposit
           </button>
         </div>
@@ -385,13 +385,16 @@ export default function WinGo() {
             <button
               key={d}
               onClick={() => setDuration(d)}
-              className={`rounded-xl py-3 flex flex-col items-center justify-center transition border ${active ? 'shadow-lg border-transparent' : 'bg-white border-red-100'}`}
-              style={active ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}
+              className="rounded-xl py-3 flex flex-col items-center justify-center transition"
+              style={active
+                ? { background: 'linear-gradient(135deg, #C8102E, #6b0808)', border: '1px solid #f5d060', boxShadow: '0 4px 12px rgba(120,10,10,0.45), inset 0 1px 0 rgba(255,255,255,0.2)' }
+                : { background: CREAM_BG, border: CARD_BORDER, boxShadow: CARD_SHADOW }
+              }
             >
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1 ${active ? 'bg-white/15' : 'bg-red-50'}`}>
+              <div className="w-9 h-9 rounded-full flex items-center justify-center mb-1" style={active ? { background: 'rgba(245,208,96,0.2)', border: '1px solid rgba(245,208,96,0.5)' } : { background: 'rgba(168,120,20,0.1)', border: '1px solid rgba(168,120,20,0.3)' }}>
                 <span className="text-lg">⏱️</span>
               </div>
-              <div className={`text-[10px] font-semibold leading-tight text-center ${active ? 'text-[#f5d060]' : 'text-gray-700'}`}>
+              <div className={`text-[10px] font-bold font-serif leading-tight text-center`} style={active ? { color: '#f5d060', textShadow: '0 1px 2px rgba(0,0,0,0.4)' } : { ...GOLD_TEXT }}>
                 {label.split(' ').map((w, i) => <div key={i}>{w}</div>)}
               </div>
             </button>
