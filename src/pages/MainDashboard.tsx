@@ -36,10 +36,10 @@ const CATEGORIES = [
 
 
 const LOTTERY_GAMES = [
-{ id: 'lottery-001', name: 'Win Go', subtitle: 'Guess the number', hot: true, gradient: 'linear-gradient(160deg, #f472b6 0%, #ec4899 50%, #db2777 100%)', timer: 47 },
-{ id: 'lottery-002', name: 'K3', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #f9a8d4 0%, #f472b6 50%, #ec4899 100%)', timer: 112 },
-{ id: 'lottery-003', name: '5D', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #c084fc 0%, #a855f7 50%, #9333ea 100%)', timer: 203 },
-{ id: 'lottery-004', name: 'Trx Win', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #f9a8d4 0%, #f472b6 50%, #e879a8 100%)', timer: 85 }];
+{ id: 'lottery-001', name: 'Win Go', subtitle: 'Guess the number', hot: true, gradient: 'linear-gradient(160deg, #4a0000 0%, #8B0000 50%, #C8102E 100%)', timer: 47 },
+{ id: 'lottery-002', name: 'K3', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #FF8A65 0%, #FF6B5A 55%, #E64A45 100%)', timer: 112 },
+{ id: 'lottery-003', name: '5D', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #FFB199 0%, #F47A6E 55%, #C8102E 100%)', timer: 203 },
+{ id: 'lottery-004', name: 'Trx Win', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #FF7A6B 0%, #E84855 55%, #8B0000 100%)', timer: 85 }];
 
 // Lottery icon components
 function WinGoIcon() {
