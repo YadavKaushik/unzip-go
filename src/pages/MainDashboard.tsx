@@ -36,10 +36,10 @@ const CATEGORIES = [
 
 
 const LOTTERY_GAMES = [
-{ id: 'lottery-001', name: 'Win Go', subtitle: 'Guess the number', hot: true, gradient: 'linear-gradient(160deg, #f472b6 0%, #ec4899 50%, #db2777 100%)', timer: 47 },
-{ id: 'lottery-002', name: 'K3', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #f9a8d4 0%, #f472b6 50%, #ec4899 100%)', timer: 112 },
-{ id: 'lottery-003', name: '5D', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #c084fc 0%, #a855f7 50%, #9333ea 100%)', timer: 203 },
-{ id: 'lottery-004', name: 'Trx Win', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #f9a8d4 0%, #f472b6 50%, #e879a8 100%)', timer: 85 }];
+{ id: 'lottery-001', name: 'Win Go', subtitle: 'Guess the number', hot: true, gradient: 'linear-gradient(160deg, #4a0000 0%, #8B0000 50%, #C8102E 100%)', timer: 47 },
+{ id: 'lottery-002', name: 'K3', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #FF8A65 0%, #FF6B5A 55%, #E64A45 100%)', timer: 112 },
+{ id: 'lottery-003', name: '5D', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #FFB199 0%, #F47A6E 55%, #C8102E 100%)', timer: 203 },
+{ id: 'lottery-004', name: 'Trx Win', subtitle: 'Guess the number', hot: false, gradient: 'linear-gradient(160deg, #FF7A6B 0%, #E84855 55%, #8B0000 100%)', timer: 85 }];
 
 // Lottery icon components
 function WinGoIcon() {
@@ -563,13 +563,28 @@ export default function MainDashboard() {
             <div
               key={game.id}
               onClick={() => handleGameClick(game.name)}
-              className="relative rounded-2xl overflow-hidden cursor-pointer shadow-md active:scale-95 transition-transform"
-              style={{ background: game.gradient, minHeight: '120px' }}>
-              
+              className="relative rounded-2xl overflow-hidden cursor-pointer active:scale-95 transition-transform"
+              style={{
+                background: game.gradient,
+                minHeight: '120px',
+                boxShadow: game.hot
+                  ? '0 6px 18px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,215,0,0.25)'
+                  : '0 4px 12px rgba(200,16,46,0.18)',
+                border: game.hot ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,255,255,0.15)',
+              }}>
+
+                {/* Crown for HOT card */}
+                {game.hot &&
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-20" style={{ fontSize: 14, filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }}>
+                    👑
+                  </div>
+                }
+
                 {/* HOT badge */}
                 {game.hot &&
               <div className="absolute top-1 right-1 z-10">
-                    <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[7px] font-800 px-1.5 py-0.5 rounded-sm leading-none shadow-md">
+                    <div className="text-white text-[7px] font-800 px-1.5 py-0.5 rounded-sm leading-none shadow-md"
+                      style={{ background: 'linear-gradient(90deg, #FFD700, #FF6B00)' }}>
                       HOT
                     </div>
                   </div>
@@ -582,8 +597,11 @@ export default function MainDashboard() {
 
                 {/* Game Name & Subtitle */}
                 <div className="px-1 pb-2 text-center">
-                  <div className="text-white font-800 text-[11px] leading-tight drop-shadow-sm">{game.name}</div>
-                  <div className="text-white/80 text-[8px] font-500 leading-tight mt-0.5">{game.subtitle}</div>
+                  <div className="font-800 text-[12px] leading-tight drop-shadow-sm"
+                    style={{ color: game.hot ? '#FFD700' : '#fff', textShadow: game.hot ? '0 1px 2px rgba(0,0,0,0.5)' : '0 1px 2px rgba(0,0,0,0.25)' }}>
+                    {game.name}
+                  </div>
+                  <div className="text-white/85 text-[8px] font-500 leading-tight mt-0.5">{game.subtitle}</div>
                 </div>
               </div>
             );
