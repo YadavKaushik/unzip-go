@@ -353,8 +353,13 @@ export default function WinGo() {
       <div className="mx-3 mt-3 rounded-2xl p-4 shadow-md border border-red-100 bg-white">
         <div className="flex items-center justify-center gap-2 text-2xl font-extrabold" style={{ color: '#8B0000' }}>
           ₹{balance.toFixed(2)}
-          <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center">
-            <RefreshCw size={13} className="text-red-700" />
+          <button
+            onClick={() => loadBalance(true)}
+            disabled={refreshingBal}
+            aria-label="Refresh balance"
+            className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center active:scale-90 transition disabled:opacity-60"
+          >
+            <RefreshCw size={13} className={`text-red-700 ${refreshingBal ? 'animate-spin' : ''}`} />
           </button>
         </div>
         <div className="text-center text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
