@@ -342,10 +342,10 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <button type="button" onClick={() => setRememberPassword(!rememberPassword)} className="flex items-center gap-2 py-0.5">
-                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-yellow-500 bg-yellow-500' : 'border-white/20 bg-transparent'}`}>
+                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-[#C8102E] bg-[#C8102E]' : 'border-gray-300 bg-white'}`}>
                       {rememberPassword && <CheckCircle size={10} className="text-black" />}
                     </div>
-                    <span className="text-white/40 text-[11px]">Remember password</span>
+                    <span className="text-gray-600 text-[11px]">Remember password</span>
                   </button>
 
                   <SubmitButton loading={isSubmitting} text="Log in" />
@@ -371,10 +371,10 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <button type="button" onClick={() => setRememberPassword(!rememberPassword)} className="flex items-center gap-2 py-0.5">
-                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-yellow-500 bg-yellow-500' : 'border-white/20 bg-transparent'}`}>
+                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-[#C8102E] bg-[#C8102E]' : 'border-gray-300 bg-white'}`}>
                       {rememberPassword && <CheckCircle size={10} className="text-black" />}
                     </div>
-                    <span className="text-white/40 text-[11px]">Remember password</span>
+                    <span className="text-gray-600 text-[11px]">Remember password</span>
                   </button>
 
                   <SubmitButton loading={isSubmitting} text="Log in" />
@@ -412,8 +412,8 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                    <input type="checkbox" {...phoneRegisterForm.register('agree')} className="w-4 h-4 accent-red-600 rounded" />
-                    <span className="text-white/50 text-[11px]">I have read and agree <span className="text-yellow-500 font-bold">【Privacy Agreement】</span></span>
+                    <input type="checkbox" {...phoneRegisterForm.register('agree')} className="w-4 h-4 accent-[#C8102E] rounded" />
+                    <span className="text-gray-600 text-[11px]">I have read and agree <span className="text-[#C8102E] font-bold">【Privacy Agreement】</span></span>
                   </label>
                   <ErrorText msg={phoneRegisterForm.formState.errors.agree?.message} />
 
@@ -453,8 +453,8 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                    <input type="checkbox" {...registerForm.register('agree')} className="w-4 h-4 accent-red-600 rounded" />
-                    <span className="text-white/50 text-[11px]">I have read and agree <span className="text-yellow-500 font-bold">【Privacy Agreement】</span></span>
+                    <input type="checkbox" {...registerForm.register('agree')} className="w-4 h-4 accent-[#C8102E] rounded" />
+                    <span className="text-gray-600 text-[11px]">I have read and agree <span className="text-[#C8102E] font-bold">【Privacy Agreement】</span></span>
                   </label>
                   <ErrorText msg={registerForm.formState.errors.agree?.message} />
 
