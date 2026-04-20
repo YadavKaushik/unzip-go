@@ -107,10 +107,20 @@ export default function WinGo() {
   }, [duration]);
 
   // Load wallet balance
-  const loadBalance = useCallback(async () => {
+  const [refreshingBal, setRefreshingBal] = useState(false);
+  const loadBalance = useCallback(async (showToast = false) => {
     if (!user) return;
-    const { data } = await supabase.from('wallets').select('balance').eq('user_id', user.id).maybeSingle();
-    if (data) setBalance(Number(data.balance) || 0);
+    setRefreshingBal(true);
+    try {
+      const { data, error } = await supabase.from('wallets').select('balance').eq('user_id', user.id).maybeSingle();
+      if (error) throw error;
+      if (data) setBalance(Number(data.balance) || 0);
+      if (showToast) toast.success('Balance updated');
+    } catch (e: any) {
+      if (showToast) toast.error(e?.message || 'Failed to refresh');
+    } finally {
+      setTimeout(() => setRefreshingBal(false), 400);
+    }
   }, [user]);
 
   useEffect(() => { loadBalance(); }, [loadBalance]);
@@ -343,8 +353,13 @@ export default function WinGo() {
       <div className="mx-3 mt-3 rounded-2xl p-4 shadow-md border border-red-100 bg-white">
         <div className="flex items-center justify-center gap-2 text-2xl font-extrabold" style={{ color: '#8B0000' }}>
           ₹{balance.toFixed(2)}
-          <button onClick={loadBalance} className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center">
-            <RefreshCw size={13} className="text-red-700" />
+          <button
+            onClick={() => loadBalance(true)}
+            disabled={refreshingBal}
+            aria-label="Refresh balance"
+            className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center active:scale-90 transition disabled:opacity-60"
+          >
+            <RefreshCw size={13} className={`text-red-700 ${refreshingBal ? 'animate-spin' : ''}`} />
           </button>
         </div>
         <div className="text-center text-xs text-gray-500 mt-1 flex items-center justify-center gap-1">
@@ -429,48 +444,154 @@ export default function WinGo() {
       </div>
 
       {/* ─── Betting Panel ─── */}
-      <div className="relative mx-3 mt-3 rounded-2xl p-3 shadow-md border border-red-100 bg-white">
-        {/* Colors */}
-        <div className="grid grid-cols-3 gap-2">
-          <button onClick={() => openBet({ type: 'color', value: 'green', label: 'Green', bg: 'linear-gradient(135deg,#22c55e,#16a34a)' })}
-            className="py-3 rounded-l-2xl rounded-tr-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)' }}>green</button>
-          <button onClick={() => openBet({ type: 'color', value: 'violet', label: 'Violet', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>purple</button>
-          <button onClick={() => openBet({ type: 'color', value: 'red', label: 'Red', bg: 'linear-gradient(135deg,#ef4444,#b91c1c)' })}
-            className="py-3 rounded-r-2xl rounded-tl-2xl font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#ef4444,#b91c1c)' }}>red</button>
-        </div>
-
-        {/* Numbers */}
-        <div className="grid grid-cols-5 gap-2 mt-3">
-          {Array.from({ length: 10 }).map((_, n) => (
-            <button key={n}
-              onClick={() => openBet({ type: 'number', value: String(n), label: String(n), bg: BALL_BG(n) })}
-              className="aspect-square rounded-full text-white text-xl font-extrabold shadow-md flex items-center justify-center"
-              style={{ background: BALL_BG(n) }}>
-              {n}
+      <div
+        className="relative mx-3 mt-3 rounded-2xl p-3 shadow-lg border-2 border-[#f5d060]/40"
+        style={{
+          background: 'linear-gradient(135deg,#fff 0%,#fff5f5 100%)',
+          boxShadow: '0 6px 20px rgba(139,0,0,0.12), inset 0 0 0 1px rgba(245,208,96,0.2)',
+        }}
+      >
+        {/* Colors — premium pill buttons */}
+        <div className="grid grid-cols-3 gap-2.5">
+          {[
+            { v: 'green', label: 'Green', grad: 'linear-gradient(145deg,#34d399 0%,#16a34a 60%,#0e7a36 100%)', glow: 'rgba(34,197,94,0.55)' },
+            { v: 'violet', label: 'Violet', grad: 'linear-gradient(145deg,#c084fc 0%,#a855f7 55%,#7c3aed 100%)', glow: 'rgba(168,85,247,0.55)' },
+            { v: 'red', label: 'Red', grad: 'linear-gradient(145deg,#fb7185 0%,#dc2626 55%,#8B0000 100%)', glow: 'rgba(220,38,38,0.55)' },
+          ].map((c, i) => (
+            <button
+              key={c.v}
+              onClick={() => openBet({ type: 'color', value: c.v, label: c.label, bg: c.grad })}
+              className={`relative py-3.5 font-extrabold text-white text-base tracking-wide active:scale-[0.97] transition ${
+                i === 0 ? 'rounded-l-2xl rounded-tr-2xl' : i === 2 ? 'rounded-r-2xl rounded-tl-2xl' : 'rounded-2xl'
+              }`}
+              style={{
+                background: c.grad,
+                boxShadow: `0 6px 14px ${c.glow}, inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -3px 0 rgba(0,0,0,0.18)`,
+                textShadow: '0 1px 2px rgba(0,0,0,0.35)',
+                border: '1px solid rgba(255,255,255,0.25)',
+              }}
+            >
+              {c.label.toLowerCase()}
             </button>
           ))}
+        </div>
+
+        {/* Numbers — 3D lottery balls inside framed tray */}
+        <div
+          className="mt-3 p-3 rounded-2xl"
+          style={{
+            background: 'linear-gradient(180deg,#fff 0%,#fff0f0 100%)',
+            border: '1.5px solid rgba(200,16,46,0.15)',
+            boxShadow: 'inset 0 2px 6px rgba(139,0,0,0.08)',
+          }}
+        >
+          <div className="grid grid-cols-5 gap-2.5">
+            {Array.from({ length: 10 }).map((_, n) => {
+              const meta = numberMeta(n);
+              const main = meta.colors[0];
+              const numColor = main === 'red' ? '#dc2626' : main === 'green' ? '#16a34a' : '#a855f7';
+              return (
+                <button
+                  key={n}
+                  onClick={() => openBet({ type: 'number', value: String(n), label: String(n), bg: BALL_BG(n) })}
+                  className="relative aspect-square rounded-full active:scale-90 transition"
+                  style={{
+                    background: BALL_BG(n),
+                    boxShadow:
+                      '0 4px 10px rgba(0,0,0,0.25), inset 0 -4px 8px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.55)',
+                  }}
+                  aria-label={`Pick number ${n}`}
+                >
+                  {/* inner white core */}
+                  <span
+                    className="absolute inset-[18%] rounded-full flex items-center justify-center text-xl font-black"
+                    style={{
+                      background: 'radial-gradient(circle at 30% 25%, #fff 0%, #f5f5f5 60%, #e5e5e5 100%)',
+                      color: numColor,
+                      boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.12), inset 0 2px 3px rgba(255,255,255,0.9)',
+                      textShadow: '0 1px 0 rgba(255,255,255,0.7)',
+                    }}
+                  >
+                    {n}
+                  </span>
+                  {/* glossy highlight */}
+                  <span
+                    className="absolute top-[8%] left-[18%] w-[28%] h-[18%] rounded-full pointer-events-none"
+                    style={{ background: 'radial-gradient(ellipse, rgba(255,255,255,0.85), rgba(255,255,255,0) 70%)' }}
+                  />
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Multipliers */}
         <div className="flex items-center gap-1.5 mt-3 overflow-x-auto scrollbar-hide">
-          <button onClick={() => { setBase(1); setMult(1); toast.message('Random bet ready — pick a color/number'); }}
-            className="px-3 py-1.5 text-xs rounded-full border border-red-200 text-[#8B0000] bg-red-50 whitespace-nowrap font-semibold">random bet</button>
-          {MULTIPLIERS.map((m) => (
-            <button key={m} onClick={() => setMult(m)}
-              className={`px-3 py-1.5 text-xs rounded-md font-bold whitespace-nowrap ${mult === m ? 'text-white shadow' : 'bg-gray-100 text-gray-600'}`}
-              style={mult === m ? { background: 'linear-gradient(135deg, #C8102E, #8B0000)' } : undefined}>
-              X{m}
-            </button>
-          ))}
+          <button
+            onClick={() => { setBase(1); setMult(1); toast.message('Random bet ready — pick a color/number'); }}
+            className="px-3 py-2 text-xs rounded-full whitespace-nowrap font-bold"
+            style={{
+              background: 'linear-gradient(135deg,#fff,#fff5f5)',
+              color: '#8B0000',
+              border: '1.5px solid #f5d060',
+              boxShadow: '0 2px 6px rgba(245,208,96,0.4), inset 0 1px 0 rgba(255,255,255,0.8)',
+            }}
+          >
+            random bet
+          </button>
+          {MULTIPLIERS.map((m) => {
+            const active = mult === m;
+            return (
+              <button
+                key={m}
+                onClick={() => setMult(m)}
+                className="px-3.5 py-2 text-xs rounded-md font-extrabold whitespace-nowrap transition active:scale-95"
+                style={
+                  active
+                    ? {
+                        background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 50%,#a87814 100%)',
+                        color: '#5a0000',
+                        boxShadow: '0 4px 10px rgba(245,208,96,0.55), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -2px 0 rgba(0,0,0,0.15)',
+                        border: '1px solid #a87814',
+                      }
+                    : {
+                        background: 'linear-gradient(180deg,#fff,#f5f5f5)',
+                        color: '#8B0000',
+                        border: '1px solid rgba(200,16,46,0.18)',
+                        boxShadow: 'inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.05)',
+                      }
+                }
+              >
+                X{m}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Big / Small */}
-        <div className="grid grid-cols-2 gap-2 mt-3">
-          <button onClick={() => openBet({ type: 'size', value: 'big', label: 'Big', bg: 'linear-gradient(135deg,#fbbf24,#f59e0b)' })}
-            className="py-3 rounded-l-full rounded-tr-full font-bold text-[#8B0000] shadow" style={{ background: 'linear-gradient(135deg,#fde68a,#fbbf24)' }}>Big</button>
-          <button onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(135deg,#a855f7,#7c3aed)' })}
-            className="py-3 rounded-r-full rounded-tl-full font-bold text-white shadow" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>small</button>
+        {/* Big / Small — premium split pill */}
+        <div className="grid grid-cols-2 gap-0 mt-3 rounded-full overflow-hidden" style={{ boxShadow: '0 6px 14px rgba(139,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.4)' }}>
+          <button
+            onClick={() => openBet({ type: 'size', value: 'big', label: 'Big', bg: 'linear-gradient(145deg,#fff4c2,#f5d060,#a87814)' })}
+            className="py-3.5 font-extrabold text-lg active:scale-[0.97] transition"
+            style={{
+              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 55%,#c89a1a 100%)',
+              color: '#5a0000',
+              textShadow: '0 1px 0 rgba(255,255,255,0.6)',
+              borderRight: '1px solid rgba(139,0,0,0.25)',
+            }}
+          >
+            Big
+          </button>
+          <button
+            onClick={() => openBet({ type: 'size', value: 'small', label: 'Small', bg: 'linear-gradient(145deg,#fb7185,#dc2626,#8B0000)' })}
+            className="py-3.5 font-extrabold text-lg text-white active:scale-[0.97] transition"
+            style={{
+              background: 'linear-gradient(180deg,#fb7185 0%,#dc2626 55%,#8B0000 100%)',
+              textShadow: '0 1px 2px rgba(0,0,0,0.35)',
+            }}
+          >
+            small
+          </button>
         </div>
 
         {/* ─── Local Freeze Overlay (covers betting panel only) ─── */}
