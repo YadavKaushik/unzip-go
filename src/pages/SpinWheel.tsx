@@ -852,28 +852,34 @@ function SpinWheelContent({ initialGiftAmount = 0 }: { initialGiftAmount?: numbe
           <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px' }}>Recent Winners</span>
         </div>
         <div className="px-3 py-2">
-          {fakeWinners.slice(0, 6).map((rec, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.05 }}
-              className="flex items-center justify-between py-2"
-              style={{ borderBottom: idx < 5 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)', border: '1px solid rgba(255,215,0,0.3)' }}>
-                  <span style={{ fontSize: '16px' }}>{rec.avatar}</span>
+          {spinRecords.length === 0 ? (
+            <div className="py-6 text-center" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>
+              No spins yet — your wins will appear here
+            </div>
+          ) : (
+            spinRecords.slice(0, 6).map((rec, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                className="flex items-center justify-between py-2"
+                style={{ borderBottom: idx < Math.min(spinRecords.length, 6) - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                    style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)', border: '1px solid rgba(255,215,0,0.3)' }}>
+                    <span style={{ fontSize: '16px' }}>🧑</span>
+                  </div>
+                  <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: 600 }}>{rec.name}</span>
                 </div>
-                <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: 600 }}>{rec.name}</span>
-              </div>
-              <div className="text-right">
-                <p style={{ color: '#FFD700', fontSize: '13px', fontWeight: 700 }}>₹{rec.amount.toFixed(2)}</p>
-                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px' }}>{rec.time}</p>
-              </div>
-            </motion.div>
-          ))}
+                <div className="text-right">
+                  <p style={{ color: '#FFD700', fontSize: '13px', fontWeight: 700 }}>₹{rec.amount.toFixed(2)}</p>
+                  <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px' }}>{rec.date}</p>
+                </div>
+              </motion.div>
+            ))
+          )}
         </div>
       </div>
 
