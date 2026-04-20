@@ -244,8 +244,8 @@ export default function SignUpLoginScreen() {
     <div>
       <FormLabel icon={Phone} text="Phone number" />
       <div className="flex gap-2">
-        <div className="flex items-center px-3 py-3 rounded-lg border border-white/10 bg-white/5 text-white/60 text-[13px] gap-1 min-w-[65px] font-medium">
-          +91 <ChevronDown size={12} className="text-white/30" />
+        <div className="flex items-center px-3 py-3 rounded-lg border border-red-100 bg-red-50 text-[#8B0000] text-[13px] gap-1 min-w-[65px] font-semibold">
+          +91 <ChevronDown size={12} className="text-[#8B0000]/60" />
         </div>
         <input type="tel" placeholder="Please enter the phone number" {...register} className={inputClass + " flex-1"} />
       </div>
@@ -254,26 +254,44 @@ export default function SignUpLoginScreen() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col w-full max-w-[420px] mx-auto overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #1a0505 0%, #2d0a0a 50%, #1a0505 100%)' }}>
+    <div
+      className="min-h-screen flex flex-col w-full max-w-[420px] mx-auto overflow-x-hidden"
+      style={{
+        background:
+          'radial-gradient(circle at 20% 0%, rgba(245,208,96,0.18) 0%, transparent 45%), radial-gradient(circle at 80% 100%, rgba(200,16,46,0.10) 0%, transparent 50%), linear-gradient(180deg, #fff5f5 0%, #f5f5f5 100%)',
+      }}
+    >
       <Toaster position="top-center" richColors />
 
       <AnimatePresence>{showWelcomeBack && <WelcomeBackPopup onClose={handleWelcomeBackClose} />}</AnimatePresence>
       <AnimatePresence>{showWelcomeBonus && <WelcomeBonusPopup username={registeredUsername} onClose={handleWelcomeBonusClose} />}</AnimatePresence>
 
       {/* ─── Header ─── */}
-      <div className="pt-4 pb-4 px-4">
+      <div
+        className="pt-4 pb-4 px-4 border-b-2 border-[#f5d060]/50"
+        style={{
+          background:
+            'linear-gradient(180deg, #8B0000 0%, #C8102E 100%)',
+          boxShadow: '0 4px 14px rgba(139,0,0,0.25)',
+        }}
+      >
         <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/main-dashboard')} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/70 active:scale-90 transition">
+          <button onClick={() => navigate('/main-dashboard')} className="w-8 h-8 rounded-full bg-black/20 border border-[#f5d060]/40 flex items-center justify-center text-[#f5d060] active:scale-90 transition">
             <ChevronLeft size={20} />
           </button>
           <div className="flex items-center gap-1.5">
-            <Crown size={20} className="text-yellow-500" />
-            <span className="text-yellow-500 font-black text-[16px] tracking-wider" style={{ fontStyle: 'italic' }}>𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴</span>
+            <Crown size={20} className="text-[#f5d060]" />
+            <span className="font-black text-[16px] tracking-wider" style={{
+              fontStyle: 'italic',
+              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 50%,#a87814 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴</span>
           </div>
           <div className="w-8" />
         </div>
         <h1 className="text-white font-bold text-[18px]">{tab === 'login' ? 'Log in' : 'Register'}</h1>
-        <p className="text-white/40 text-[11px] mt-1 leading-[1.5]">
+        <p className="text-white/80 text-[11px] mt-1 leading-[1.5]">
           {tab === 'login'
             ? 'Please log in with your phone number or email\nIf you forget your password, please contact customer service'
             : 'Please register by phone number or email'}
@@ -281,14 +299,14 @@ export default function SignUpLoginScreen() {
       </div>
 
       {/* ─── Form ─── */}
-      <div className="flex-1 px-4 pb-4">
+      <div className="flex-1 px-4 pb-4 pt-4">
         {/* Tabs */}
-        <div className="flex mb-5 border-b border-white/10">
+        <div className="flex mb-5 border-b border-red-100 bg-white rounded-t-xl shadow-sm">
           {tab === 'login' ? (
             <>
               {(['phone', 'email'] as const).map(m => (
                 <button key={m} onClick={() => setLoginMethod(m)}
-                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-semibold transition-all border-b-2 ${loginMethod === m ? 'border-yellow-500 text-yellow-500' : 'border-transparent text-white/30'}`}>
+                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-bold transition-all border-b-2 ${loginMethod === m ? 'border-[#C8102E] text-[#8B0000]' : 'border-transparent text-gray-400'}`}>
                   {m === 'phone' ? <Phone size={15} /> : <Mail size={15} />}
                   {m === 'phone' ? 'phone number' : 'Email Login'}
                 </button>
@@ -298,7 +316,7 @@ export default function SignUpLoginScreen() {
             <>
               {(['phone', 'email'] as const).map(m => (
                 <button key={m} onClick={() => setRegisterMethod(m)}
-                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-semibold transition-all border-b-2 ${registerMethod === m ? 'border-yellow-500 text-yellow-500' : 'border-transparent text-white/30'}`}>
+                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-bold transition-all border-b-2 ${registerMethod === m ? 'border-[#C8102E] text-[#8B0000]' : 'border-transparent text-gray-400'}`}>
                   {m === 'phone' ? <Phone size={15} /> : <Mail size={15} />}
                   {m === 'phone' ? 'phone number' : 'Email'}
                 </button>
