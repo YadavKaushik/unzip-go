@@ -343,7 +343,7 @@ export default function SignUpLoginScreen() {
 
                   <button type="button" onClick={() => setRememberPassword(!rememberPassword)} className="flex items-center gap-2 py-0.5">
                     <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-[#C8102E] bg-[#C8102E]' : 'border-gray-300 bg-white'}`}>
-                      {rememberPassword && <CheckCircle size={10} className="text-black" />}
+                      {rememberPassword && <CheckCircle size={10} className="text-white" />}
                     </div>
                     <span className="text-gray-600 text-[11px]">Remember password</span>
                   </button>
@@ -372,7 +372,7 @@ export default function SignUpLoginScreen() {
 
                   <button type="button" onClick={() => setRememberPassword(!rememberPassword)} className="flex items-center gap-2 py-0.5">
                     <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-[#C8102E] bg-[#C8102E]' : 'border-gray-300 bg-white'}`}>
-                      {rememberPassword && <CheckCircle size={10} className="text-black" />}
+                      {rememberPassword && <CheckCircle size={10} className="text-white" />}
                     </div>
                     <span className="text-gray-600 text-[11px]">Remember password</span>
                   </button>
