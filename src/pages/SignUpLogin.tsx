@@ -76,12 +76,12 @@ function WelcomeBonusPopup({ username, onClose }: { username: string; onClose: (
 }
 
 /* ── Shared Components ── */
-const inputClass = "w-full px-3.5 py-3 rounded-lg border border-white/10 bg-white/5 text-[13px] text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-red-500/50 focus:border-red-500/50 transition-all";
+const inputClass = "w-full px-3.5 py-3 rounded-lg border border-red-100 bg-white text-[13px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E]/30 focus:border-[#C8102E]/50 transition-all";
 
 function FormLabel({ icon: Icon, text }: { icon: any; text: string }) {
   return (
-    <label className="flex items-center gap-1.5 text-[13px] font-bold text-white/80 mb-1.5">
-      <Icon size={14} className="text-yellow-500" /> {text}
+    <label className="flex items-center gap-1.5 text-[13px] font-bold text-[#8B0000] mb-1.5">
+      <Icon size={14} className="text-[#C8102E]" /> {text}
     </label>
   );
 }
@@ -91,7 +91,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, { show: boolean; toggle
     return (
       <div className="relative">
         <input ref={ref} type={show ? 'text' : 'password'} {...props} className={inputClass + " pr-10"} />
-        <button type="button" onClick={toggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 active:text-white/60">
+        <button type="button" onClick={toggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 active:text-[#8B0000]">
           {show ? <Eye size={16} /> : <EyeOff size={16} />}
         </button>
       </div>
@@ -102,8 +102,12 @@ const PasswordInput = React.forwardRef<HTMLInputElement, { show: boolean; toggle
 function SubmitButton({ loading, text }: { loading: boolean; text: string }) {
   return (
     <button type="submit" disabled={loading}
-      className="w-full py-3 rounded-full font-bold text-white text-[14px] shadow-lg transition-all active:scale-[0.97] disabled:opacity-60"
-      style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+      className="w-full py-3 rounded-full font-bold text-white text-[14px] transition-all active:scale-[0.97] disabled:opacity-60"
+      style={{
+        background: 'linear-gradient(135deg, #C8102E, #8B0000)',
+        boxShadow: '0 6px 16px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,255,255,0.25)',
+        border: '1px solid rgba(245,208,96,0.5)',
+      }}>
       {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" /> : text}
     </button>
   );
@@ -112,7 +116,11 @@ function SubmitButton({ loading, text }: { loading: boolean; text: string }) {
 function SwitchButton({ onClick, text }: { onClick: () => void; text: React.ReactNode }) {
   return (
     <button type="button" onClick={onClick}
-      className="w-full py-2.5 rounded-full font-semibold text-[13px] border border-yellow-600/40 text-yellow-500 bg-transparent transition-all active:scale-[0.97] active:bg-yellow-500/5">
+      className="w-full py-2.5 rounded-full font-semibold text-[13px] bg-white text-[#8B0000] transition-all active:scale-[0.97]"
+      style={{
+        border: '1.5px solid #f5d060',
+        boxShadow: '0 2px 6px rgba(245,208,96,0.35), inset 0 1px 0 #fff',
+      }}>
       {text}
     </button>
   );
@@ -122,17 +130,17 @@ function BottomActions({ navigate }: { navigate: (path: string) => void }) {
   return (
     <div className="flex items-center justify-center gap-14 pt-4 pb-1">
       <button type="button" className="flex flex-col items-center gap-1" onClick={() => navigate('/forgot-password')}>
-        <div className="w-11 h-11 rounded-full border border-yellow-600/30 flex items-center justify-center bg-yellow-500/10">
-          <Lock size={18} className="text-yellow-500" />
+        <div className="w-11 h-11 rounded-full border border-[#f5d060] flex items-center justify-center bg-red-50">
+          <Lock size={18} className="text-[#C8102E]" />
         </div>
-        <span className="text-[10px] text-white/40 font-medium mt-0.5">Forgot password</span>
+        <span className="text-[10px] text-gray-600 font-medium mt-0.5">Forgot password</span>
       </button>
       <a href="https://t.me/techie_404" target="_blank" rel="noopener noreferrer"
         className="flex flex-col items-center gap-1">
-        <div className="w-11 h-11 rounded-full border border-yellow-600/30 flex items-center justify-center bg-yellow-500/10">
-          <Headphones size={18} className="text-yellow-500" />
+        <div className="w-11 h-11 rounded-full border border-[#f5d060] flex items-center justify-center bg-red-50">
+          <Headphones size={18} className="text-[#C8102E]" />
         </div>
-        <span className="text-[10px] text-white/40 font-medium mt-0.5">Customer Service</span>
+        <span className="text-[10px] text-gray-600 font-medium mt-0.5">Customer Service</span>
       </a>
     </div>
   );
@@ -140,7 +148,7 @@ function BottomActions({ navigate }: { navigate: (path: string) => void }) {
 
 function ErrorText({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return <p className="text-red-400 text-[11px] mt-0.5">{msg}</p>;
+  return <p className="text-[#C8102E] text-[11px] mt-0.5 font-semibold">{msg}</p>;
 }
 
 /* ── Main Component ── */
