@@ -107,10 +107,20 @@ export default function WinGo() {
   }, [duration]);
 
   // Load wallet balance
-  const loadBalance = useCallback(async () => {
+  const [refreshingBal, setRefreshingBal] = useState(false);
+  const loadBalance = useCallback(async (showToast = false) => {
     if (!user) return;
-    const { data } = await supabase.from('wallets').select('balance').eq('user_id', user.id).maybeSingle();
-    if (data) setBalance(Number(data.balance) || 0);
+    setRefreshingBal(true);
+    try {
+      const { data, error } = await supabase.from('wallets').select('balance').eq('user_id', user.id).maybeSingle();
+      if (error) throw error;
+      if (data) setBalance(Number(data.balance) || 0);
+      if (showToast) toast.success('Balance updated');
+    } catch (e: any) {
+      if (showToast) toast.error(e?.message || 'Failed to refresh');
+    } finally {
+      setTimeout(() => setRefreshingBal(false), 400);
+    }
   }, [user]);
 
   useEffect(() => { loadBalance(); }, [loadBalance]);
