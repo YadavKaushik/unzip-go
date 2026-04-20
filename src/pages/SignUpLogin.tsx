@@ -76,12 +76,12 @@ function WelcomeBonusPopup({ username, onClose }: { username: string; onClose: (
 }
 
 /* ── Shared Components ── */
-const inputClass = "w-full px-3.5 py-3 rounded-lg border border-white/10 bg-white/5 text-[13px] text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-red-500/50 focus:border-red-500/50 transition-all";
+const inputClass = "w-full px-3.5 py-3 rounded-lg border border-red-100 bg-white text-[13px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E]/30 focus:border-[#C8102E]/50 transition-all";
 
 function FormLabel({ icon: Icon, text }: { icon: any; text: string }) {
   return (
-    <label className="flex items-center gap-1.5 text-[13px] font-bold text-white/80 mb-1.5">
-      <Icon size={14} className="text-yellow-500" /> {text}
+    <label className="flex items-center gap-1.5 text-[13px] font-bold text-[#8B0000] mb-1.5">
+      <Icon size={14} className="text-[#C8102E]" /> {text}
     </label>
   );
 }
@@ -91,7 +91,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, { show: boolean; toggle
     return (
       <div className="relative">
         <input ref={ref} type={show ? 'text' : 'password'} {...props} className={inputClass + " pr-10"} />
-        <button type="button" onClick={toggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 active:text-white/60">
+        <button type="button" onClick={toggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 active:text-[#8B0000]">
           {show ? <Eye size={16} /> : <EyeOff size={16} />}
         </button>
       </div>
@@ -102,8 +102,12 @@ const PasswordInput = React.forwardRef<HTMLInputElement, { show: boolean; toggle
 function SubmitButton({ loading, text }: { loading: boolean; text: string }) {
   return (
     <button type="submit" disabled={loading}
-      className="w-full py-3 rounded-full font-bold text-white text-[14px] shadow-lg transition-all active:scale-[0.97] disabled:opacity-60"
-      style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)' }}>
+      className="w-full py-3 rounded-full font-bold text-white text-[14px] transition-all active:scale-[0.97] disabled:opacity-60"
+      style={{
+        background: 'linear-gradient(135deg, #C8102E, #8B0000)',
+        boxShadow: '0 6px 16px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,255,255,0.25)',
+        border: '1px solid rgba(245,208,96,0.5)',
+      }}>
       {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" /> : text}
     </button>
   );
@@ -112,7 +116,11 @@ function SubmitButton({ loading, text }: { loading: boolean; text: string }) {
 function SwitchButton({ onClick, text }: { onClick: () => void; text: React.ReactNode }) {
   return (
     <button type="button" onClick={onClick}
-      className="w-full py-2.5 rounded-full font-semibold text-[13px] border border-yellow-600/40 text-yellow-500 bg-transparent transition-all active:scale-[0.97] active:bg-yellow-500/5">
+      className="w-full py-2.5 rounded-full font-semibold text-[13px] bg-white text-[#8B0000] transition-all active:scale-[0.97]"
+      style={{
+        border: '1.5px solid #f5d060',
+        boxShadow: '0 2px 6px rgba(245,208,96,0.35), inset 0 1px 0 #fff',
+      }}>
       {text}
     </button>
   );
@@ -122,17 +130,17 @@ function BottomActions({ navigate }: { navigate: (path: string) => void }) {
   return (
     <div className="flex items-center justify-center gap-14 pt-4 pb-1">
       <button type="button" className="flex flex-col items-center gap-1" onClick={() => navigate('/forgot-password')}>
-        <div className="w-11 h-11 rounded-full border border-yellow-600/30 flex items-center justify-center bg-yellow-500/10">
-          <Lock size={18} className="text-yellow-500" />
+        <div className="w-11 h-11 rounded-full border border-[#f5d060] flex items-center justify-center bg-red-50">
+          <Lock size={18} className="text-[#C8102E]" />
         </div>
-        <span className="text-[10px] text-white/40 font-medium mt-0.5">Forgot password</span>
+        <span className="text-[10px] text-gray-600 font-medium mt-0.5">Forgot password</span>
       </button>
       <a href="https://t.me/techie_404" target="_blank" rel="noopener noreferrer"
         className="flex flex-col items-center gap-1">
-        <div className="w-11 h-11 rounded-full border border-yellow-600/30 flex items-center justify-center bg-yellow-500/10">
-          <Headphones size={18} className="text-yellow-500" />
+        <div className="w-11 h-11 rounded-full border border-[#f5d060] flex items-center justify-center bg-red-50">
+          <Headphones size={18} className="text-[#C8102E]" />
         </div>
-        <span className="text-[10px] text-white/40 font-medium mt-0.5">Customer Service</span>
+        <span className="text-[10px] text-gray-600 font-medium mt-0.5">Customer Service</span>
       </a>
     </div>
   );
@@ -140,7 +148,7 @@ function BottomActions({ navigate }: { navigate: (path: string) => void }) {
 
 function ErrorText({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return <p className="text-red-400 text-[11px] mt-0.5">{msg}</p>;
+  return <p className="text-[#C8102E] text-[11px] mt-0.5 font-semibold">{msg}</p>;
 }
 
 /* ── Main Component ── */
@@ -236,8 +244,8 @@ export default function SignUpLoginScreen() {
     <div>
       <FormLabel icon={Phone} text="Phone number" />
       <div className="flex gap-2">
-        <div className="flex items-center px-3 py-3 rounded-lg border border-white/10 bg-white/5 text-white/60 text-[13px] gap-1 min-w-[65px] font-medium">
-          +91 <ChevronDown size={12} className="text-white/30" />
+        <div className="flex items-center px-3 py-3 rounded-lg border border-red-100 bg-red-50 text-[#8B0000] text-[13px] gap-1 min-w-[65px] font-semibold">
+          +91 <ChevronDown size={12} className="text-[#8B0000]/60" />
         </div>
         <input type="tel" placeholder="Please enter the phone number" {...register} className={inputClass + " flex-1"} />
       </div>
@@ -246,26 +254,44 @@ export default function SignUpLoginScreen() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col w-full max-w-[420px] mx-auto overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #1a0505 0%, #2d0a0a 50%, #1a0505 100%)' }}>
+    <div
+      className="min-h-screen flex flex-col w-full max-w-[420px] mx-auto overflow-x-hidden"
+      style={{
+        background:
+          'radial-gradient(circle at 20% 0%, rgba(245,208,96,0.18) 0%, transparent 45%), radial-gradient(circle at 80% 100%, rgba(200,16,46,0.10) 0%, transparent 50%), linear-gradient(180deg, #fff5f5 0%, #f5f5f5 100%)',
+      }}
+    >
       <Toaster position="top-center" richColors />
 
       <AnimatePresence>{showWelcomeBack && <WelcomeBackPopup onClose={handleWelcomeBackClose} />}</AnimatePresence>
       <AnimatePresence>{showWelcomeBonus && <WelcomeBonusPopup username={registeredUsername} onClose={handleWelcomeBonusClose} />}</AnimatePresence>
 
       {/* ─── Header ─── */}
-      <div className="pt-4 pb-4 px-4">
+      <div
+        className="pt-4 pb-4 px-4 border-b-2 border-[#f5d060]/50"
+        style={{
+          background:
+            'linear-gradient(180deg, #8B0000 0%, #C8102E 100%)',
+          boxShadow: '0 4px 14px rgba(139,0,0,0.25)',
+        }}
+      >
         <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/main-dashboard')} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/70 active:scale-90 transition">
+          <button onClick={() => navigate('/main-dashboard')} className="w-8 h-8 rounded-full bg-black/20 border border-[#f5d060]/40 flex items-center justify-center text-[#f5d060] active:scale-90 transition">
             <ChevronLeft size={20} />
           </button>
           <div className="flex items-center gap-1.5">
-            <Crown size={20} className="text-yellow-500" />
-            <span className="text-yellow-500 font-black text-[16px] tracking-wider" style={{ fontStyle: 'italic' }}>𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴</span>
+            <Crown size={20} className="text-[#f5d060]" />
+            <span className="font-black text-[16px] tracking-wider" style={{
+              fontStyle: 'italic',
+              background: 'linear-gradient(180deg,#fff4c2 0%,#f5d060 50%,#a87814 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴</span>
           </div>
           <div className="w-8" />
         </div>
         <h1 className="text-white font-bold text-[18px]">{tab === 'login' ? 'Log in' : 'Register'}</h1>
-        <p className="text-white/40 text-[11px] mt-1 leading-[1.5]">
+        <p className="text-white/80 text-[11px] mt-1 leading-[1.5]">
           {tab === 'login'
             ? 'Please log in with your phone number or email\nIf you forget your password, please contact customer service'
             : 'Please register by phone number or email'}
@@ -273,14 +299,14 @@ export default function SignUpLoginScreen() {
       </div>
 
       {/* ─── Form ─── */}
-      <div className="flex-1 px-4 pb-4">
+      <div className="flex-1 px-4 pb-4 pt-4">
         {/* Tabs */}
-        <div className="flex mb-5 border-b border-white/10">
+        <div className="flex mb-5 border-b border-red-100 bg-white rounded-t-xl shadow-sm">
           {tab === 'login' ? (
             <>
               {(['phone', 'email'] as const).map(m => (
                 <button key={m} onClick={() => setLoginMethod(m)}
-                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-semibold transition-all border-b-2 ${loginMethod === m ? 'border-yellow-500 text-yellow-500' : 'border-transparent text-white/30'}`}>
+                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-bold transition-all border-b-2 ${loginMethod === m ? 'border-[#C8102E] text-[#8B0000]' : 'border-transparent text-gray-400'}`}>
                   {m === 'phone' ? <Phone size={15} /> : <Mail size={15} />}
                   {m === 'phone' ? 'phone number' : 'Email Login'}
                 </button>
@@ -290,7 +316,7 @@ export default function SignUpLoginScreen() {
             <>
               {(['phone', 'email'] as const).map(m => (
                 <button key={m} onClick={() => setRegisterMethod(m)}
-                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-semibold transition-all border-b-2 ${registerMethod === m ? 'border-yellow-500 text-yellow-500' : 'border-transparent text-white/30'}`}>
+                  className={`flex-1 py-2.5 flex items-center justify-center gap-1.5 text-[12px] font-bold transition-all border-b-2 ${registerMethod === m ? 'border-[#C8102E] text-[#8B0000]' : 'border-transparent text-gray-400'}`}>
                   {m === 'phone' ? <Phone size={15} /> : <Mail size={15} />}
                   {m === 'phone' ? 'phone number' : 'Email'}
                 </button>
@@ -316,10 +342,10 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <button type="button" onClick={() => setRememberPassword(!rememberPassword)} className="flex items-center gap-2 py-0.5">
-                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-yellow-500 bg-yellow-500' : 'border-white/20 bg-transparent'}`}>
-                      {rememberPassword && <CheckCircle size={10} className="text-black" />}
+                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-[#C8102E] bg-[#C8102E]' : 'border-gray-300 bg-white'}`}>
+                      {rememberPassword && <CheckCircle size={10} className="text-white" />}
                     </div>
-                    <span className="text-white/40 text-[11px]">Remember password</span>
+                    <span className="text-gray-600 text-[11px]">Remember password</span>
                   </button>
 
                   <SubmitButton loading={isSubmitting} text="Log in" />
@@ -345,10 +371,10 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <button type="button" onClick={() => setRememberPassword(!rememberPassword)} className="flex items-center gap-2 py-0.5">
-                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-yellow-500 bg-yellow-500' : 'border-white/20 bg-transparent'}`}>
-                      {rememberPassword && <CheckCircle size={10} className="text-black" />}
+                    <div className={`w-[16px] h-[16px] rounded-full border flex items-center justify-center transition-all ${rememberPassword ? 'border-[#C8102E] bg-[#C8102E]' : 'border-gray-300 bg-white'}`}>
+                      {rememberPassword && <CheckCircle size={10} className="text-white" />}
                     </div>
-                    <span className="text-white/40 text-[11px]">Remember password</span>
+                    <span className="text-gray-600 text-[11px]">Remember password</span>
                   </button>
 
                   <SubmitButton loading={isSubmitting} text="Log in" />
@@ -386,8 +412,8 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                    <input type="checkbox" {...phoneRegisterForm.register('agree')} className="w-4 h-4 accent-red-600 rounded" />
-                    <span className="text-white/50 text-[11px]">I have read and agree <span className="text-yellow-500 font-bold">【Privacy Agreement】</span></span>
+                    <input type="checkbox" {...phoneRegisterForm.register('agree')} className="w-4 h-4 accent-[#C8102E] rounded" />
+                    <span className="text-gray-600 text-[11px]">I have read and agree <span className="text-[#C8102E] font-bold">【Privacy Agreement】</span></span>
                   </label>
                   <ErrorText msg={phoneRegisterForm.formState.errors.agree?.message} />
 
@@ -427,8 +453,8 @@ export default function SignUpLoginScreen() {
                   </div>
 
                   <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                    <input type="checkbox" {...registerForm.register('agree')} className="w-4 h-4 accent-red-600 rounded" />
-                    <span className="text-white/50 text-[11px]">I have read and agree <span className="text-yellow-500 font-bold">【Privacy Agreement】</span></span>
+                    <input type="checkbox" {...registerForm.register('agree')} className="w-4 h-4 accent-[#C8102E] rounded" />
+                    <span className="text-gray-600 text-[11px]">I have read and agree <span className="text-[#C8102E] font-bold">【Privacy Agreement】</span></span>
                   </label>
                   <ErrorText msg={registerForm.formState.errors.agree?.message} />
 
