@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { db as supabase } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 import { DashboardSkeleton } from '@/components/SkeletonScreens';
-import lotteryWingo from '@/assets/lottery-wingo.png';
-import lotteryK3 from '@/assets/lottery-k3.png';
-import lottery5D from '@/assets/lottery-5d.png';
-import lotteryTrx from '@/assets/lottery-trx.png';
+import lotteryWingo from '@/assets/lottery-card-wingo.png';
+import lotteryK3 from '@/assets/lottery-card-k3.png';
+import lottery5D from '@/assets/lottery-card-5d.png';
+import lotteryTrx from '@/assets/lottery-card-trx.png';
 
 
 // ── Mock Data ──────────────────────────────────────────────────────────────────
@@ -562,93 +562,41 @@ export default function MainDashboard() {
 
         <div className="grid grid-cols-4 gap-2">
           {LOTTERY_GAMES.map((game) => {
-            const IconComp = LOTTERY_ICONS[game.name];
+            const cardImg =
+              game.name === 'Win Go' ? lotteryWingo :
+              game.name === 'K3' ? lotteryK3 :
+              game.name === '5D' ? lottery5D :
+              lotteryTrx;
             const isHot = game.hot;
             return (
-            <motion.div
-              key={game.id}
-              onClick={() => handleGameClick(game.name)}
-              whileTap={{ scale: 0.94 }}
-              animate={isHot ? {
-                boxShadow: [
-                  '0 6px 18px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,215,0,0.25)',
-                  '0 8px 24px rgba(255,215,0,0.55), inset 0 1px 0 rgba(255,215,0,0.45)',
-                  '0 6px 18px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,215,0,0.25)',
-                ],
-              } : {}}
-              transition={isHot ? { duration: 2, repeat: Infinity, ease: 'easeInOut' } : {}}
-              className="relative rounded-2xl overflow-hidden cursor-pointer"
-              style={{
-                background: game.gradient,
-                minHeight: '120px',
-                boxShadow: isHot
-                  ? '0 6px 18px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,215,0,0.25)'
-                  : '0 4px 12px rgba(200,16,46,0.18)',
-                border: isHot ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,255,255,0.15)',
-              }}>
-
-                {/* Animated shine sweep for HOT */}
+              <motion.div
+                key={game.id}
+                onClick={() => handleGameClick(game.name)}
+                whileTap={{ scale: 0.94 }}
+                animate={isHot ? { y: [0, -2, 0] } : {}}
+                transition={isHot ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut' } : {}}
+                className="relative rounded-2xl overflow-hidden cursor-pointer"
+                style={{ aspectRatio: '270 / 345' }}
+              >
+                <img
+                  src={cardImg}
+                  alt={game.name}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                  draggable={false}
+                />
                 {isHot && (
                   <motion.div
                     aria-hidden
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: 'linear-gradient(115deg, transparent 30%, rgba(255,215,0,0.35) 50%, transparent 70%)',
+                      background: 'linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%)',
                       mixBlendMode: 'screen',
                     }}
                     animate={{ x: ['-120%', '120%'] }}
-                    transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.6 }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.2 }}
                   />
                 )}
-
-                {/* Crown for HOT card */}
-                {isHot &&
-                  <motion.div
-                    className="absolute -top-1 left-1/2 -translate-x-1/2 z-20"
-                    style={{ fontSize: 14, filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }}
-                    animate={{ y: [0, -2, 0], rotate: [-5, 5, -5] }}
-                    transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    👑
-                  </motion.div>
-                }
-
-                {/* HOT badge */}
-                {isHot &&
-              <div className="absolute top-1 right-1 z-10">
-                    <motion.div
-                      className="text-white text-[7px] font-800 px-1.5 py-0.5 rounded-sm leading-none shadow-md"
-                      style={{ background: 'linear-gradient(90deg, #FFD700, #FF6B00)' }}
-                      animate={{ scale: [1, 1.12, 1] }}
-                      transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-                    >
-                      HOT
-                    </motion.div>
-                  </div>
-              }
-
-                {/* Game Icon */}
-                <div className="flex justify-center items-center pt-3 pb-1 relative z-[1]" style={{ minHeight: '70px' }}>
-                  {isHot ? (
-                    <motion.div
-                      animate={{ y: [0, -3, 0], rotate: [-2, 2, -2] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                    >
-                      {IconComp && <IconComp />}
-                    </motion.div>
-                  ) : (
-                    IconComp && <IconComp />
-                  )}
-                </div>
-
-                {/* Game Name & Subtitle */}
-                <div className="px-1 pb-2 text-center relative z-[1]">
-                  <div className="font-800 text-[12px] leading-tight drop-shadow-sm"
-                    style={{ color: isHot ? '#FFD700' : '#fff', textShadow: isHot ? '0 1px 2px rgba(0,0,0,0.5)' : '0 1px 2px rgba(0,0,0,0.25)' }}>
-                    {game.name}
-                  </div>
-                  <div className="text-white/85 text-[8px] font-500 leading-tight mt-0.5">{game.subtitle}</div>
-                </div>
               </motion.div>
             );
           })}
