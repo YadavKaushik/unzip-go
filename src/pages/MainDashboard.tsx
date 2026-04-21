@@ -8,6 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { db as supabase } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 import { DashboardSkeleton } from '@/components/SkeletonScreens';
+import lotteryWingo from '@/assets/lottery-wingo.png';
+import lotteryK3 from '@/assets/lottery-k3.png';
+import lottery5D from '@/assets/lottery-5d.png';
+import lotteryTrx from '@/assets/lottery-trx.png';
 
 
 // ── Mock Data ──────────────────────────────────────────────────────────────────
@@ -43,53 +47,19 @@ const LOTTERY_GAMES = [
 
 // Lottery icon components
 function WinGoIcon() {
-  return (
-    <div className="relative w-16 h-16 flex items-center justify-center">
-      <div className="absolute w-7 h-7 rounded-full bg-green-400 flex items-center justify-center text-white font-800 text-xs shadow-md" style={{ top: 0, left: '50%', transform: 'translateX(-50%)' }}>5</div>
-      <div className="absolute w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white font-800 text-[10px] shadow-md" style={{ top: 2, left: 2 }}>9</div>
-      <div className="absolute w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-white font-800 text-[10px] shadow-md" style={{ bottom: 4, left: 6 }}>7</div>
-      <div className="absolute w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white font-800 text-[10px] shadow-md" style={{ bottom: 2, right: 6 }}>2</div>
-    </div>
-  );
+  return <img src={lotteryWingo} alt="Win Go" loading="lazy" width={512} height={512} className="w-16 h-16 object-contain drop-shadow-lg" />;
 }
 
 function K3Icon() {
-  return (
-    <div className="relative w-16 h-16 flex items-center justify-center">
-      <div className="w-10 h-10 bg-white rounded-lg shadow-md flex flex-wrap items-center justify-center gap-0.5 p-1.5 transform -rotate-6">
-        <div className="w-2 h-2 rounded-full bg-red-500" />
-        <div className="w-2 h-2 rounded-full bg-red-500" />
-        <div className="w-2 h-2 rounded-full bg-red-500" />
-        <div className="w-2 h-2 rounded-full bg-red-500" />
-      </div>
-      <div className="absolute bottom-1 right-1 w-8 h-8 bg-white rounded-lg shadow-md flex flex-wrap items-center justify-center gap-0.5 p-1 transform rotate-12">
-        <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-        <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-      </div>
-    </div>
-  );
+  return <img src={lotteryK3} alt="K3" loading="lazy" width={512} height={512} className="w-16 h-16 object-contain drop-shadow-lg" />;
 }
 
 function FiveDIcon() {
-  return (
-    <div className="relative w-16 h-16 flex items-center justify-center">
-      <div className="w-8 h-8 rounded-full bg-green-400 flex items-center justify-center text-white font-900 text-xs shadow-md z-10">5D</div>
-      <div className="absolute w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white font-800 text-[9px] shadow-md" style={{ top: 2, left: 8 }}>1</div>
-      <div className="absolute w-5 h-5 rounded-full bg-yellow-400 flex items-center justify-center text-white font-800 text-[9px] shadow-md" style={{ top: 2, right: 8 }}>3</div>
-      <div className="absolute w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center text-white font-800 text-[9px] shadow-md" style={{ bottom: 4, left: '50%', transform: 'translateX(-50%)' }}>8</div>
-    </div>
-  );
+  return <img src={lottery5D} alt="5D" loading="lazy" width={512} height={512} className="w-16 h-16 object-contain drop-shadow-lg" />;
 }
 
 function TrxIcon() {
-  return (
-    <div className="relative w-16 h-16 flex items-center justify-center">
-      <div className="w-0 h-0 border-l-[14px] border-r-[14px] border-b-[24px] border-l-transparent border-r-transparent border-b-red-400" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }} />
-      <div className="absolute w-5 h-5 rounded-full bg-yellow-400 flex items-center justify-center text-white font-800 text-[9px] shadow-md" style={{ top: 2, right: 6 }}>1</div>
-      <div className="absolute w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white font-800 text-[9px] shadow-md" style={{ bottom: 6, left: 4 }}>T</div>
-      <div className="absolute w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white font-800 text-[9px] shadow-md" style={{ bottom: 6, right: 4 }}>X</div>
-    </div>
-  );
+  return <img src={lotteryTrx} alt="Trx Win" loading="lazy" width={512} height={512} className="w-16 h-16 object-contain drop-shadow-lg" />;
 }
 
 const LOTTERY_ICONS: Record<string, React.FC> = {
