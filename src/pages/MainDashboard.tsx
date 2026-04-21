@@ -560,47 +560,11 @@ export default function MainDashboard() {
           </button>
         </div>
 
-        <div className="grid grid-cols-4 gap-2">
-          {LOTTERY_GAMES.map((game) => {
-            const cardImg =
-              game.name === 'Win Go' ? lotteryWingo :
-              game.name === 'K3' ? lotteryK3 :
-              game.name === '5D' ? lottery5D :
-              lotteryTrx;
-            const isHot = game.hot;
-            return (
-              <motion.div
-                key={game.id}
-                onClick={() => handleGameClick(game.name)}
-                whileTap={{ scale: 0.94 }}
-                animate={isHot ? { y: [0, -2, 0] } : {}}
-                transition={isHot ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut' } : {}}
-                className="relative rounded-2xl overflow-hidden cursor-pointer"
-                style={{ aspectRatio: '270 / 345' }}
-              >
-                <img
-                  src={cardImg}
-                  alt={game.name}
-                  loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-                  draggable={false}
-                />
-                {isHot && (
-                  <motion.div
-                    aria-hidden
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: 'linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%)',
-                      mixBlendMode: 'screen',
-                    }}
-                    animate={{ x: ['-120%', '120%'] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.2 }}
-                  />
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
+        <LotteryCarousel
+          games={LOTTERY_GAMES}
+          onGameClick={handleGameClick}
+          cardImgs={{ 'Win Go': lotteryWingo, 'K3': lotteryK3, '5D': lottery5D, 'Trx Win': lotteryTrx }}
+        />
       </div>
       }
 
