@@ -12,6 +12,7 @@ import lotteryWingo from '@/assets/lottery-card-wingo.png';
 import lotteryK3 from '@/assets/lottery-card-k3.png';
 import lottery5D from '@/assets/lottery-card-5d.png';
 import lotteryTrx from '@/assets/lottery-card-trx.png';
+import LotteryCarousel from '@/components/LotteryCarousel';
 
 
 // ── Mock Data ──────────────────────────────────────────────────────────────────
