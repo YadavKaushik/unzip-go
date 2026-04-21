@@ -43,7 +43,7 @@ export default function LotteryCarousel({ games, onGameClick, cardImgs }: Props)
       onTouchEnd={() => setTimeout(() => setPaused(false), 4000)}
       onMouseDown={() => setPaused(true)}
       onMouseUp={() => setTimeout(() => setPaused(false), 4000)}
-      className="flex gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-none -mx-3 px-3 pb-1"
+      className="flex gap-2 overflow-x-auto snap-x snap-mandatory scrollbar-none -mx-3 px-3 pb-1"
       style={{ scrollbarWidth: 'none' }}
     >
       {games.map((game) => {
@@ -56,14 +56,14 @@ export default function LotteryCarousel({ games, onGameClick, cardImgs }: Props)
             whileTap={{ scale: 0.95 }}
             animate={isHot ? { y: [0, -3, 0] } : {}}
             transition={isHot ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut' } : {}}
-            className="relative rounded-2xl overflow-hidden cursor-pointer shrink-0 snap-start shadow-lg"
-            style={{ width: 'calc((100% - 1.5rem) / 3)', aspectRatio: '270 / 345' }}
+            className="relative overflow-hidden cursor-pointer shrink-0 snap-start"
+            style={{ width: 'calc((100% - 1rem) / 3)', aspectRatio: '270 / 345' }}
           >
             <img
               src={cardImg}
               alt={game.name}
               loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+              className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
               draggable={false}
             />
             {isHot && (
