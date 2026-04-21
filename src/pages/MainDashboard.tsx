@@ -8,6 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { db as supabase } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 import { DashboardSkeleton } from '@/components/SkeletonScreens';
+import lotteryWingo from '@/assets/lottery-wingo.png';
+import lotteryK3 from '@/assets/lottery-k3.png';
+import lottery5D from '@/assets/lottery-5d.png';
+import lotteryTrx from '@/assets/lottery-trx.png';
 
 
 // ── Mock Data ──────────────────────────────────────────────────────────────────
