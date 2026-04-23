@@ -275,6 +275,7 @@ function PremiumCard({
 export default function MainDashboard() {
   const navigate = useNavigate();
   const { user, wallet } = useAuth();
+  const [authBanner, setAuthBanner] = useState<{ type: 'login' | 'register' } | null>(null);
   const [activeCategory, setActiveCategory] = useState('cat-lobby');
   const [currentBanner, setCurrentBanner] = useState(0);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -351,6 +352,23 @@ export default function MainDashboard() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const storedBanner = sessionStorage.getItem('techie404-auth-banner');
+    if (!storedBanner) return;
+
+    try {
+      const parsed = JSON.parse(storedBanner) as { type?: 'login' | 'register' };
+      if (parsed.type === 'login' || parsed.type === 'register') {
+        setAuthBanner({ type: parsed.type });
+        sessionStorage.removeItem('techie404-auth-banner');
+        const timeout = window.setTimeout(() => setAuthBanner(null), 2000);
+        return () => window.clearTimeout(timeout);
+      }
+    } catch {
+      sessionStorage.removeItem('techie404-auth-banner');
+    }
+  }, []);
+
   const toggleFavorite = (id: string) => {
     setFavorites((prev) => {
       const next = new Set(prev);
@@ -424,6 +442,32 @@ export default function MainDashboard() {
   return (
     <div className="min-h-screen w-full max-w-[420px] mx-auto pb-24 overflow-x-hidden" style={{ background: '#f5f5f5' }}>
       <Toaster position="top-center" richColors />
+
+      <AnimatePresence>
+        {authBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: -18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -18 }}
+            transition={{ duration: 0.22 }}
+            className="fixed top-3 left-1/2 z-50 w-[calc(100%-24px)] max-w-[396px] -translate-x-1/2 px-3"
+          >
+            <div className="flex items-center gap-3 rounded-2xl border border-yellow-300/40 bg-gradient-to-r from-[#8B0000] via-[#C8102E] to-[#8B0000] px-4 py-3 text-white shadow-xl">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/12 border border-yellow-300/30">
+                <Crown size={18} className="text-yellow-300" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-black leading-none">
+                  {authBanner.type === 'login' ? 'Welcome back!' : 'Welcome to 𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴!'}
+                </p>
+                <p className="mt-1 text-[11px] text-white/80">
+                  {authBanner.type === 'login' ? 'Aap successfully login ho gaye.' : 'Account create ho gaya, ab aap direct home par ho.'}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Header ─────────────────────────────────────────── */}
       <div style={{ background: 'linear-gradient(180deg, #8B0000 0%, #C8102E 100%)' }} className="px-3 py-2">
