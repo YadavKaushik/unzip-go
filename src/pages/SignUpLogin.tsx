@@ -180,11 +180,23 @@ export default function SignUpLoginScreen() {
   // If a ref code is in URL, switch to register tab automatically
   useEffect(() => { if (refFromUrl) setTab('register'); }, [refFromUrl]);
 
+  const showAuthPopup = (title: string, description: string) => {
+    toast.error(title, {
+      description,
+      duration: 2000,
+      closeButton: false,
+    });
+  };
+
   const onLogin = loginForm.handleSubmit(async (data) => {
     setIsSubmitting(true);
     const { error } = await signIn(data.email, data.password);
     setIsSubmitting(false);
-    if (error) { loginForm.setError('email', { message: error.message || 'Invalid credentials' }); return; }
+    if (error) {
+      loginForm.setError('email', { message: 'Wrong email or password' });
+      showAuthPopup('Login failed', 'Email ya password galat hai.');
+      return;
+    }
     setShowWelcomeBack(true);
   });
 
@@ -194,7 +206,11 @@ export default function SignUpLoginScreen() {
     setIsSubmitting(true);
     const { error } = await signInWithPhone('+91' + cleanPhone, data.password);
     setIsSubmitting(false);
-    if (error) { phoneLoginForm.setError('phone', { message: error.message || 'Invalid credentials' }); return; }
+    if (error) {
+      phoneLoginForm.setError('phone', { message: 'Wrong mobile number or password' });
+      showAuthPopup('Login failed', 'Mobile number ya password galat hai.');
+      return;
+    }
     setShowWelcomeBack(true);
   });
 
@@ -210,8 +226,10 @@ export default function SignUpLoginScreen() {
       const msg = error.message || 'Registration failed';
       if (msg.includes('already registered')) {
         registerForm.setError('email', { message: 'This email is already registered. Please login instead.' });
+        showAuthPopup('Already registered', 'Ye email pehle se registered hai.');
       } else {
         registerForm.setError('email', { message: msg });
+        showAuthPopup('Registration failed', msg);
       }
       return;
     }
@@ -230,8 +248,10 @@ export default function SignUpLoginScreen() {
       const msg = error.message || 'Registration failed';
       if (msg.includes('already registered')) {
         phoneRegisterForm.setError('phone', { message: 'This number is already registered. Please login instead.' });
+        showAuthPopup('Already registered', 'Ye mobile number pehle se registered hai.');
       } else {
         phoneRegisterForm.setError('phone', { message: msg });
+        showAuthPopup('Registration failed', msg);
       }
       return;
     }
