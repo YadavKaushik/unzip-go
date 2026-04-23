@@ -361,7 +361,7 @@ export default function MainDashboard() {
       if (parsed.type === 'login' || parsed.type === 'register') {
         setAuthBanner({ type: parsed.type });
         sessionStorage.removeItem('techie404-auth-banner');
-        const timeout = window.setTimeout(() => setAuthBanner(null), 2000);
+        const timeout = window.setTimeout(() => setAuthBanner(null), 5000);
         return () => window.clearTimeout(timeout);
       }
     } catch {
