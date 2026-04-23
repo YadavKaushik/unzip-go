@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface Game {
@@ -15,34 +15,10 @@ interface Props {
 
 export default function LotteryCarousel({ games, onGameClick, cardImgs }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [paused, setPaused] = useState(false);
-  const [index, setIndex] = useState(0);
-
-  // Auto-slide every 3s
-  useEffect(() => {
-    if (paused) return;
-    const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % games.length);
-    }, 3000);
-    return () => clearInterval(id);
-  }, [paused, games.length]);
-
-  // Scroll to index when it changes (auto-slide only — user manual scroll is independent)
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    const child = el.children[index] as HTMLElement | undefined;
-    if (!child) return;
-    el.scrollTo({ left: child.offsetLeft - el.offsetLeft, behavior: 'smooth' });
-  }, [index]);
 
   return (
     <div
       ref={trackRef}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setTimeout(() => setPaused(false), 4000)}
-      onMouseDown={() => setPaused(true)}
-      onMouseUp={() => setTimeout(() => setPaused(false), 4000)}
       className="flex gap-2 overflow-x-auto snap-x snap-mandatory scrollbar-none -mx-3 px-3 pb-1"
       style={{ scrollbarWidth: 'none' }}
     >
