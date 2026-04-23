@@ -450,9 +450,9 @@ export default function MainDashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -18 }}
             transition={{ duration: 0.22 }}
-            className="fixed top-3 left-1/2 z-50 w-[calc(100%-24px)] max-w-[396px] -translate-x-1/2 px-3"
+            className="fixed inset-x-0 top-3 z-50 flex justify-center px-3"
           >
-            <div className="flex items-center gap-3 rounded-2xl border border-yellow-300/40 bg-gradient-to-r from-[#8B0000] via-[#C8102E] to-[#8B0000] px-4 py-3 text-white shadow-xl">
+            <div className="flex w-full max-w-[396px] items-center gap-3 rounded-2xl border border-yellow-300/40 bg-gradient-to-r from-[#8B0000] via-[#C8102E] to-[#8B0000] px-4 py-3 text-white shadow-xl">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/12 border border-yellow-300/30">
                 <Crown size={18} className="text-yellow-300" />
               </div>
