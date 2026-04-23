@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Crown } from 'lucide-react';
+import splashHero from '@/assets/splash-hero.png';
 
 export default function PageLoader() {
   return (
@@ -30,9 +30,14 @@ export default function PageLoader() {
         <motion.div
           animate={{ y: [0, -2, 0] }}
           transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-          className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border border-accent/40 bg-background/20 text-accent"
+          className="relative z-10 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-accent/40 bg-background/20 p-2"
         >
-          <Crown size={20} />
+          <img
+            src={splashHero}
+            alt="Techie404 logo"
+            className="h-full w-full object-contain"
+            loading="eager"
+          />
         </motion.div>
       </motion.div>
     </motion.div>
