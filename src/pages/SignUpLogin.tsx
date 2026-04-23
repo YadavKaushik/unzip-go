@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, Toaster } from 'sonner';
-import { Eye, EyeOff, Crown, Lock, Mail, Phone, Gift, X, Sparkles, Wallet, ChevronLeft, ChevronDown, MessageCircle, Headphones, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Crown, Lock, Mail, Phone, Gift, ChevronLeft, ChevronDown, MessageCircle, Headphones, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -10,70 +10,6 @@ type LoginForm = { email: string; password: string };
 type PhoneLoginForm = { phone: string; password: string };
 type RegisterForm = { email: string; password: string; confirmPassword: string; referral: string; agree: boolean };
 type PhoneRegisterForm = { phone: string; password: string; confirmPassword: string; referral: string; agree: boolean };
-
-/* ── Popups ── */
-function WelcomeBackPopup({ onClose }: { onClose: () => void }) {
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6" onClick={onClose}>
-      <motion.div initial={{ scale: 0.7, opacity: 0, y: 40 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.8, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-        className="relative w-full max-w-[340px] rounded-3xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-        <div style={{ background: 'linear-gradient(160deg, #1a0505 0%, #8B0000 50%, #2d0a0a 100%)' }} className="p-6 text-center">
-          <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70"><X size={16} /></button>
-          <div className="flex justify-center mb-3">
-            <div className="w-20 h-20 rounded-full bg-yellow-400/10 border-2 border-yellow-600/40 flex items-center justify-center">
-              <Crown size={40} className="text-yellow-500" />
-            </div>
-          </div>
-          <h2 className="text-white font-bold text-2xl mb-1">Welcome Back!</h2>
-          <p className="text-yellow-500 font-bold text-lg mb-1">to 𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴ 👑</p>
-          <p className="text-white/60 text-sm mb-5">Great to see you again!</p>
-          <button onClick={onClose} className="w-full py-3.5 rounded-2xl font-bold text-[15px]"
-            style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)', color: '#fff' }}>
-            🎮 Start Playing Now!
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function WelcomeBonusPopup({ username, onClose }: { username: string; onClose: () => void }) {
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6" onClick={onClose}>
-      <motion.div initial={{ scale: 0.7, opacity: 0, y: 40 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.8, opacity: 0, y: 20 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-        className="relative w-full max-w-[340px] rounded-3xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-        <div style={{ background: 'linear-gradient(160deg, #1a0505 0%, #8B0000 50%, #2d0a0a 100%)' }} className="p-6 text-center">
-          <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70"><X size={16} /></button>
-          <div className="flex justify-center mb-3">
-            <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-yellow-400/10 border-2 border-yellow-600/40 flex items-center justify-center">
-                <Gift size={40} className="text-yellow-500" />
-              </div>
-              <Sparkles size={18} className="text-yellow-500 absolute -top-1 -right-1" />
-            </div>
-          </div>
-          <h2 className="text-white font-bold text-xl mb-1">Congratulations{username ? `, ${username}` : ''}! 🎊</h2>
-          <p className="text-white/60 text-sm mb-4">Your account has been created!</p>
-          <div className="bg-white/5 border border-yellow-600/30 rounded-2xl p-4 mb-5">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Wallet size={20} className="text-yellow-500" />
-              <span className="text-white/60 text-sm font-semibold">Bonus Added to Wallet</span>
-            </div>
-            <div className="text-yellow-500 font-black text-4xl">₹49</div>
-          </div>
-          <button onClick={onClose} className="w-full py-3.5 rounded-2xl font-bold text-[15px]"
-            style={{ background: 'linear-gradient(135deg, #C8102E, #8B0000)', color: '#fff' }}>
-            🎮 Claim & Play Now!
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
 
 /* ── Shared Components ── */
 const inputClass = "w-full px-3.5 py-3 rounded-lg border border-red-100 bg-white text-[13px] text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E]/30 focus:border-[#C8102E]/50 transition-all";
@@ -160,9 +96,6 @@ export default function SignUpLoginScreen() {
   const [registerMethod, setRegisterMethod] = useState<'phone' | 'email'>('phone');
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
-  const [showWelcomeBack, setShowWelcomeBack] = useState(false);
-  const [showWelcomeBonus, setShowWelcomeBonus] = useState(false);
-  const [registeredUsername, setRegisteredUsername] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false);
 
@@ -188,6 +121,11 @@ export default function SignUpLoginScreen() {
     });
   };
 
+  const redirectWithWelcome = (type: 'login' | 'register') => {
+    sessionStorage.setItem('techie404-auth-banner', JSON.stringify({ type }));
+    navigate('/main-dashboard');
+  };
+
   const onLogin = loginForm.handleSubmit(async (data) => {
     setIsSubmitting(true);
     const { error } = await signIn(data.email, data.password);
@@ -197,7 +135,7 @@ export default function SignUpLoginScreen() {
       showAuthPopup('Login failed', 'Email ya password galat hai.');
       return;
     }
-    setShowWelcomeBack(true);
+    redirectWithWelcome('login');
   });
 
   const onPhoneLogin = phoneLoginForm.handleSubmit(async (data) => {
@@ -211,10 +149,8 @@ export default function SignUpLoginScreen() {
       showAuthPopup('Login failed', 'Mobile number ya password galat hai.');
       return;
     }
-    setShowWelcomeBack(true);
+    redirectWithWelcome('login');
   });
-
-  const handleWelcomeBackClose = () => { setShowWelcomeBack(false); navigate('/main-dashboard'); };
 
   const onRegister = registerForm.handleSubmit(async (data) => {
     if (data.password !== data.confirmPassword) { registerForm.setError('confirmPassword', { message: 'Passwords do not match' }); return; }
@@ -233,7 +169,7 @@ export default function SignUpLoginScreen() {
       }
       return;
     }
-    navigate('/main-dashboard');
+    redirectWithWelcome('register');
   });
 
   const onPhoneRegister = phoneRegisterForm.handleSubmit(async (data) => {
@@ -255,10 +191,8 @@ export default function SignUpLoginScreen() {
       }
       return;
     }
-    navigate('/main-dashboard');
+    redirectWithWelcome('register');
   });
-
-  const handleWelcomeBonusClose = () => { setShowWelcomeBonus(false); navigate('/main-dashboard'); };
 
   const PhoneInput = ({ register, error }: { register: any; error?: string }) => (
     <div>
@@ -282,9 +216,6 @@ export default function SignUpLoginScreen() {
       }}
     >
       <Toaster position="top-center" richColors />
-
-      <AnimatePresence>{showWelcomeBack && <WelcomeBackPopup onClose={handleWelcomeBackClose} />}</AnimatePresence>
-      <AnimatePresence>{showWelcomeBonus && <WelcomeBonusPopup username={registeredUsername} onClose={handleWelcomeBonusClose} />}</AnimatePresence>
 
       {/* ─── Header ─── */}
       <div
