@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { toast, Toaster } from 'sonner';
-import { Eye, EyeOff, Crown, Lock, Mail, Phone, ChevronLeft, ChevronDown, MessageCircle, Headphones, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Crown, Lock, Mail, Phone, Gift, ChevronLeft, ChevronDown, MessageCircle, Headphones, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
