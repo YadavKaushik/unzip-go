@@ -387,10 +387,10 @@ export default function MainDashboard() {
         navigate('/sign-up-login-screen');
         return;
       }
-      if (gameName === 'Win Go') {
-        navigate('/win-go');
-        return;
-      }
+      if (gameName === 'Win Go') { navigate('/win-go'); return; }
+      if (gameName === 'K3') { navigate('/k3'); return; }
+      if (gameName === '5D') { navigate('/fived'); return; }
+      if (gameName === 'Trx Win') { navigate('/trx'); return; }
       navigate(`/game-screen?game=${encodeURIComponent(gameName)}`);
       return;
     }

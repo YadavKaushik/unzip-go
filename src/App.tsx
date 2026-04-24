@@ -31,6 +31,9 @@ const GiftPage = lazy(() => import("./pages/GiftPage"));
 const GameStatistics = lazy(() => import("./pages/GameStatistics"));
 const LanguagePage = lazy(() => import("./pages/LanguagePage"));
 const WinGo = lazy(() => import("./pages/WinGo"));
+const K3 = lazy(() => import("./pages/K3"));
+const FiveD = lazy(() => import("./pages/FiveD"));
+const TrxWinGo = lazy(() => import("./pages/TrxWinGo"));
 
 const queryClient = new QueryClient();
 
@@ -69,6 +72,9 @@ const App = () => {
                   <Route path="/activity-history" element={<AuthGuard><ActivityHistory /></AuthGuard>} />
                   <Route path="/promotions-detail" element={<AuthGuard><PromotionsDetail /></AuthGuard>} />
                   <Route path="/win-go" element={<WinGo />} />
+                  <Route path="/k3" element={<K3 />} />
+                  <Route path="/fived" element={<FiveD />} />
+                  <Route path="/trx" element={<TrxWinGo />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/reset-password" element={<ForgotPassword />} />
                   <Route path="*" element={<NotFound />} />
