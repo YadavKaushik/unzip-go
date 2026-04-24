@@ -97,6 +97,171 @@ export type Database = {
           },
         ]
       }
+      fived_bets: {
+        Row: {
+          amount: number
+          created_at: string
+          duration_seconds: number
+          id: string
+          multiplier: number
+          payout: number
+          period_id: string
+          position: string
+          selection_type: string
+          selection_value: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          duration_seconds: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id: string
+          position: string
+          selection_type: string
+          selection_value: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id?: string
+          position?: string
+          selection_type?: string
+          selection_value?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      fived_rounds: {
+        Row: {
+          a: number
+          b: number
+          c: number
+          created_at: string
+          d: number
+          duration_seconds: number
+          e: number
+          id: string
+          period_id: string
+          sum: number
+        }
+        Insert: {
+          a: number
+          b: number
+          c: number
+          created_at?: string
+          d: number
+          duration_seconds: number
+          e: number
+          id?: string
+          period_id: string
+          sum: number
+        }
+        Update: {
+          a?: number
+          b?: number
+          c?: number
+          created_at?: string
+          d?: number
+          duration_seconds?: number
+          e?: number
+          id?: string
+          period_id?: string
+          sum?: number
+        }
+        Relationships: []
+      }
+      k3_bets: {
+        Row: {
+          amount: number
+          created_at: string
+          duration_seconds: number
+          id: string
+          multiplier: number
+          payout: number
+          period_id: string
+          selection_type: string
+          selection_value: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          duration_seconds: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id: string
+          selection_type: string
+          selection_value: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id?: string
+          selection_type?: string
+          selection_value?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      k3_rounds: {
+        Row: {
+          created_at: string
+          d1: number
+          d2: number
+          d3: number
+          duration_seconds: number
+          id: string
+          parity: string
+          period_id: string
+          size: string
+          sum: number
+        }
+        Insert: {
+          created_at?: string
+          d1: number
+          d2: number
+          d3: number
+          duration_seconds: number
+          id?: string
+          parity: string
+          period_id: string
+          size: string
+          sum: number
+        }
+        Update: {
+          created_at?: string
+          d1?: number
+          d2?: number
+          d3?: number
+          duration_seconds?: number
+          id?: string
+          parity?: string
+          period_id?: string
+          size?: string
+          sum?: number
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -208,6 +373,87 @@ export type Database = {
           reference_id?: string | null
           type?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      trx_bets: {
+        Row: {
+          amount: number
+          created_at: string
+          duration_seconds: number
+          id: string
+          multiplier: number
+          payout: number
+          period_id: string
+          selection_type: string
+          selection_value: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          duration_seconds: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id: string
+          selection_type: string
+          selection_value: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          multiplier?: number
+          payout?: number
+          period_id?: string
+          selection_type?: string
+          selection_value?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trx_rounds: {
+        Row: {
+          block_id: number
+          block_time: string
+          color: string
+          created_at: string
+          duration_seconds: number
+          hash: string
+          id: string
+          number: number
+          period_id: string
+          size: string
+        }
+        Insert: {
+          block_id: number
+          block_time: string
+          color: string
+          created_at?: string
+          duration_seconds: number
+          hash: string
+          id?: string
+          number: number
+          period_id: string
+          size: string
+        }
+        Update: {
+          block_id?: number
+          block_time?: string
+          color?: string
+          created_at?: string
+          duration_seconds?: number
+          hash?: string
+          id?: string
+          number?: number
+          period_id?: string
+          size?: string
         }
         Relationships: []
       }
