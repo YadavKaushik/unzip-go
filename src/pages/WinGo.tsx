@@ -27,6 +27,8 @@ const numberMeta = (n: number) => {
 // Period derivation: deterministic, time-based
 // Format: YYYYMMDDHHMMSS-style sequence per duration. We use day index + slot index.
 const pad = (n: number, w: number) => String(n).padStart(w, '0');
+// Format: YYYYMMDD + 2-digit duration code + 4-digit slot index (e.g. 20260424302515)
+const DUR_CODE: Record<Duration, string> = { 30: '30', 60: '01', 180: '03', 300: '05' };
 const buildPeriodId = (now: Date, d: Duration) => {
   const y = now.getUTCFullYear();
   const m = pad(now.getUTCMonth() + 1, 2);
@@ -34,7 +36,7 @@ const buildPeriodId = (now: Date, d: Duration) => {
   // slot index since UTC midnight
   const secs = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
   const slot = Math.floor(secs / d);
-  return `${y}${m}${day}${d === 30 ? '301' : d === 60 ? '101' : d === 180 ? '301' : '501'}${pad(slot + 1, 4)}`;
+  return `${y}${m}${day}${DUR_CODE[d]}${pad(slot + 1, 4)}`;
 };
 
 const getRoundState = (d: Duration) => {
