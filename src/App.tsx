@@ -7,7 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { I18nProvider } from "@/hooks/useI18n";
 import AuthGuard from "@/components/AuthGuard";
 import SplashScreen from "@/components/SplashScreen";
-import PageLoader from "@/components/PageLoader";
+import RouteFallback from "@/components/RouteFallback";
 
 const MainDashboard = lazy(() => import("./pages/MainDashboard"));
 const GameScreen = lazy(() => import("./pages/GameScreen"));
@@ -46,7 +46,7 @@ const App = () => {
           <AuthProvider>
             {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
             <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
+              <Suspense fallback={<RouteFallback />}>
                 <Routes>
                   <Route path="/" element={<Navigate to="/main-dashboard" replace />} />
                   <Route path="/main-dashboard" element={<MainDashboard />} />
