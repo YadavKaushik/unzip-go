@@ -8,14 +8,14 @@ import { toast } from 'sonner';
 
 /* Tier list — small to large for vertical scroll */
 const TIERS = [
-  { id: 8, deposit: 100,    bonus: 28 },
-  { id: 7, deposit: 200,    bonus: 48 },
-  { id: 6, deposit: 500,    bonus: 108 },
-  { id: 5, deposit: 1000,   bonus: 188 },
-  { id: 4, deposit: 5000,   bonus: 488 },
-  { id: 3, deposit: 12000,  bonus: 1388 },
-  { id: 2, deposit: 60000,  bonus: 5888 },
-  { id: 1, deposit: 110000, bonus: 9999 },
+  { id: 1, deposit: 100,    bonus: 28 },
+  { id: 2, deposit: 200,    bonus: 48 },
+  { id: 3, deposit: 500,    bonus: 108 },
+  { id: 4, deposit: 1000,   bonus: 188 },
+  { id: 5, deposit: 5000,   bonus: 488 },
+  { id: 6, deposit: 12000,  bonus: 1388 },
+  { id: 7, deposit: 60000,  bonus: 5888 },
+  { id: 8, deposit: 110000, bonus: 9999 },
 ];
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
