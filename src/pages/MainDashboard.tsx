@@ -18,15 +18,72 @@ import LotteryCarousel from '@/components/LotteryCarousel';
 
 // ── Mock Data ──────────────────────────────────────────────────────────────────
 const BANNERS = [
-  { id: 'b1', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_20231201191823x5uj.png' },
-  { id: 'b2', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_202311302338523vpv.png' },
-  { id: 'b3', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_202311302341004kwv.png' },
-  { id: 'b4', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_20231130234042rnai.png' },
-  { id: 'b5', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_202311302340217ul2.png' },
-  { id: 'b6', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_20231130233820k3m3.png' },
-  { id: 'b7', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_202404111904167usj.png' },
-  { id: 'b8', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_20240409192800g1dn.png' },
-  { id: 'b9', url: '/promotions-detail', img: 'https://img1.rajaluckcdn.com/banner/Banner_202406071326127ds2.png' },
+  {
+    id: 'b1',
+    url: '/promotions-detail',
+    title: 'WELCOME BONUS',
+    headline: '₹777 FREE',
+    subline: 'On Sign Up',
+    cta: 'Claim Now',
+    bg: 'radial-gradient(ellipse at top right, #FF6B5A 0%, #C8102E 45%, #4a0000 100%)',
+    accent: '#FFD86B',
+    icon: '🎁',
+  },
+  {
+    id: 'b2',
+    url: '/deposit',
+    title: 'FIRST DEPOSIT',
+    headline: 'UP TO +₹9,999',
+    subline: '8 Reward Tiers',
+    cta: 'Deposit Now',
+    bg: 'radial-gradient(ellipse at top left, #FFB199 0%, #E84855 50%, #8B0000 100%)',
+    accent: '#FFE76B',
+    icon: '💰',
+  },
+  {
+    id: 'b3',
+    url: '/win-go',
+    title: 'WIN GO LOTTERY',
+    headline: 'WIN BIG EVERY MIN',
+    subline: 'Predict & Earn',
+    cta: 'Play Now',
+    bg: 'radial-gradient(ellipse at center, #FF3A1C 0%, #C8102E 50%, #2b0000 100%)',
+    accent: '#FFD86B',
+    icon: '🎯',
+  },
+  {
+    id: 'b4',
+    url: '/spin-wheel',
+    title: 'LUCKY SPIN',
+    headline: 'SPIN & WIN DAILY',
+    subline: 'Free Every 24h',
+    cta: 'Spin Now',
+    bg: 'radial-gradient(ellipse at bottom right, #FF8A65 0%, #D62828 50%, #4a0000 100%)',
+    accent: '#FFE76B',
+    icon: '🎡',
+  },
+  {
+    id: 'b5',
+    url: '/activity-history',
+    title: 'INVITE & EARN',
+    headline: '5% COMMISSION',
+    subline: 'Forever On Friends',
+    cta: 'Invite Now',
+    bg: 'radial-gradient(ellipse at top, #FF6B7A 0%, #B8001F 50%, #1a0303 100%)',
+    accent: '#FFD86B',
+    icon: '👥',
+  },
+  {
+    id: 'b6',
+    url: '/k3',
+    title: 'K3 DICE GAME',
+    headline: 'BIG / SMALL WIN',
+    subline: '1 Min Quick Draw',
+    cta: 'Try K3',
+    bg: 'radial-gradient(ellipse at right, #FF7A6B 0%, #C8102E 50%, #3a0000 100%)',
+    accent: '#FFE76B',
+    icon: '🎲',
+  },
 ];
 
 
@@ -502,25 +559,88 @@ export default function MainDashboard() {
         </div>
       </div>
 
-      {/* ── Banner Slider ───────────────────────────────────── */}
+      {/* ── Banner Slider (swipeable + branded) ─────────────── */}
       <div className="px-3 pt-3">
-        <div className="relative rounded-2xl overflow-hidden h-36 cursor-pointer" onClick={() => navigate(BANNERS[currentBanner]?.url || '/promotions-detail')}>
-          <AnimatePresence mode="wait">
+        <div className="relative rounded-2xl overflow-hidden h-36" style={{ touchAction: 'pan-y' }}>
+          <AnimatePresence mode="wait" initial={false}>
             {BANNERS.map((banner, idx) =>
             idx === currentBanner ?
             <motion.div
               key={banner.id}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -50) setCurrentBanner((currentBanner + 1) % BANNERS.length);
+                else if (info.offset.x > 50) setCurrentBanner((currentBanner - 1 + BANNERS.length) % BANNERS.length);
+              }}
+              onClick={() => navigate(banner.url)}
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -60 }}
               transition={{ duration: 0.4 }}
-              className="absolute inset-0">
-              <img src={banner.img} alt="promo" className="w-full h-full object-cover" />
+              className="absolute inset-0 cursor-grab active:cursor-grabbing"
+              style={{ background: banner.bg }}>
+              {/* sparkle dots */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {[...Array(10)].map((_, i) => (
+                  <div key={i} style={{
+                    position: 'absolute',
+                    top: `${(i * 37) % 90}%`,
+                    left: `${(i * 53) % 95}%`,
+                    width: 3, height: 3, borderRadius: '50%',
+                    background: banner.accent, opacity: 0.5,
+                    boxShadow: `0 0 6px ${banner.accent}`,
+                  }} />
+                ))}
+              </div>
+              {/* gradient overlay sheen */}
+              <div className="absolute inset-0 pointer-events-none" style={{
+                background: 'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%)',
+              }} />
+              {/* content */}
+              <div className="relative h-full flex items-center justify-between px-4 py-3 pointer-events-none">
+                <div className="flex flex-col gap-1 max-w-[65%]">
+                  {/* brand chip */}
+                  <div className="inline-flex items-center gap-1 self-start px-2 py-0.5 rounded-full" style={{
+                    background: 'rgba(0,0,0,0.35)',
+                    border: `1px solid ${banner.accent}66`,
+                  }}>
+                    <span style={{ color: banner.accent, fontSize: 8, fontWeight: 900, letterSpacing: 1 }}>
+                      𝐓𝐞𝐜𝐡𝐢𝐞⁴⁰⁴
+                    </span>
+                  </div>
+                  <span style={{
+                    color: banner.accent, fontSize: 9, fontWeight: 800, letterSpacing: 1.2,
+                    textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+                  }}>{banner.title}</span>
+                  <h3 style={{
+                    color: '#fff', fontSize: 18, fontWeight: 900, lineHeight: 1.05,
+                    textShadow: '0 2px 6px rgba(0,0,0,0.45)', letterSpacing: -0.3,
+                  }}>{banner.headline}</h3>
+                  <span style={{
+                    color: 'rgba(255,255,255,0.85)', fontSize: 10, fontWeight: 600,
+                  }}>{banner.subline}</span>
+                  <div style={{
+                    marginTop: 4, alignSelf: 'flex-start',
+                    background: `linear-gradient(180deg, ${banner.accent}, #f59e0b)`,
+                    color: '#7a2a00', fontSize: 10, fontWeight: 900,
+                    padding: '4px 12px', borderRadius: 12,
+                    boxShadow: `0 3px 10px ${banner.accent}55`,
+                  }}>{banner.cta} ›</div>
+                </div>
+                {/* big icon */}
+                <div style={{
+                  fontSize: 56, opacity: 0.9,
+                  filter: `drop-shadow(0 4px 12px ${banner.accent}88)`,
+                  transform: 'rotate(-8deg)',
+                }}>{banner.icon}</div>
+              </div>
             </motion.div> :
             null
             )}
           </AnimatePresence>
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
             {BANNERS.map((b, i) =>
             <button
               key={`dot-${b.id}`}
