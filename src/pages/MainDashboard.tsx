@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, ChevronRight, Heart, Flame, Crown, Plus, X, Gamepad2, Grid3x3, Volume2, Trophy, Tv, Ticket, Home, Fish, ArrowLeft, Search } from 'lucide-react';
 import { PROVIDER_GAMES, type ProviderGame } from '@/data/providerGames';
 import BottomNav from '@/components/BottomNav';
+import FirstDepositBonusPopup from '@/components/FirstDepositBonusPopup';
 import { Toaster, toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { db as supabase } from '@/lib/db';
@@ -1178,6 +1179,7 @@ export default function MainDashboard() {
       </AnimatePresence>
 
       <BottomNav />
+      <FirstDepositBonusPopup />
     </div>);
 
 }

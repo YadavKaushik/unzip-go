@@ -84,6 +84,12 @@ export default function DepositPage() {
       if (!v || v < 100) return toast.error('Minimum ₹100');
       if (v > 50000) return toast.error('Maximum ₹50,000');
       toast.success(`₹${v.toLocaleString('en-IN')} deposit via ${sel?.name}`);
+      // Track first deposit amount for First Deposit Bonus popup
+      if (user?.id) {
+        const key = `fdb_first_deposit_${user.id}`;
+        const prev = Number(localStorage.getItem(key) || 0);
+        if (v > prev) localStorage.setItem(key, String(v));
+      }
     }
     setAmt('');
   };
