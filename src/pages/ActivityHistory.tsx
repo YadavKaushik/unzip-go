@@ -2381,71 +2381,136 @@ export default function ActivityPage() {
           ))}
         </div>
 
-        {/* Full-width banners */}
+        {/* Full-width banners — Raja Luck-style fiery cards */}
         {fullBanners?.map((banner) => (
-          <motion.button
-            key={banner?.key}
-            variants={itemVariants}
-            whileHover={{ scale: 1.02, y: -3, boxShadow: '0 10px 28px rgba(0,0,0,0.2)' }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-            className="w-full rounded-xl overflow-hidden text-left"
-            style={{
-              background: banner?.gradient,
-              border: '1px solid #e0e0e0',
-              minHeight: 90,
-            }}
-            onClick={
-              banner?.key === 'banner-invitation' ? () => setShowInvitationBonus(true)
-              : banner?.key === 'banner-gifts' ? () => setShowGift(true)
-              : banner?.key === 'banner-recharge' ? () => setActivePromo('rechargeBonus')
-              : banner?.key === 'banner-first-second' ? () => setActivePromo('firstSecondRecharge')
-              : banner?.key === 'banner-lucky10' ? () => setActivePromo('lucky10')
-              : banner?.key === 'banner-luckyspin' ? () => setActivePromo('luckySpin')
-              : banner?.key === 'banner-winstreak' ? () => setActivePromo('winStreak')
-              : banner?.key === 'banner-aviator' ? () => setActivePromo('aviatorBonus')
-              : banner?.key === 'banner-vip' ? () => setActivePromo('vipUpgrade')
-              : undefined
-            }
-          >
-            <div className="p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3 flex-1">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                  style={{ background: 'rgba(255,255,255,0.1)' }}
+          <div key={banner?.key} className="w-full">
+            <motion.button
+              variants={itemVariants}
+              whileHover={{ scale: 1.015, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+              className="w-full rounded-2xl overflow-hidden text-left relative"
+              style={{
+                background:
+                  'radial-gradient(ellipse at 30% 100%, #FF3A1C 0%, #8B0000 35%, #2a0606 70%, #1a0303 100%)',
+                border: '1px solid rgba(255,90,60,0.35)',
+                boxShadow:
+                  '0 6px 20px rgba(200,16,46,0.35), inset 0 1px 0 rgba(255,200,150,0.15)',
+                minHeight: 130,
+              }}
+              onClick={
+                banner?.key === 'banner-invitation' ? () => setShowInvitationBonus(true)
+                : banner?.key === 'banner-gifts' ? () => setShowGift(true)
+                : banner?.key === 'banner-recharge' ? () => setActivePromo('rechargeBonus')
+                : banner?.key === 'banner-first-second' ? () => setActivePromo('firstSecondRecharge')
+                : banner?.key === 'banner-lucky10' ? () => setActivePromo('lucky10')
+                : banner?.key === 'banner-luckyspin' ? () => setActivePromo('luckySpin')
+                : banner?.key === 'banner-winstreak' ? () => setActivePromo('winStreak')
+                : banner?.key === 'banner-aviator' ? () => setActivePromo('aviatorBonus')
+                : banner?.key === 'banner-vip' ? () => setActivePromo('vipUpgrade')
+                : undefined
+              }
+            >
+              {/* Embers / glow overlay */}
+              <div
+                className="absolute inset-0 pointer-events-none opacity-60"
+                style={{
+                  backgroundImage:
+                    'radial-gradient(circle at 85% 30%, rgba(255,180,80,0.25) 0%, transparent 40%), radial-gradient(circle at 10% 90%, rgba(255,100,40,0.3) 0%, transparent 45%)',
+                }}
+              />
+
+              {/* Brand chip */}
+              <div
+                className="absolute top-0 left-3 px-3 py-1 rounded-b-md flex items-center gap-1 z-10"
+                style={{
+                  background: 'linear-gradient(180deg, #fff8e8 0%, #ffe9c2 100%)',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                }}
+              >
+                <span
+                  className="font-black text-[11px] tracking-wide"
+                  style={{
+                    background: 'linear-gradient(180deg, #C8102E 0%, #8B0000 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
                 >
-                  {banner?.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-white font-bold text-sm">{banner?.title}</span>
-                    {banner?.tag && (
-                      <span
-                        className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                  techie⁴⁰⁴
+                </span>
+              </div>
+
+              <div className="relative flex items-stretch px-4 pt-6 pb-4 gap-3">
+                {/* Left content */}
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  {banner?.tag && (
+                    <span
+                      className="self-start text-[9px] font-black px-2 py-0.5 rounded-full mb-1.5 tracking-wider"
+                      style={{
+                        background: 'rgba(255,255,255,0.15)',
+                        color: '#FFD86B',
+                        border: '1px solid rgba(255,216,107,0.5)',
+                      }}
+                    >
+                      {banner?.tag}
+                    </span>
+                  )}
+                  <div
+                    className="font-black text-[15px] leading-tight uppercase tracking-wide"
+                    style={{
+                      color: '#FFD86B',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.5), 0 0 8px rgba(255,170,40,0.3)',
+                      fontFamily: 'system-ui, -apple-system, sans-serif',
+                      letterSpacing: '0.02em',
+                    }}
+                  >
+                    {banner?.title}
+                  </div>
+                  <div className="text-white/85 text-[10.5px] mt-1 leading-snug font-medium">
+                    {banner?.subtitle}
+                  </div>
+                  {banner?.detail && (
+                    <div className="mt-2 inline-flex">
+                      <div
+                        className="px-2.5 py-1 rounded-md font-black text-[13px]"
                         style={{
-                          background: `${banner?.tagColor}22`,
-                          color: banner?.tagColor,
-                          border: `1px solid ${banner?.tagColor}`,
+                          background:
+                            'linear-gradient(180deg, rgba(255,68,68,0.25) 0%, rgba(139,0,0,0.4) 100%)',
+                          color: '#FFD86B',
+                          border: '1px solid rgba(255,216,107,0.4)',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
                         }}
                       >
-                        {banner?.tag}
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-gray-300 text-[11px] mt-0.5">{banner?.subtitle}</div>
-                  {banner?.detail && (
-                    <div
-                      className={`mt-1 font-bold ${banner?.bigText ? 'text-sm' : 'text-[11px]'}`}
-                      style={{ color: banner?.tagColor || '#FF4444' }}
-                    >
-                      {banner?.detail}
+                        {banner?.detail}
+                      </div>
                     </div>
                   )}
                 </div>
+
+                {/* Right artwork */}
+                <div className="flex-shrink-0 w-[92px] flex items-center justify-center">
+                  <div
+                    className="w-[88px] h-[88px] rounded-2xl flex items-center justify-center"
+                    style={{
+                      background:
+                        'radial-gradient(circle, rgba(255,180,80,0.3) 0%, rgba(255,68,68,0.15) 50%, transparent 80%)',
+                    }}
+                  >
+                    <span
+                      className="text-[56px] leading-none drop-shadow-lg"
+                      style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))' }}
+                    >
+                      {banner?.icon}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <ChevronRight size={16} className="text-gray-400 flex-shrink-0 ml-2" />
+            </motion.button>
+            {/* Label below card */}
+            <div className="px-1 pt-2 pb-1 text-[13px] font-semibold text-foreground">
+              {banner?.title}
             </div>
-          </motion.button>
+          </div>
         ))}
       </motion.div>
 
