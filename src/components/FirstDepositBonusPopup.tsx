@@ -117,8 +117,8 @@ export default function FirstDepositBonusPopup() {
             transition={{ type: 'spring', damping: 22, stiffness: 280 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '100%', maxWidth: 360,
-              background: '#fff', borderRadius: 18,
+              width: '100%', maxWidth: 300,
+              background: '#fff', borderRadius: 16,
               overflow: 'hidden', position: 'relative',
               boxShadow: '0 25px 60px rgba(200,16,46,0.35)',
               fontFamily: "'Plus Jakarta Sans', Bahnschrift, sans-serif",
@@ -167,8 +167,8 @@ export default function FirstDepositBonusPopup() {
 
             {/* Scrollable Tier List */}
             <div style={{
-              maxHeight: '50vh', overflowY: 'auto',
-              padding: '12px 14px 6px',
+              maxHeight: '62vh', overflowY: 'auto',
+              padding: '10px 12px 4px',
               background: 'linear-gradient(180deg, #fff 0%, #fff5f5 100%)',
             }}>
               {TIERS.map((t) => {
