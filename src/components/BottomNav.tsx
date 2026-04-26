@@ -51,7 +51,7 @@ export default function BottomNav() {
         .spin-label-shine { background: linear-gradient(90deg, #FFD700 0%, #FFF8DC 40%, #FFD700 60%, #FFA500 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: labelShine 2s linear infinite; }
       `}</style>
 
-      <div className="w-full max-w-[420px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[600px] relative pointer-events-auto" style={{ height: 88 }}>
+      <div className="w-full max-w-[360px] sm:max-w-[380px] md:max-w-[400px] relative pointer-events-auto" style={{ height: 88 }}>
         {/* SVG curved bar with center notch */}
         <svg viewBox="0 0 420 96" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 w-full" style={{ height: 96, filter: 'drop-shadow(0 -6px 18px rgba(0,0,0,0.55))' }}>
           <defs>
